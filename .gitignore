@@ -1,0 +1,4 @@
+*.suo
+debug/
+release/
+**/packages/*
