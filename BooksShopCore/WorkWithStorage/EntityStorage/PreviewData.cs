@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BooksShopCore.WorkWithStorage.EntityStorage
 {
-    public class PreviewData
+    internal class PreviewData
     {
         public int Id { get; set; }
         public FormatPreviewData Format { get; set; }// формат данных для превью

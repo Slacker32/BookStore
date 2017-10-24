@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BooksShopCore.WorkWithStorage.EntityStorage
 {
-    public class AuthorData // тип данных автор
+    internal class AuthorData // тип данных автор
     {
         public int Id { get; set; }
         public string Name { get; set; }// наименование автора

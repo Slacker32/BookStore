@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BooksShopCore.WorkWithStorage
 {
-    internal class WorkWithDataStorage:IDisposable
+    public class WorkWithDataStorage:IDisposable
     {
         private BookStoreContext db;
         private IDataRepository<BookData> Books;

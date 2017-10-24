@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BooksShopCore.WorkWithStorage.EntityStorage
 {
-    public class PricePolicyData // тип ценовая политика для разных стран
+    internal class PricePolicyData // тип ценовая политика для разных стран
     {
         public int Id { get; set; }
 

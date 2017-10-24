@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BooksShopCore.WorkWithStorage.EntityStorage
 {
-    public class FormatAdressBuyerData // тип формат адреса покупателя
+    internal class FormatAdressBuyerData // тип формат адреса покупателя
     {
         public int Id { get; set; }
         public string FormatAdressName { get; set; }// формат адреса(физический, электронный)

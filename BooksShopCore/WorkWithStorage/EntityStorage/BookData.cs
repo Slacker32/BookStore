@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BooksShopCore.WorkWithStorage.EntityStorage
 {
-    public class BookData // тип данных книга
+    internal class BookData // тип данных книга
     {
         public int Id { get; set; }
         public IList<NameBooksTranslateData> NameBooksTranslates { get; set; }// названия книги на разных языках

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BooksShopCore.WorkWithStorage.EntityStorage
 {
-    public class StorageData // склад
+    internal class StorageData // склад
     {
         public int Id { get; set; }
         public string NameStorage { get; set; }// название хранилища

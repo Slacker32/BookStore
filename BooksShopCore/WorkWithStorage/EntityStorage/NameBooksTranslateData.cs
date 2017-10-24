@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BooksShopCore.WorkWithStorage.EntityStorage
 {
-    public class NameBooksTranslateData // язык наименования книги
+    internal class NameBooksTranslateData // язык наименования книги
     {
         public int Id { get; set; }
 

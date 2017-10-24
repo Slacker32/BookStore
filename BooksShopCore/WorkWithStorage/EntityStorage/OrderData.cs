@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BooksShopCore.WorkWithStorage.EntityStorage
 {
-    public class OrderData // тип заказ
+    internal class OrderData // тип заказ
     {
         public int Id { get; set; }
         public DateTime Date { get; set; } //дата заказа

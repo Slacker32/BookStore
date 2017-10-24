@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BooksShopCore.WorkWithStorage.EntityStorage
 {
-    public class ExchangeRatesData // тип обменный курс
+    internal class ExchangeRatesData // тип обменный курс
     {
         public int Id { get; set; }
         public DateTime Date { get; set; }// дата, время задания курса конверсии

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BooksShopCore.WorkWithStorage.EntityStorage
 {
-    public class FormatBookData
+    internal class FormatBookData
     {
         public int Id { get; set; }
         public string FormatName { get; set; }// формат данных книги(paper, pdf, fb2, doc, rtf, txt)

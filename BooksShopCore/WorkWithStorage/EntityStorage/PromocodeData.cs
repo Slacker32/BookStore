@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BooksShopCore.WorkWithStorage.EntityStorage
 {
-    public class PromocodeData
+    internal class PromocodeData
     {
         public int Id { get; set; }
         public string Code { get; set; }// значение для сравнения

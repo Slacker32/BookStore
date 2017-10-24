@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BooksShopCore.WorkWithStorage.EntityStorage
 {
-    public class BooksStorage // сопоставление складов и книг
+    internal class BooksStorage // сопоставление складов и книг
     {
         public int Id { get; set; }
 

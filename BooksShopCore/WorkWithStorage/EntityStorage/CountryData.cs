@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BooksShopCore.WorkWithStorage.EntityStorage
 {
-    public class CountryData
+    internal class CountryData
     {
         public int Id { get; set; }
         public string CountryCode { get; set; }// код страны по спецификации ISO
