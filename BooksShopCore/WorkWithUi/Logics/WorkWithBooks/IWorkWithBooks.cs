@@ -7,13 +7,12 @@ using System.Threading.Tasks;
 
 namespace BooksShopCore.WorkWithUi.Logics.WorkWithBooks
 {
-    internal interface IWorkWithBooks
+    public interface IWorkWithBooks
     {
-        IList<BookUi> ShowAllBooks();
-        IList<BookUi> FindBooks(string searchStr);
-        bool Buy(int bookId);
-        bool Reversal(int bookId);
-        IList<BookUi> ChangeCurrencyBook(int idCurrency);
+        IList<BookUi> ShowAllBooks(string languageCode, string currency);
+        IList<BookUi> FindBooks(string searchStr, string languageCode, string currency);
+
+        IList<BookUi> ChangeCurrencyBook(int idCurrency, string languageCode);
     }
 
 }

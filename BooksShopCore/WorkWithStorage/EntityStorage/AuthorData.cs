@@ -13,7 +13,7 @@ namespace BooksShopCore.WorkWithStorage.EntityStorage
         public string Year { get; set; }// годы жизни
         public string Info { get; set; }// краткая информация об авторе
 
-        public IList<BookData> Books { get; set; }// книги автора
+        public virtual IList<BookData> Books { get; set; }// книги автора
     }
 
 }

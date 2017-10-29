@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BooksShopCore.WorkWithUi.Logics.WorkWithOrder
 {
-    internal interface IWorkWithOrder
+    public interface IWorkWithOrder
     {
         IList<BookUi> ShowListCurrentPurchases();
         bool ConfirmationOrder();

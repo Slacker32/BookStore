@@ -58,6 +58,7 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WorkWithStorage\BookStoreContext.cs" />
+    <Compile Include="WorkWithStorage\BookStoreInitializer.cs" />
     <Compile Include="WorkWithStorage\EntityStorage\BookData.cs" />
     <Compile Include="WorkWithStorage\EntityStorage\BooksStorage.cs" />
     <Compile Include="WorkWithStorage\EntityStorage\AuthorData.cs" />
@@ -78,8 +79,10 @@
     <Compile Include="WorkWithStorage\EntityStorage\FormatBookData.cs" />
     <Compile Include="WorkWithStorage\EntityStorage\StorageData.cs" />
     <Compile Include="WorkWithStorage\IDataRepository.cs" />
+    <Compile Include="WorkWithStorage\Interface1.cs" />
     <Compile Include="WorkWithStorage\Repositories\BookSqlRepository.cs" />
     <Compile Include="WorkWithStorage\Repositories\BuyerSqlRepository.cs" />
+    <Compile Include="WorkWithStorage\Repositories\GenericRepository.cs" />
     <Compile Include="WorkWithStorage\Repositories\PurchaseSqlRepository.cs" />
     <Compile Include="WorkWithStorage\WorkWithDataStorage.cs" />
     <Compile Include="WorkWithUi\EntityUi\BookUi.cs" />
@@ -87,8 +90,11 @@
     <Compile Include="WorkWithUi\EntityUi\OrderUi.cs" />
     <Compile Include="WorkWithUi\EntityUi\CurrencyUi.cs" />
     <Compile Include="WorkWithUi\EntityUi\PurchaseUi.cs" />
+    <Compile Include="WorkWithUi\Logics\IBookShop.cs" />
     <Compile Include="WorkWithUi\Logics\PromoCode\IPromoCode.cs" />
     <Compile Include="WorkWithUi\Logics\Preview\IPreview.cs" />
+    <Compile Include="WorkWithUi\Logics\WorkWithBooks\WorkWithBooks.cs" />
+    <Compile Include="WorkWithUi\Logics\WorkWithOrder\WorkWithOrder.cs" />
     <Compile Include="WorkWithUi\Logics\WorkWithOrder\IWorkWithOrder.cs" />
     <Compile Include="WorkWithUi\Logics\WorkWithBooks\IWorkWithBooks.cs" />
   </ItemGroup>
