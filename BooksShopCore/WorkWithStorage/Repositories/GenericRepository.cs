@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace BooksShopCore.WorkWithStorage.Repositories
 {
-    internal class GenericRepository<T> : IDisposable, IDataRepository<T> where T : class
+    internal sealed class GenericRepository<T> : IDisposable, IDataRepository<T> where T : class
     {
-        private DbContext db;
-        private DbSet<T> dbSet;
+        private readonly DbContext db;
+        private readonly DbSet<T> dbSet;
 
-        public GenericRepository(BookStoreContext context)
+        public GenericRepository(DbContext context)
         {
             this.db = context;
             this.dbSet = context.Set<T>();
@@ -74,10 +74,11 @@ namespace BooksShopCore.WorkWithStorage.Repositories
         public void Dispose()
         {
             Dispose(true);
-            GC.SuppressFinalize(this);
+            //GC.SuppressFinalize(this);
         }
         private bool disposed = false;
-        protected virtual void Dispose(bool disposing)
+
+        private void Dispose(bool disposing)
         {
             if (!this.disposed)
             {

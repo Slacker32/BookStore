@@ -7,13 +7,13 @@ namespace BooksShopCore.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class createDB2 : IMigrationMetadata
+    public sealed partial class CreateDB : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(createDB2));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(CreateDB));
         
         string IMigrationMetadata.Id
         {
-            get { return "201710242024271_createDB2"; }
+            get { return "201710310908152_CreateDB"; }
         }
         
         string IMigrationMetadata.Source

@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 
 namespace BooksShopCore.WorkWithUi.Logics.WorkWithBooks
 {
-    class WorkWithBooks:IWorkWithBooks
+    public class WorkWithBooks:IWorkWithBooks
     {
-        GenericRepository<BookData> BookRepository { get; set; }
-        GenericRepository<ExchangeRatesData> ExchangeRatesRepository { get; set; }
+        private GenericRepository<BookData> BookRepository { get; set; }
+        private GenericRepository<ExchangeRatesData> ExchangeRatesRepository { get; set; }
 
         public WorkWithBooks()
         {

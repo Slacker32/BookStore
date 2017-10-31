@@ -6,27 +6,133 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BooksShopCore.WorkWithStorage;
 
 
 namespace BooksShopCore.WorkWithUi.Logics.WorkWithOrder
 {
     public class WorkWithOrder : IWorkWithOrder
     {
-        GenericRepository<PromocodeData> PromocodeRepository { get; set; }
-        BuyerUi Buyer { get; set; }
+        internal IDataRepository<PromocodeData> PromocodeRepository { get; set; }
+        private BuyerUi TempBuyer { get; set; }
 
         public WorkWithOrder(BuyerUi buyer)
         {
-            this.Buyer = buyer;
+           this.TempBuyer = buyer ?? new BuyerUi();
+           this.PromocodeRepository=new GenericRepository<PromocodeData>(new BookStoreContext());
         }
 
-        public IList<BookUi> ApplyPromocode(string promocode)
+        public bool Buy(BookUi book)
         {
-            var ret = new List<BookUi>();
+            var ret = false;
             try
             {
-                var listBook = PromocodeRepository.ReadAll();
-                var d = listBook.Where((p) => p.Code.Contains(promocode)).OrderByDescending(p=>p.Date).First();
+                var tempPurchase = new PurchaseUi();
+
+                //проверка списка на наличие книги
+                bool flgAddBook = false;
+                if (TempBuyer.ListPurchases?.Count > 0)
+                {
+                    tempPurchase = TempBuyer.ListPurchases.FirstOrDefault((p) => p.Book.BookId == book.BookId);
+                    if (tempPurchase == null)
+                    {
+                        flgAddBook = true;
+                        tempPurchase = new PurchaseUi();
+                    }
+
+                }
+                else
+                {
+                    //первая запись
+                    TempBuyer.ListPurchases = new List<PurchaseUi>();
+                    flgAddBook = true;
+                }
+
+                tempPurchase.Book = book;
+                tempPurchase.Amount = book.Price;
+                tempPurchase.Buyer = this.TempBuyer;
+                tempPurchase.Count++;
+                tempPurchase.Currency = book.Currency;
+                tempPurchase.Date = DateTime.UtcNow;
+
+                if (flgAddBook)
+                {
+                    TempBuyer.ListPurchases.Add(tempPurchase);
+                }
+                ret = true;
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException($"Ошибка при покупке книги: {ex}");
+            }
+            return ret;
+        }
+
+        public bool Reversal(BookUi book)
+        {
+            var ret = false;
+            try
+            {
+                //проверка списка на наличие книги
+                if (TempBuyer.ListPurchases?.Count > 0)
+                {
+                    var tempPurchase = TempBuyer.ListPurchases.FirstOrDefault((p) => p.Book.BookId == book.BookId);
+                    if (tempPurchase?.Count > 1)
+                    {
+                        tempPurchase.Count--;
+                    }
+                    else
+                    {
+                        TempBuyer.ListPurchases.Remove(tempPurchase);
+                    }
+
+
+                    ret = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException($"Ошибка при возврате книги: {ex}");
+            }
+            return ret;
+        }
+
+        public bool ApplyPromocode(string promocode)
+        {
+            var ret = false;
+            try
+            {
+                var promo = PromocodeRepository.ReadAll().OrderByDescending(p=>p.Date).FirstOrDefault(p=>p.Code.Equals(promocode,StringComparison.OrdinalIgnoreCase));
+                if (promo != null)
+                {
+                    if (promo.Code.Equals(promocode, StringComparison.OrdinalIgnoreCase))
+                    {
+                        #region  промокод совпал применяем скидку в процентах для всего заказа пользователя
+
+                        if (this.TempBuyer?.ListPurchases != null)
+                        {
+                            //у покупателя есть заказы применяем скидочный процент
+                            var percent = promo.Percent;
+                            foreach (var purchase in this.TempBuyer.ListPurchases)
+                            {
+                                purchase.Amount -= purchase.Amount*percent/100m;
+                            }
+
+                            ret = true;
+                        }
+                        else
+                        {
+                            throw new ApplicationException($"У покупателя отстутствуют книги предназначенные для покупки");
+                        }
+
+                        #endregion
+                    }  
+                }
+                else
+                {
+                    throw new ApplicationException($"Код {promocode} не применят");
+                }
+
             }
             catch (Exception ex)
             {
@@ -35,14 +141,40 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithOrder
             return ret;
         }
 
-        public IList<BookUi> ShowListCurrentPurchases()
+        public IList<PurchaseUi> ShowListCurrentPurchases()
         {
-            throw new NotImplementedException();
+            IList<PurchaseUi> ret = null;
+            try
+            {
+                if (this.TempBuyer?.ListPurchases != null)
+                {
+                    ret = this.TempBuyer.ListPurchases;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException($"Ошибка загрузки списка покупок для текущего покупатеся:{ex}");
+            }
+            return ret;
         }
 
-        public bool CancelPurchase(int purchaseId)
+        public bool CancelPurchaseAfterConfirmation(int purchaseId)
         {
-            throw new NotImplementedException();
+            var ret = false;
+            try
+            {
+                if (this.TempBuyer?.ListPurchases != null)
+                {
+                    //ret = this.TempBuyer.ListPurchases;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException($"Ошибка загрузки списка покупок для текущего покупатеся:{ex}");
+            }
+            return ret;
         }
 
         public bool ConfirmationOrder()

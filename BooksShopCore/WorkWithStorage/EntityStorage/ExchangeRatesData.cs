@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace BooksShopCore.WorkWithStorage.EntityStorage
 {
+    [Table("ExchangeRates")]
     internal class ExchangeRatesData // тип обменный курс
     {
         public int Id { get; set; }

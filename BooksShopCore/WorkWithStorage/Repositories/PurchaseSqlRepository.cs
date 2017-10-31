@@ -10,7 +10,7 @@ namespace BooksShopCore.WorkWithStorage.Repositories
 {
     internal class PurchaseSqlRepository : IDataRepository<PurchaseData>
     {
-        private BookStoreContext db;
+        private readonly BookStoreContext db;
 
         public PurchaseSqlRepository(BookStoreContext context)
         {

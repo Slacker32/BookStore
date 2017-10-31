@@ -3,12 +3,12 @@ namespace BooksShopCore.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class createDB2 : DbMigration
+    public partial class CreateDB : DbMigration
     {
         public override void Up()
         {
             CreateTable(
-                "dbo.AuthorDatas",
+                "dbo.Authors",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
@@ -19,7 +19,7 @@ namespace BooksShopCore.Migrations
                 .PrimaryKey(t => t.Id);
             
             CreateTable(
-                "dbo.BookDatas",
+                "dbo.Books",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
@@ -38,13 +38,13 @@ namespace BooksShopCore.Migrations
                         CountInBlocked = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.BookDatas", t => t.BookId, cascadeDelete: true)
-                .ForeignKey("dbo.StorageDatas", t => t.StorageDataId, cascadeDelete: true)
+                .ForeignKey("dbo.Books", t => t.BookId, cascadeDelete: true)
+                .ForeignKey("dbo.Storages", t => t.StorageDataId, cascadeDelete: true)
                 .Index(t => t.StorageDataId)
                 .Index(t => t.BookId);
             
             CreateTable(
-                "dbo.StorageDatas",
+                "dbo.Storages",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
@@ -53,7 +53,7 @@ namespace BooksShopCore.Migrations
                 .PrimaryKey(t => t.Id);
             
             CreateTable(
-                "dbo.FormatBookDatas",
+                "dbo.FormatsBook",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
@@ -61,11 +61,11 @@ namespace BooksShopCore.Migrations
                         BookDataId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.BookDatas", t => t.BookDataId, cascadeDelete: true)
+                .ForeignKey("dbo.Books", t => t.BookDataId, cascadeDelete: true)
                 .Index(t => t.BookDataId);
             
             CreateTable(
-                "dbo.NameBooksTranslateDatas",
+                "dbo.NameBooksTranslate",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
@@ -74,13 +74,13 @@ namespace BooksShopCore.Migrations
                         LanguageDataId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.BookDatas", t => t.BookDataId, cascadeDelete: true)
-                .ForeignKey("dbo.LanguageDatas", t => t.LanguageDataId, cascadeDelete: true)
+                .ForeignKey("dbo.Books", t => t.BookDataId, cascadeDelete: true)
+                .ForeignKey("dbo.Languages", t => t.LanguageDataId, cascadeDelete: true)
                 .Index(t => t.BookDataId)
                 .Index(t => t.LanguageDataId);
             
             CreateTable(
-                "dbo.LanguageDatas",
+                "dbo.Languages",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
@@ -89,7 +89,7 @@ namespace BooksShopCore.Migrations
                 .PrimaryKey(t => t.Id);
             
             CreateTable(
-                "dbo.PreviewDatas",
+                "dbo.Previews",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
@@ -99,13 +99,13 @@ namespace BooksShopCore.Migrations
                         Format_Id = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.BookDatas", t => t.BookDataId, cascadeDelete: true)
-                .ForeignKey("dbo.FormatPreviewDatas", t => t.Format_Id)
+                .ForeignKey("dbo.Books", t => t.BookDataId, cascadeDelete: true)
+                .ForeignKey("dbo.FormatsPreview", t => t.Format_Id)
                 .Index(t => t.BookDataId)
                 .Index(t => t.Format_Id);
             
             CreateTable(
-                "dbo.FormatPreviewDatas",
+                "dbo.FormatsPreview",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
@@ -114,7 +114,7 @@ namespace BooksShopCore.Migrations
                 .PrimaryKey(t => t.Id);
             
             CreateTable(
-                "dbo.PricePolicyDatas",
+                "dbo.PricePolicies",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
@@ -124,15 +124,15 @@ namespace BooksShopCore.Migrations
                         CountryDataId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.BookDatas", t => t.BookDataId, cascadeDelete: true)
-                .ForeignKey("dbo.CountryDatas", t => t.CountryDataId, cascadeDelete: true)
-                .ForeignKey("dbo.CurrencyDatas", t => t.CurrencyDataId, cascadeDelete: true)
+                .ForeignKey("dbo.Books", t => t.BookDataId, cascadeDelete: true)
+                .ForeignKey("dbo.Countries", t => t.CountryDataId, cascadeDelete: true)
+                .ForeignKey("dbo.Currencies", t => t.CurrencyDataId, cascadeDelete: true)
                 .Index(t => t.BookDataId)
                 .Index(t => t.CurrencyDataId)
                 .Index(t => t.CountryDataId);
             
             CreateTable(
-                "dbo.CountryDatas",
+                "dbo.Countries",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
@@ -141,7 +141,7 @@ namespace BooksShopCore.Migrations
                 .PrimaryKey(t => t.Id);
             
             CreateTable(
-                "dbo.CurrencyDatas",
+                "dbo.Currencies",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
@@ -150,7 +150,7 @@ namespace BooksShopCore.Migrations
                 .PrimaryKey(t => t.Id);
             
             CreateTable(
-                "dbo.BuyerAddressDatas",
+                "dbo.BuyersAddress",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
@@ -159,13 +159,13 @@ namespace BooksShopCore.Migrations
                         FormatAdressBuyer_Id = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.BuyerDatas", t => t.BuyerDataId, cascadeDelete: true)
-                .ForeignKey("dbo.FormatAdressBuyerDatas", t => t.FormatAdressBuyer_Id)
+                .ForeignKey("dbo.Buyers", t => t.BuyerDataId, cascadeDelete: true)
+                .ForeignKey("dbo.FormatsAdressBuyer", t => t.FormatAdressBuyer_Id)
                 .Index(t => t.BuyerDataId)
                 .Index(t => t.FormatAdressBuyer_Id);
             
             CreateTable(
-                "dbo.BuyerDatas",
+                "dbo.Buyers",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
@@ -175,7 +175,7 @@ namespace BooksShopCore.Migrations
                 .PrimaryKey(t => t.Id);
             
             CreateTable(
-                "dbo.OrderDatas",
+                "dbo.Orders",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
@@ -183,11 +183,11 @@ namespace BooksShopCore.Migrations
                         BuyerDataId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.BuyerDatas", t => t.BuyerDataId, cascadeDelete: true)
+                .ForeignKey("dbo.Buyers", t => t.BuyerDataId, cascadeDelete: true)
                 .Index(t => t.BuyerDataId);
             
             CreateTable(
-                "dbo.PurchaseDatas",
+                "dbo.Purchases",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
@@ -202,17 +202,17 @@ namespace BooksShopCore.Migrations
                         IsTransferComplete = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.BookDatas", t => t.BookId, cascadeDelete: true)
-                .ForeignKey("dbo.BuyerDatas", t => t.BuyerId, cascadeDelete: true)
-                .ForeignKey("dbo.CurrencyDatas", t => t.CurrencyDataId, cascadeDelete: true)
-                .ForeignKey("dbo.OrderDatas", t => t.OrderDataId, cascadeDelete: true)
+                .ForeignKey("dbo.Books", t => t.BookId, cascadeDelete: true)
+                .ForeignKey("dbo.Buyers", t => t.BuyerId, cascadeDelete: true)
+                .ForeignKey("dbo.Currencies", t => t.CurrencyDataId, cascadeDelete: true)
+                .ForeignKey("dbo.Orders", t => t.OrderDataId, cascadeDelete: true)
                 .Index(t => t.BuyerId)
                 .Index(t => t.BookId)
                 .Index(t => t.OrderDataId)
                 .Index(t => t.CurrencyDataId);
             
             CreateTable(
-                "dbo.FormatAdressBuyerDatas",
+                "dbo.FormatsAdressBuyer",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
@@ -221,7 +221,7 @@ namespace BooksShopCore.Migrations
                 .PrimaryKey(t => t.Id);
             
             CreateTable(
-                "dbo.ExchangeRatesDatas",
+                "dbo.ExchangeRates",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
@@ -231,17 +231,18 @@ namespace BooksShopCore.Migrations
                         CurrencyDataToId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.CurrencyDatas", t => t.CurrencyDataFromId, cascadeDelete: true)
-                .ForeignKey("dbo.CurrencyDatas", t => t.CurrencyDataToId, cascadeDelete: true)
+                .ForeignKey("dbo.Currencies", t => t.CurrencyDataFromId, cascadeDelete: true)
+                .ForeignKey("dbo.Currencies", t => t.CurrencyDataToId, cascadeDelete: true)
                 .Index(t => t.CurrencyDataFromId)
                 .Index(t => t.CurrencyDataToId);
             
             CreateTable(
-                "dbo.PromocodeDatas",
+                "dbo.Promocodes",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
                         Code = c.String(),
+                        Percent = c.Int(nullable: false),
                         Date = c.DateTime(nullable: false),
                     })
                 .PrimaryKey(t => t.Id);
@@ -254,8 +255,8 @@ namespace BooksShopCore.Migrations
                         AuthorData_Id = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => new { t.BookData_Id, t.AuthorData_Id })
-                .ForeignKey("dbo.BookDatas", t => t.BookData_Id, cascadeDelete: true)
-                .ForeignKey("dbo.AuthorDatas", t => t.AuthorData_Id, cascadeDelete: true)
+                .ForeignKey("dbo.Books", t => t.BookData_Id, cascadeDelete: true)
+                .ForeignKey("dbo.Authors", t => t.AuthorData_Id, cascadeDelete: true)
                 .Index(t => t.BookData_Id)
                 .Index(t => t.AuthorData_Id);
             
@@ -263,68 +264,68 @@ namespace BooksShopCore.Migrations
         
         public override void Down()
         {
-            DropForeignKey("dbo.ExchangeRatesDatas", "CurrencyDataToId", "dbo.CurrencyDatas");
-            DropForeignKey("dbo.ExchangeRatesDatas", "CurrencyDataFromId", "dbo.CurrencyDatas");
-            DropForeignKey("dbo.BuyerAddressDatas", "FormatAdressBuyer_Id", "dbo.FormatAdressBuyerDatas");
-            DropForeignKey("dbo.PurchaseDatas", "OrderDataId", "dbo.OrderDatas");
-            DropForeignKey("dbo.PurchaseDatas", "CurrencyDataId", "dbo.CurrencyDatas");
-            DropForeignKey("dbo.PurchaseDatas", "BuyerId", "dbo.BuyerDatas");
-            DropForeignKey("dbo.PurchaseDatas", "BookId", "dbo.BookDatas");
-            DropForeignKey("dbo.OrderDatas", "BuyerDataId", "dbo.BuyerDatas");
-            DropForeignKey("dbo.BuyerAddressDatas", "BuyerDataId", "dbo.BuyerDatas");
-            DropForeignKey("dbo.PricePolicyDatas", "CurrencyDataId", "dbo.CurrencyDatas");
-            DropForeignKey("dbo.PricePolicyDatas", "CountryDataId", "dbo.CountryDatas");
-            DropForeignKey("dbo.PricePolicyDatas", "BookDataId", "dbo.BookDatas");
-            DropForeignKey("dbo.PreviewDatas", "Format_Id", "dbo.FormatPreviewDatas");
-            DropForeignKey("dbo.PreviewDatas", "BookDataId", "dbo.BookDatas");
-            DropForeignKey("dbo.NameBooksTranslateDatas", "LanguageDataId", "dbo.LanguageDatas");
-            DropForeignKey("dbo.NameBooksTranslateDatas", "BookDataId", "dbo.BookDatas");
-            DropForeignKey("dbo.FormatBookDatas", "BookDataId", "dbo.BookDatas");
-            DropForeignKey("dbo.BooksStorages", "StorageDataId", "dbo.StorageDatas");
-            DropForeignKey("dbo.BooksStorages", "BookId", "dbo.BookDatas");
-            DropForeignKey("dbo.BookDataAuthorDatas", "AuthorData_Id", "dbo.AuthorDatas");
-            DropForeignKey("dbo.BookDataAuthorDatas", "BookData_Id", "dbo.BookDatas");
+            DropForeignKey("dbo.ExchangeRates", "CurrencyDataToId", "dbo.Currencies");
+            DropForeignKey("dbo.ExchangeRates", "CurrencyDataFromId", "dbo.Currencies");
+            DropForeignKey("dbo.BuyersAddress", "FormatAdressBuyer_Id", "dbo.FormatsAdressBuyer");
+            DropForeignKey("dbo.Purchases", "OrderDataId", "dbo.Orders");
+            DropForeignKey("dbo.Purchases", "CurrencyDataId", "dbo.Currencies");
+            DropForeignKey("dbo.Purchases", "BuyerId", "dbo.Buyers");
+            DropForeignKey("dbo.Purchases", "BookId", "dbo.Books");
+            DropForeignKey("dbo.Orders", "BuyerDataId", "dbo.Buyers");
+            DropForeignKey("dbo.BuyersAddress", "BuyerDataId", "dbo.Buyers");
+            DropForeignKey("dbo.PricePolicies", "CurrencyDataId", "dbo.Currencies");
+            DropForeignKey("dbo.PricePolicies", "CountryDataId", "dbo.Countries");
+            DropForeignKey("dbo.PricePolicies", "BookDataId", "dbo.Books");
+            DropForeignKey("dbo.Previews", "Format_Id", "dbo.FormatsPreview");
+            DropForeignKey("dbo.Previews", "BookDataId", "dbo.Books");
+            DropForeignKey("dbo.NameBooksTranslate", "LanguageDataId", "dbo.Languages");
+            DropForeignKey("dbo.NameBooksTranslate", "BookDataId", "dbo.Books");
+            DropForeignKey("dbo.FormatsBook", "BookDataId", "dbo.Books");
+            DropForeignKey("dbo.BooksStorages", "StorageDataId", "dbo.Storages");
+            DropForeignKey("dbo.BooksStorages", "BookId", "dbo.Books");
+            DropForeignKey("dbo.BookDataAuthorDatas", "AuthorData_Id", "dbo.Authors");
+            DropForeignKey("dbo.BookDataAuthorDatas", "BookData_Id", "dbo.Books");
             DropIndex("dbo.BookDataAuthorDatas", new[] { "AuthorData_Id" });
             DropIndex("dbo.BookDataAuthorDatas", new[] { "BookData_Id" });
-            DropIndex("dbo.ExchangeRatesDatas", new[] { "CurrencyDataToId" });
-            DropIndex("dbo.ExchangeRatesDatas", new[] { "CurrencyDataFromId" });
-            DropIndex("dbo.PurchaseDatas", new[] { "CurrencyDataId" });
-            DropIndex("dbo.PurchaseDatas", new[] { "OrderDataId" });
-            DropIndex("dbo.PurchaseDatas", new[] { "BookId" });
-            DropIndex("dbo.PurchaseDatas", new[] { "BuyerId" });
-            DropIndex("dbo.OrderDatas", new[] { "BuyerDataId" });
-            DropIndex("dbo.BuyerAddressDatas", new[] { "FormatAdressBuyer_Id" });
-            DropIndex("dbo.BuyerAddressDatas", new[] { "BuyerDataId" });
-            DropIndex("dbo.PricePolicyDatas", new[] { "CountryDataId" });
-            DropIndex("dbo.PricePolicyDatas", new[] { "CurrencyDataId" });
-            DropIndex("dbo.PricePolicyDatas", new[] { "BookDataId" });
-            DropIndex("dbo.PreviewDatas", new[] { "Format_Id" });
-            DropIndex("dbo.PreviewDatas", new[] { "BookDataId" });
-            DropIndex("dbo.NameBooksTranslateDatas", new[] { "LanguageDataId" });
-            DropIndex("dbo.NameBooksTranslateDatas", new[] { "BookDataId" });
-            DropIndex("dbo.FormatBookDatas", new[] { "BookDataId" });
+            DropIndex("dbo.ExchangeRates", new[] { "CurrencyDataToId" });
+            DropIndex("dbo.ExchangeRates", new[] { "CurrencyDataFromId" });
+            DropIndex("dbo.Purchases", new[] { "CurrencyDataId" });
+            DropIndex("dbo.Purchases", new[] { "OrderDataId" });
+            DropIndex("dbo.Purchases", new[] { "BookId" });
+            DropIndex("dbo.Purchases", new[] { "BuyerId" });
+            DropIndex("dbo.Orders", new[] { "BuyerDataId" });
+            DropIndex("dbo.BuyersAddress", new[] { "FormatAdressBuyer_Id" });
+            DropIndex("dbo.BuyersAddress", new[] { "BuyerDataId" });
+            DropIndex("dbo.PricePolicies", new[] { "CountryDataId" });
+            DropIndex("dbo.PricePolicies", new[] { "CurrencyDataId" });
+            DropIndex("dbo.PricePolicies", new[] { "BookDataId" });
+            DropIndex("dbo.Previews", new[] { "Format_Id" });
+            DropIndex("dbo.Previews", new[] { "BookDataId" });
+            DropIndex("dbo.NameBooksTranslate", new[] { "LanguageDataId" });
+            DropIndex("dbo.NameBooksTranslate", new[] { "BookDataId" });
+            DropIndex("dbo.FormatsBook", new[] { "BookDataId" });
             DropIndex("dbo.BooksStorages", new[] { "BookId" });
             DropIndex("dbo.BooksStorages", new[] { "StorageDataId" });
             DropTable("dbo.BookDataAuthorDatas");
-            DropTable("dbo.PromocodeDatas");
-            DropTable("dbo.ExchangeRatesDatas");
-            DropTable("dbo.FormatAdressBuyerDatas");
-            DropTable("dbo.PurchaseDatas");
-            DropTable("dbo.OrderDatas");
-            DropTable("dbo.BuyerDatas");
-            DropTable("dbo.BuyerAddressDatas");
-            DropTable("dbo.CurrencyDatas");
-            DropTable("dbo.CountryDatas");
-            DropTable("dbo.PricePolicyDatas");
-            DropTable("dbo.FormatPreviewDatas");
-            DropTable("dbo.PreviewDatas");
-            DropTable("dbo.LanguageDatas");
-            DropTable("dbo.NameBooksTranslateDatas");
-            DropTable("dbo.FormatBookDatas");
-            DropTable("dbo.StorageDatas");
+            DropTable("dbo.Promocodes");
+            DropTable("dbo.ExchangeRates");
+            DropTable("dbo.FormatsAdressBuyer");
+            DropTable("dbo.Purchases");
+            DropTable("dbo.Orders");
+            DropTable("dbo.Buyers");
+            DropTable("dbo.BuyersAddress");
+            DropTable("dbo.Currencies");
+            DropTable("dbo.Countries");
+            DropTable("dbo.PricePolicies");
+            DropTable("dbo.FormatsPreview");
+            DropTable("dbo.Previews");
+            DropTable("dbo.Languages");
+            DropTable("dbo.NameBooksTranslate");
+            DropTable("dbo.FormatsBook");
+            DropTable("dbo.Storages");
             DropTable("dbo.BooksStorages");
-            DropTable("dbo.BookDatas");
-            DropTable("dbo.AuthorDatas");
+            DropTable("dbo.Books");
+            DropTable("dbo.Authors");
         }
     }
 }

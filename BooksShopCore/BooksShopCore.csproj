@@ -51,9 +51,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BooksShop.cs" />
-    <Compile Include="Migrations\201710242024271_createDB.cs" />
-    <Compile Include="Migrations\201710242024271_createDB.Designer.cs">
-      <DependentUpon>201710242024271_createDB.cs</DependentUpon>
+    <Compile Include="Migrations\201710310908152_CreateDB.cs" />
+    <Compile Include="Migrations\201710310908152_CreateDB.Designer.cs">
+      <DependentUpon>201710310908152_CreateDB.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -90,7 +90,6 @@
     <Compile Include="WorkWithUi\EntityUi\OrderUi.cs" />
     <Compile Include="WorkWithUi\EntityUi\CurrencyUi.cs" />
     <Compile Include="WorkWithUi\EntityUi\PurchaseUi.cs" />
-    <Compile Include="WorkWithUi\Logics\IBookShop.cs" />
     <Compile Include="WorkWithUi\Logics\PromoCode\IPromoCode.cs" />
     <Compile Include="WorkWithUi\Logics\Preview\IPreview.cs" />
     <Compile Include="WorkWithUi\Logics\WorkWithBooks\WorkWithBooks.cs" />
@@ -103,11 +102,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201710242024271_createDB.resx">
-      <DependentUpon>201710242024271_createDB.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201710310908152_CreateDB.resx">
+      <DependentUpon>201710310908152_CreateDB.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

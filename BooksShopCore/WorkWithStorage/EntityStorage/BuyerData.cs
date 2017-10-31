@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace BooksShopCore.WorkWithStorage.EntityStorage
 {
+    [Table("Buyers")]
     internal class BuyerData // тип данных покупатель
     {
         public int Id { get; set; }

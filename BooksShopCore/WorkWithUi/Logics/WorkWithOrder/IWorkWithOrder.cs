@@ -9,11 +9,13 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithOrder
 {
     public interface IWorkWithOrder
     {
-        IList<BookUi> ShowListCurrentPurchases();
+        bool Buy(BookUi book);
+        bool Reversal(BookUi book);
+        IList<PurchaseUi> ShowListCurrentPurchases();
         bool ConfirmationOrder();
-        bool CancelPurchase(int purchaseId);
+        bool CancelPurchaseAfterConfirmation(int purchaseId);
         bool IsCompleted(int purchaseId);
-        IList<BookUi> ApplyPromocode(string promocode);
+        bool ApplyPromocode(string promocode);
     }
 
 }

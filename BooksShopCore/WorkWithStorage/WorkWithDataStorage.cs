@@ -39,7 +39,7 @@ namespace BooksShopCore.WorkWithStorage
         public void Dispose()
         {
             Dispose(true);
-            GC.SuppressFinalize(this);
+            //GC.SuppressFinalize(this);
         }
         private bool disposed = false;
         protected virtual void Dispose(bool disposing)
@@ -54,5 +54,6 @@ namespace BooksShopCore.WorkWithStorage
             }
         }
         #endregion
+
     }
 }
