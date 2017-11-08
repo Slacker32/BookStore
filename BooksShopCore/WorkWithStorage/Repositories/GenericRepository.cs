@@ -24,9 +24,9 @@ namespace BooksShopCore.WorkWithStorage.Repositories
             return this.dbSet.Find(id);
         }
 
-        public IEnumerable<T> ReadAll()
+        public IList<T> ReadAll()
         {
-            return this.dbSet;
+            return this.dbSet.ToList();
         }
 
         public void Create(T item)
@@ -48,12 +48,12 @@ namespace BooksShopCore.WorkWithStorage.Repositories
             }
         }
 
-        public IEnumerable<T> GetWithInclude(params Expression<Func<T, object>>[] includeProperties)
+        public IList<T> GetWithInclude(params Expression<Func<T, object>>[] includeProperties)
         {
             return Include(includeProperties).ToList();
         }
 
-        public IEnumerable<T> GetWithInclude(Func<T, bool> predicate, params Expression<Func<T, object>>[] includeProperties)
+        public IList<T> GetWithInclude(Func<T, bool> predicate, params Expression<Func<T, object>>[] includeProperties)
         {
             var query = Include(includeProperties);
             return query.Where(predicate).ToList();

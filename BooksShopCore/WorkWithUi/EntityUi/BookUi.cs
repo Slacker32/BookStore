@@ -13,7 +13,8 @@ namespace BooksShopCore.WorkWithUi.EntityUi
         public string Name { get; set; }// название книги
         public DateTime Year { get; set; }// год издания
         public decimal Price { get; set; }// цена
-        public string Currency { get; set; }// валюта
+        public CurrencyUi Currency { get; set; }// валюта
+        public FormatBookUi Format { get; set; }//формат книги
         public int Count { get; set; }// количество книг в наличии(за вычетом блокированных)
     }
 

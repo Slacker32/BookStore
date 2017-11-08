@@ -7,13 +7,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage;
 
 namespace BooksShopCore.WorkWithUi.Logics.WorkWithBooks
 {
     public class WorkWithBooks:IWorkWithBooks
     {
-        private GenericRepository<BookData> BookRepository { get; set; }
-        private GenericRepository<ExchangeRatesData> ExchangeRatesRepository { get; set; }
+        private IDataRepository<BookData> BookRepository { get; set; }
+        private IDataRepository<ExchangeRatesData> ExchangeRatesRepository { get; set; }
+        private WorkWithCurrencyStorage CurrencyStorage { get; set; }
 
         public WorkWithBooks()
         {
@@ -67,17 +69,14 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithBooks
                         #endregion
 
                         book.Price = tempPrice;
-                        book.Currency = tempCurrency;
+                        book.Currency = CurrencyStorage.Read(currencyCode);
 
 
                         #region определение количества книги на разных складах
                         var tempCount = 0;
                         if (item.BooksStorages != null)
                         {
-                            foreach (var storage in item.BooksStorages)
-                            {
-                                tempCount += storage.Count - storage.CountInBlocked;
-                            }
+                            tempCount += item.BooksStorages.Sum(storage => storage.Count - storage.CountInBlocked);
                         }
                         #endregion
                         book.Count = tempCount;

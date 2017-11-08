@@ -22,7 +22,7 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithOrder.Tests
             Author = "Рихтер",
             BookId = 1,
             Count = 1,
-            Currency = "BUN",
+            Currency = new CurrencyUi() {CurrencyCode = "BUN" },
             Name = "Clr via C#",
             Price = 123.43m,
             Year = new DateTime(2017, 1, 1)
@@ -99,6 +99,40 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithOrder.Tests
             {
                 throw;
             }
+        }
+
+        [TestMethod()]
+        public void ShowListCurrentPurchasesTest()
+        {
+            //инициализация исходных данных
+            var workWithOrder = new WorkWithOrder(this.tempBuyerUi);
+            BuyTest();
+
+            //ожидаемое значение
+            var expected = 1;
+
+            //результат
+            var actual = workWithOrder.ShowListCurrentPurchases();
+
+            //сверка значений
+            Assert.AreEqual(expected, actual.Count);
+        }
+
+        [TestMethod()]
+        public void CancelPurchaseAfterConfirmationTest()
+        {
+            //инициализация исходных данных
+            var workWithOrder = new WorkWithOrder(this.tempBuyerUi);
+            BuyTest();
+
+            //ожидаемое значение
+            var expected = 1;
+
+            //результат
+            var actual = workWithOrder.ShowListCurrentPurchases();
+
+            //сверка значений
+            Assert.AreEqual(expected, actual.Count);
         }
     }
 }

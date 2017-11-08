@@ -14,6 +14,10 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithOrder
     public class WorkWithOrder : IWorkWithOrder
     {
         internal IDataRepository<PromocodeData> PromocodeRepository { get; set; }
+        internal IDataRepository<PurchaseData> PurchaseRepository { get; set; }
+        internal IDataRepository<BuyerData> BuyerRepository { get; set; }
+        internal IDataRepository<BookData> BookRepository { get; set; }
+
         private BuyerUi TempBuyer { get; set; }
 
         public WorkWithOrder(BuyerUi buyer)
@@ -159,6 +163,77 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithOrder
             return ret;
         }
 
+        public bool ConfirmationOrder()
+        {
+            //Возвращает флаг успешности / ошибки принятия заказа, tempBuyer добавляется в хранилище данных, выбранные книги помечаются флагом блокировки, и не отображаются пользователю.
+            //Заново проверяется, что наличие и количество выбранных книг не превышает доступного значения.
+            //Для каждой книги формируется покупка(Purchase), и записывается в базу.
+            //Необходимо учесть что доставка книги на бумаге невозможна на электронный адрес.
+
+            var ret = false;
+            try
+            {
+                //временный покупатель существует и у него есть заказанные книги 
+                if (this.TempBuyer?.ListPurchases?.Count > 0)
+                {
+                    foreach (var pubrchase in this.TempBuyer?.ListPurchases)
+                    {
+                        var book = pubrchase.Book;
+                        #region блокировка заказанных книг
+
+                        var bookData = BookRepository.Read(book.BookId);
+                        if (bookData.BooksStorages?.Count > 0)
+                        {
+                            var bookIsAvailable = bookData.BooksStorages.Sum(p => p.Count - p.CountInBlocked);
+                            if (bookIsAvailable < book.Count)
+                            {
+                                var countBookPurchase = book.Count;
+                                int tempBook = 0;
+                                while (tempBook < countBookPurchase)
+                                {
+                                    //указанное количество книг доступно для заказа они будут блокироваться
+                                    var flgAdd = false;
+                                    foreach (var storage in bookData.BooksStorages)
+                                    {
+                                        if ((storage.Count - storage.CountInBlocked) >= tempBook)
+                                        {
+                                            storage.CountInBlocked += tempBook;
+                                            flgAdd = true;
+                                            break;
+                                        }
+                                    }
+                                    if (!flgAdd)
+                                    {
+                                        throw new ApplicationException($"На складах нехватает книг");
+                                    }
+                                    tempBook++;
+                                }
+                                BookRepository.Update(bookData);
+                            }
+                            else
+                            {
+                                throw new ApplicationException($"Выбранное количество{book.Count} книги {book.Name} недоступно для заказа");
+                            }
+                        }
+                        
+
+                        #endregion
+                    }
+
+                }
+                else
+                {
+                    throw new ApplicationException($"Невозможно подтвердить заказ так-как не выбраны книги для покупки");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException($"Ошибка при попытке отмены покупки:{ex}");
+            }
+            return ret;
+        }
+
         public bool CancelPurchaseAfterConfirmation(int purchaseId)
         {
             var ret = false;
@@ -172,15 +247,12 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithOrder
             }
             catch (Exception ex)
             {
-                throw new ApplicationException($"Ошибка загрузки списка покупок для текущего покупатеся:{ex}");
+                throw new ApplicationException($"Ошибка при попытке отмены покупки:{ex}");
             }
             return ret;
         }
 
-        public bool ConfirmationOrder()
-        {
-            throw new NotImplementedException();
-        }
+
 
         public bool IsCompleted(int purchaseId)
         {
