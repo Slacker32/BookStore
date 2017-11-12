@@ -1,0 +1,74 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>BookStore</title>
+    <style>
+        .text{
+            margin: 1em auto auto;
+            width: 85%;
+        }
+        table.filter {
+            margin: 0.3em auto 0.5em;
+            width: 90%;
+        }
+        .filterInput{
+            margin: 0;
+            width: 98%;
+        }
+        table.data {
+            border-collapse: collapse;
+            margin: 0.3em auto 0.5em;
+            width: 90%;
+        }
+        .data td, .data th {
+            border: 1px solid #333;
+            padding: 4px;
+        }
+        th {
+            background: #bfbfbf;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1 class="text"><i>BookStore</i></h1>
+        <table class="filter">
+            <tr>
+                <td><input type="text" value="Search string" class="filterInput"></td>
+                <td width="25" align="center"><p>Currency</p></td>
+                <td width="25" align="center"><p>Backet</p></td>
+            </tr>
+        </table>
+        <table class="data">
+            <tr>
+                <th>Author</th>
+                <th>Book title</th>
+                <th>The year of publishing</th>
+                <th>Price</th>
+                <th>Format</th>
+                <th></th>
+                <th></th>
+            </tr>
+            @foreach (var b in ViewBag.Books)
+            {
+                <tr>
+                    <td><p>@b.Author</p></td>
+                    <td><p>@b.Name</p></td>
+                    <td><p>@b.Year</p></td>
+                    <td><p>@b.Price</p></td>
+                    <td><p>@b.Format.FormatName</p></td>
+                    <td><p><a href="/Home/Buy/@b.BookId">Preview</a></p></td>
+                    <td><p><a href="/Home/Buy/@b.BookId">Buy</a></p></td>
+                </tr>
+            }
+        </table>
+    </div>
+</body>
+</html>
