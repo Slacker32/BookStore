@@ -10,7 +10,7 @@ using BooksShopCore.WorkWithUi.EntityUi;
 
 namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
 {
-    public class WorkWithFormatBookStorage : IDisposable
+    public class WorkWithFormatBookStorage : IDisposable, IWorkWithDataStorage<FormatBookUi>
     {
         private readonly BookStoreContext db;
         private IDataRepository<FormatBookData> FormatBookDataRepository { get; set; }
@@ -85,6 +85,30 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
             try
             {
                 var formatBookStorage = FormatBookDataRepository.Read(id);
+                if (formatBookStorage != null)
+                {
+                    var formatBook = new FormatBookUi()
+                    {
+                        FormatBookId = formatBookStorage.Id,
+                        FormatName = formatBookStorage.FormatName
+                    };
+
+                    ret = formatBook;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw new ApplicationException($"Ошибка получения формата по индексу: {ex}");
+            }
+            return ret;
+        }
+        public FormatBookUi Read(string formatName)
+        {
+            FormatBookUi ret = null;
+            try
+            {
+                var formatBookStorage = FormatBookDataRepository.ReadAll().FirstOrDefault(p => p.FormatName.Equals(formatName, StringComparison.OrdinalIgnoreCase));
                 if (formatBookStorage != null)
                 {
                     var formatBook = new FormatBookUi()

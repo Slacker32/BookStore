@@ -11,7 +11,7 @@ using BooksShopCore.WorkWithUi.EntityUi;
 
 namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
 {
-    public class WorkWithCurrencyStorage : IDisposable
+    public class WorkWithCurrencyStorage : IDisposable, IWorkWithDataStorage<CurrencyUi>
     {
         private readonly BookStoreContext db;
         private IDataRepository<CurrencyData> CurrencyRepository { get; set; }
@@ -36,7 +36,8 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
                         var currency = new CurrencyUi()
                         {
                             CurrencyId = item.Id,
-                            CurrencyCode = item.CurrencyCode
+                            CurrencyCode = item.CurrencyCode,
+                            CurrencyName = item.CurrencyName
                         };
 
                         if (ret == null)
@@ -65,7 +66,8 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
                     //добавление новой записи в валюты в хранилище данных
                     var currencyData = new CurrencyData()
                     {
-                        CurrencyCode = item.CurrencyCode
+                        CurrencyCode = item.CurrencyCode,
+                        CurrencyName = item.CurrencyName
                     };
 
                     CurrencyRepository.Create(currencyData);
@@ -90,7 +92,8 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
                     var currency = new CurrencyUi()
                     {
                         CurrencyId = currencyFromStorage.Id,
-                        CurrencyCode = currencyFromStorage.CurrencyCode
+                        CurrencyCode = currencyFromStorage.CurrencyCode,
+                        CurrencyName = currencyFromStorage.CurrencyName
                     };
 
                     ret = currency;
@@ -115,7 +118,8 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
                     var currency = new CurrencyUi()
                     {
                         CurrencyId = currencyFromStorage.Id,
-                        CurrencyCode = currencyFromStorage.CurrencyCode
+                        CurrencyCode = currencyFromStorage.CurrencyCode,
+                        CurrencyName = currencyFromStorage.CurrencyName
                     };
 
                     ret = currency;
@@ -139,6 +143,7 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
                     if (updateCurrencyData != null)
                     {
                         updateCurrencyData.CurrencyCode = item.CurrencyCode;
+                        updateCurrencyData.CurrencyName = item.CurrencyName;
                         CurrencyRepository.Update(updateCurrencyData);
                         this.db.SaveChanges();
                     }

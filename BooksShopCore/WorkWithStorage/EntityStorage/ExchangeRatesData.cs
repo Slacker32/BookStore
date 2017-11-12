@@ -15,12 +15,12 @@ namespace BooksShopCore.WorkWithStorage.EntityStorage
         public decimal Rate { get; set; }// курс конверсии
 
 
-        public int CurrencyDataFromId { get; set; }// FK на таблицу валют
+        public int? CurrencyDataFromId { get; set; }// FK на таблицу валют
         [ForeignKey("CurrencyDataFromId")]
         public CurrencyData CurrencyFrom { get; set; }// валюта «Из»
 
 
-        public int CurrencyDataToId { get; set; }// FK на таблицу CurrencyData
+        public int? CurrencyDataToId { get; set; }// FK на таблицу CurrencyData
         [ForeignKey("CurrencyDataToId")]
         public CurrencyData CurrencyTo { get; set; }// валюта «В»
     }

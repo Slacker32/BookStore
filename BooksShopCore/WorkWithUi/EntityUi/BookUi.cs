@@ -9,8 +9,9 @@ namespace BooksShopCore.WorkWithUi.EntityUi
     public class BookUi // тип данных книга
     {
         public int BookId { get; set; }// уникальный идентификатор книги
-        public string Author { get; set; }//автор книги
+        public string Author { get; set; }//авторы книги через ";"
         public string Name { get; set; }// название книги
+        public string LanguageBookCode { get; set; }// код языка книги
         public DateTime Year { get; set; }// год издания
         public decimal Price { get; set; }// цена
         public CurrencyUi Currency { get; set; }// валюта

@@ -16,7 +16,7 @@ namespace BooksShopCore.WorkWithStorage.EntityStorage
         public int BuyerDataId { get; set; }// FK на таблицу покупателей
         public BuyerData Buyer { get; set; }// данные покупателя
 
-        public IList<PurchaseData> ListPurchases { get; set; }// список покупок в заказе
+        public virtual IList<PurchaseData> ListPurchases { get; set; }// список покупок в заказе
     }
 
 }

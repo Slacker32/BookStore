@@ -3,7 +3,7 @@ namespace BooksShopCore.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class CreateDB : DbMigration
+    public partial class createDb : DbMigration
     {
         public override void Up()
         {
@@ -69,13 +69,13 @@ namespace BooksShopCore.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        BookDataId = c.Int(nullable: false),
+                        BookDataId = c.Int(),
                         NameBook = c.String(),
-                        LanguageDataId = c.Int(nullable: false),
+                        LanguageDataId = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Books", t => t.BookDataId, cascadeDelete: true)
-                .ForeignKey("dbo.Languages", t => t.LanguageDataId, cascadeDelete: true)
+                .ForeignKey("dbo.Books", t => t.BookDataId)
+                .ForeignKey("dbo.Languages", t => t.LanguageDataId)
                 .Index(t => t.BookDataId)
                 .Index(t => t.LanguageDataId);
             
@@ -85,6 +85,7 @@ namespace BooksShopCore.Migrations
                     {
                         Id = c.Int(nullable: false, identity: true),
                         LanguageCode = c.String(),
+                        LanguageName = c.String(),
                     })
                 .PrimaryKey(t => t.Id);
             
@@ -137,6 +138,7 @@ namespace BooksShopCore.Migrations
                     {
                         Id = c.Int(nullable: false, identity: true),
                         CountryCode = c.String(),
+                        CountryName = c.String(),
                     })
                 .PrimaryKey(t => t.Id);
             
@@ -146,6 +148,7 @@ namespace BooksShopCore.Migrations
                     {
                         Id = c.Int(nullable: false, identity: true),
                         CurrencyCode = c.String(),
+                        CurrencyName = c.String(),
                     })
                 .PrimaryKey(t => t.Id);
             
@@ -194,7 +197,7 @@ namespace BooksShopCore.Migrations
                         Date = c.DateTime(nullable: false),
                         BuyerId = c.Int(nullable: false),
                         BookId = c.Int(nullable: false),
-                        OrderDataId = c.Int(nullable: false),
+                        OrderDataId = c.Int(),
                         Count = c.Int(nullable: false),
                         Amount = c.Decimal(nullable: false, precision: 18, scale: 2),
                         CurrencyDataId = c.Int(nullable: false),
@@ -205,7 +208,7 @@ namespace BooksShopCore.Migrations
                 .ForeignKey("dbo.Books", t => t.BookId, cascadeDelete: true)
                 .ForeignKey("dbo.Buyers", t => t.BuyerId, cascadeDelete: true)
                 .ForeignKey("dbo.Currencies", t => t.CurrencyDataId, cascadeDelete: true)
-                .ForeignKey("dbo.Orders", t => t.OrderDataId, cascadeDelete: true)
+                .ForeignKey("dbo.Orders", t => t.OrderDataId)
                 .Index(t => t.BuyerId)
                 .Index(t => t.BookId)
                 .Index(t => t.OrderDataId)
@@ -227,12 +230,12 @@ namespace BooksShopCore.Migrations
                         Id = c.Int(nullable: false, identity: true),
                         Date = c.DateTime(nullable: false),
                         Rate = c.Decimal(nullable: false, precision: 18, scale: 2),
-                        CurrencyDataFromId = c.Int(nullable: false),
-                        CurrencyDataToId = c.Int(nullable: false),
+                        CurrencyDataFromId = c.Int(),
+                        CurrencyDataToId = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Currencies", t => t.CurrencyDataFromId, cascadeDelete: true)
-                .ForeignKey("dbo.Currencies", t => t.CurrencyDataToId, cascadeDelete: true)
+                .ForeignKey("dbo.Currencies", t => t.CurrencyDataFromId)
+                .ForeignKey("dbo.Currencies", t => t.CurrencyDataToId)
                 .Index(t => t.CurrencyDataFromId)
                 .Index(t => t.CurrencyDataToId);
             

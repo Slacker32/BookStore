@@ -12,6 +12,7 @@ namespace BooksShopCore.WorkWithStorage.EntityStorage
     {
         public int Id { get; set; }
         public string CurrencyCode { get; set; }//– строковый код валюты по ISO
+        public string CurrencyName { get; set; }//– название валюты по ISO
     }
 
 }

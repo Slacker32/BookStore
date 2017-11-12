@@ -10,7 +10,7 @@ using BooksShopCore.WorkWithUi.EntityUi;
 
 namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
 {
-    public class WorkWithBooksStorage : IDisposable
+    public class WorkWithBooksStorage : IDisposable, IWorkWithDataStorage<BookUi>
     {
         private readonly BookStoreContext db;
         private IDataRepository<BookData> BookRepository { get; set; }
@@ -80,7 +80,10 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
                         #endregion
 
                         book.Price = tempPrice;
-                        book.Currency = tempCurrency;
+                        book.Currency = new CurrencyUi()
+                        {
+                            CurrencyCode = tempCurrency
+                        };
 
 
                         #region определение количества книги на разных складах
@@ -105,8 +108,7 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
 
             return ret;
         }
-
-        public void Create(BookUi item, string languageCode)
+        public void Create(BookUi item,string languageCode)
         {
             try
             {
@@ -231,7 +233,20 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
             }
         }
 
+        public IList<BookUi> ReadAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Create(BookUi item)
+        {
+            throw new NotImplementedException();
+        }
         public BookUi Read(int index)
+        {
+            throw new NotImplementedException();
+        }
+        public BookUi Read(string findStr)
         {
             throw new NotImplementedException();
         }

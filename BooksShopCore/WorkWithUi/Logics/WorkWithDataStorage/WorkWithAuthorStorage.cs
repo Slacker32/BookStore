@@ -10,7 +10,7 @@ using BooksShopCore.WorkWithUi.EntityUi;
 
 namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
 {
-    public class WorkWithAuthorStorage : IDisposable
+    public class WorkWithAuthorStorage : IDisposable, IWorkWithDataStorage<AuthorUi>
     {
         private readonly BookStoreContext db;
         private IDataRepository<AuthorData> AuthorDataRepository { get; set; }

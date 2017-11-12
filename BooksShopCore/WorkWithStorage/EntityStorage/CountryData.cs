@@ -12,6 +12,7 @@ namespace BooksShopCore.WorkWithStorage.EntityStorage
     {
         public int Id { get; set; }
         public string CountryCode { get; set; }// код страны по спецификации ISO
+        public string CountryName { get; set; }// название страны по спецификации ISO
     }
 
 }

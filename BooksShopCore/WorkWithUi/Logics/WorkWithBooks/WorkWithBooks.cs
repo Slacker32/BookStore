@@ -20,27 +20,36 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithBooks
         public WorkWithBooks()
         {
             BookRepository = new GenericRepository<BookData>(new BookStoreContext());
+            ExchangeRatesRepository = new GenericRepository<ExchangeRatesData>(new BookStoreContext());
+            CurrencyStorage = new WorkWithCurrencyStorage();
         }
 
-        public IList<BookUi> ShowAllBooks(string languageCode,string currencyCode)
+        public IList<BookUi> ShowAllBooks(string languageCode=null,string currencyCode=null)
         {
             var ret = new List<BookUi>();
             try
             {
-                var booksListFromStorage = BookRepository.GetWithInclude(p=>p.Authors,p=>p.BooksStorages, p => p.NameBooksTranslates, p => p.PricePolicy);
+                var booksListFromStorage = BookRepository.GetWithInclude(
+                    p => p.Authors,p => p.BooksStorages, p => p.NameBooksTranslates, p => p.PricePolicy, p => p.FormatBook,
+                    p => p.NameBooksTranslates.Select(p1=>p1.Language), p => p.PricePolicy.Select(p1 => p1.Currency));
                 if (booksListFromStorage!=null)
                 {
                     foreach (var item in booksListFromStorage)
                     {
                         var book = new BookUi();
 
+                        book.BookId = item.Id;
                         //получение списка авторов
-                        book.Author = String.Join(";", item.Authors.ToList());
+                        book.Author = item.Authors.Aggregate(new StringBuilder(), (s, p) => s.Append(p.Name).Append(";")).ToString();
 
                         //получение названия в зависимости от выбранного языка
-                        var tempBookName = item.NameBooksTranslates.FirstOrDefault((p) => p.Language.LanguageCode.Equals(languageCode, StringComparison.OrdinalIgnoreCase));
-                        book.Name = tempBookName!=null ? tempBookName.NameBook: string.Empty;
-
+                        var tempBookName = item.NameBooksTranslates[0];
+                        if (!string.IsNullOrEmpty(languageCode))
+                        {
+                            tempBookName = item.NameBooksTranslates.FirstOrDefault((p) => p.Language.LanguageCode.Equals(languageCode, StringComparison.OrdinalIgnoreCase));
+                        }
+                        book.Name = tempBookName != null ? tempBookName.NameBook : string.Empty;
+                        
                         //год издания
                         book.Year = item.Year;
 
@@ -80,7 +89,11 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithBooks
                         }
                         #endregion
                         book.Count = tempCount;
-                        book.BookId = item.Id;
+
+                        book.Format = new FormatBookUi
+                        {
+                            FormatName = item.FormatBook.Aggregate(new StringBuilder(), (s, p) => s.Append(p.FormatName).Append(";")).ToString(),
+                        };
 
                         ret.Add(book);
                     }

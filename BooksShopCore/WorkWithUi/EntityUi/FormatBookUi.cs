@@ -8,7 +8,7 @@ namespace BooksShopCore.WorkWithUi.EntityUi
 {
     public class FormatBookUi // формат книги
     {
-        public int FormatBookId { get; set; }// уникальный идентификатор валюты
+        public int FormatBookId { get; set; }// уникальный идентификатор 
         public string FormatName { get; set; }// формат данных книги(paper, pdf, fb2, doc, rtf, txt)
 
     }

@@ -18,10 +18,10 @@ namespace BooksShopCore.WorkWithStorage.EntityStorage
         public decimal Price { get; set; }// цена книги
 
         public int CurrencyDataId { get; set; }// FK на таблицу валют
-        public CurrencyData Currency { get; set; }// валюта для цены
+        public virtual CurrencyData Currency { get; set; }// валюта для цены
 
         public int CountryDataId { get; set; }// FK на таблицу стран
-        public CountryData Country { get; set; }// страна для которой применена ценовая политика
+        public virtual CountryData Country { get; set; }// страна для которой применена ценовая политика
     }
 
 }

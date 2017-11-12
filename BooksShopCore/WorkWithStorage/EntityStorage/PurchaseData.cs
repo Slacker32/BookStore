@@ -19,8 +19,8 @@ namespace BooksShopCore.WorkWithStorage.EntityStorage
         public int BookId { get; set; }// FK на таблицу Book
         public BookData Book { get; set; }// данные по книге
 
-        public int OrderDataId { get; set; }// FK на таблицу OrderData
-        public OrderData Order { get; set; }// данные по заказу
+        public int? OrderDataId { get; set; }// FK на таблицу OrderData
+        public virtual OrderData Order { get; set; }// данные по заказу
 
         public int Count { get; set; }// количество купленных/ покупаемых экземпляров книги
         public decimal Amount { get; set; }// сумма покупки

@@ -12,6 +12,7 @@ namespace BooksShopCore.WorkWithStorage.EntityStorage
     {
         public int Id { get; set; }
         public string LanguageCode { get; set; }// код языка по спецификации ISO
+        public string LanguageName { get; set; }// название языка по спецификации ISO
     }
 
 }

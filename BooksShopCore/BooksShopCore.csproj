@@ -51,9 +51,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BooksShop.cs" />
-    <Compile Include="Migrations\201710310908152_CreateDB.cs" />
-    <Compile Include="Migrations\201710310908152_CreateDB.Designer.cs">
-      <DependentUpon>201710310908152_CreateDB.cs</DependentUpon>
+    <Compile Include="Migrations\201711111938228_createDb.cs" />
+    <Compile Include="Migrations\201711111938228_createDb.Designer.cs">
+      <DependentUpon>201711111938228_createDb.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -83,6 +83,9 @@
     <Compile Include="WorkWithUi\EntityUi\AuthorUi.cs" />
     <Compile Include="WorkWithUi\EntityUi\BookUi.cs" />
     <Compile Include="WorkWithUi\EntityUi\BuyerUi.cs" />
+    <Compile Include="WorkWithUi\EntityUi\PreviewUi.cs" />
+    <Compile Include="WorkWithUi\EntityUi\CountryUi.cs" />
+    <Compile Include="WorkWithUi\EntityUi\LanguageUi.cs" />
     <Compile Include="WorkWithUi\EntityUi\FormatBookUi.cs" />
     <Compile Include="WorkWithUi\EntityUi\OrderUi.cs" />
     <Compile Include="WorkWithUi\EntityUi\CurrencyUi.cs" />
@@ -90,6 +93,9 @@
     <Compile Include="WorkWithUi\Logics\PromoCode\IPromoCode.cs" />
     <Compile Include="WorkWithUi\Logics\Preview\IPreview.cs" />
     <Compile Include="WorkWithUi\Logics\WorkWithBooks\WorkWithBooks.cs" />
+    <Compile Include="WorkWithUi\Logics\WorkWithDataStorage\WorkWithCountryStorage.cs" />
+    <Compile Include="WorkWithUi\Logics\WorkWithDataStorage\WorkWithLanguageStorage.cs" />
+    <Compile Include="WorkWithUi\Logics\WorkWithDataStorage\IWorkWithDataStorage.cs" />
     <Compile Include="WorkWithUi\Logics\WorkWithDataStorage\WorkWithAuthorStorage.cs" />
     <Compile Include="WorkWithUi\Logics\WorkWithDataStorage\WorkWithFormatBookStorage.cs" />
     <Compile Include="WorkWithUi\Logics\WorkWithDataStorage\WorkWithCurrencyStorage.cs" />
@@ -103,11 +109,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201710310908152_CreateDB.resx">
-      <DependentUpon>201710310908152_CreateDB.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201711111938228_createDb.resx">
+      <DependentUpon>201711111938228_createDb.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

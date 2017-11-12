@@ -56,7 +56,7 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithOrder
                 tempPurchase.Amount = book.Price;
                 tempPurchase.Buyer = this.TempBuyer;
                 tempPurchase.Count++;
-                tempPurchase.Currency = book.Currency;
+                tempPurchase.Currency = book.Currency.CurrencyCode;
                 tempPurchase.Date = DateTime.UtcNow;
 
                 if (flgAddBook)
