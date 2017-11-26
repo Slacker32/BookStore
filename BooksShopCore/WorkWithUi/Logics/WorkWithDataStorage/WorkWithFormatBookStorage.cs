@@ -12,13 +12,11 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
 {
     public class WorkWithFormatBookStorage : IDisposable, IWorkWithDataStorage<FormatBookUi>
     {
-        private readonly BookStoreContext db;
         private IDataRepository<FormatBookData> FormatBookDataRepository { get; set; }
 
         public WorkWithFormatBookStorage()
         {
-            this.db = new BookStoreContext();
-            FormatBookDataRepository = new GenericRepository<FormatBookData>(db);
+            FormatBookDataRepository = new GenericRepository<FormatBookData>(new BookStoreContext());
 
         }
 
@@ -46,10 +44,10 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw new ApplicationException($"Ошибка получения данных");
+                ex.Data.Add(this.GetType().ToString(), "Ошибка получения всех форматов книг из хранилища");
+                throw;
             }
 
             return ret;
@@ -69,13 +67,13 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
                     };
 
                     FormatBookDataRepository.Create(formatBook);
-                    this.db.SaveChanges();
+                    FormatBookDataRepository.SaveChanges();
                 }
             }
             catch (Exception ex)
             {
-
-                throw new ApplicationException($"Ошибка добавления формата в хранилище данных: {ex}");
+                ex.Data.Add(this.GetType().ToString(), "Ошибка добавления формата книги в хранилище");
+                throw;
             }
         }
 
@@ -98,17 +96,17 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
             }
             catch (Exception ex)
             {
-
-                throw new ApplicationException($"Ошибка получения формата по индексу: {ex}");
+                ex.Data.Add(this.GetType().ToString(), "Ошибка получения формата книги из хранилища по индексу");
+                throw;
             }
             return ret;
         }
-        public FormatBookUi Read(string formatName)
+        public FormatBookUi Read(string bookName)
         {
             FormatBookUi ret = null;
             try
             {
-                var formatBookStorage = FormatBookDataRepository.ReadAll().FirstOrDefault(p => p.FormatName.Equals(formatName, StringComparison.OrdinalIgnoreCase));
+                var formatBookStorage = FormatBookDataRepository.ReadAll().FirstOrDefault(p => p.Book.NameBooksTranslates.FirstOrDefault(p2 => p2.NameBook.Equals(bookName, StringComparison.OrdinalIgnoreCase)) != null);
                 if (formatBookStorage != null)
                 {
                     var formatBook = new FormatBookUi()
@@ -122,8 +120,8 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
             }
             catch (Exception ex)
             {
-
-                throw new ApplicationException($"Ошибка получения формата по индексу: {ex}");
+                ex.Data.Add(this.GetType().ToString(), "Ошибка получения формата книги из хранилища по названию книги");
+                throw;
             }
             return ret;
         }
@@ -141,14 +139,14 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
                         formatBookData.FormatName = item.FormatName;
                         //formatBookData.Book=item.
                         FormatBookDataRepository.Update(formatBookData);
-                        this.db.SaveChanges();
+                        FormatBookDataRepository.SaveChanges();
                     }
                 }
             }
             catch (Exception ex)
             {
-
-                throw new ApplicationException($"Ошибка изменения формата в хранилище данных: {ex}");
+                ex.Data.Add(this.GetType().ToString(), "Ошибка обновления формата книги из хранилища");
+                throw;
             }
         }
 
@@ -157,13 +155,40 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
             try
             {
                 FormatBookDataRepository.Delete(id);
+                FormatBookDataRepository.SaveChanges();
             }
             catch (Exception ex)
             {
 
-                throw new ApplicationException($"Ошибка удаления формата по индексу: {ex}");
+                ex.Data.Add(this.GetType().ToString(), "Ошибка удаления формата книги из хранилища");
+                throw;
             }
         }
+
+        public void AddOrUpdate(FormatBookUi item)
+        {
+            try
+            {
+                if (item != null)
+                {
+                    //добавление новой записи формата в хранилище данных
+                    var formatBook = new FormatBookData()
+                    {
+                        Id = item.FormatBookId,
+                        FormatName = item.FormatName
+                    };
+
+                    FormatBookDataRepository.AddOrUpdate(formatBook);
+                    FormatBookDataRepository.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                ex.Data.Add(this.GetType().ToString(), "Ошибка добавления или изменения формата книги в хранилище");
+                throw;
+            }
+        }
+
 
         #region частичная реализация паттерна очистки
         public void Dispose()
@@ -178,7 +203,7 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
             {
                 if (disposing)
                 {
-                    db.Dispose();
+                    FormatBookDataRepository.Dispose();
                 }
                 this.disposed = true;
             }

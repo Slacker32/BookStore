@@ -13,13 +13,11 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
 {
     public class WorkWithCurrencyStorage : IDisposable, IWorkWithDataStorage<CurrencyUi>
     {
-        private readonly BookStoreContext db;
         private IDataRepository<CurrencyData> CurrencyRepository { get; set; }
 
         public WorkWithCurrencyStorage()
         {
-            this.db = new BookStoreContext();
-            CurrencyRepository = new GenericRepository<CurrencyData>(db);
+            CurrencyRepository = new GenericRepository<CurrencyData>(new BookStoreContext());
 
         }
 
@@ -48,10 +46,10 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw new ApplicationException($"Ошибка получения данных");
+                ex.Data.Add(this.GetType().ToString(), "Ошибка получения всех валют из хранилища");
+                throw;
             }
 
             return ret;
@@ -71,13 +69,13 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
                     };
 
                     CurrencyRepository.Create(currencyData);
-                    this.db.SaveChanges();
+                    CurrencyRepository.SaveChanges();
                 }
             }
             catch (Exception ex)
             {
-
-                throw new ApplicationException($"Ошибка добавления валюты в хранилище данных: {ex}");
+                ex.Data.Add(this.GetType().ToString(), "Ошибка добавления валюты в хранилище");
+                throw;
             }
         }
 
@@ -101,18 +99,18 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
             }
             catch (Exception ex)
             {
-
-                throw new ApplicationException($"Ошибка получения валюты по индексу: {ex}");
+                ex.Data.Add(this.GetType().ToString(), "Ошибка получения валюты из хранилища по индексу");
+                throw;
             }
             return ret;
         }
 
-        public CurrencyUi Read(string currencyName)
+        public CurrencyUi Read(string сurrencyCode)
         {
             CurrencyUi ret = null;
             try
             {
-                var currencyFromStorage = CurrencyRepository.ReadAll().FirstOrDefault(p=>p.CurrencyCode.Equals(currencyName,StringComparison.OrdinalIgnoreCase));
+                var currencyFromStorage = CurrencyRepository.ReadAll().FirstOrDefault(p=>p.CurrencyCode.Equals(сurrencyCode, StringComparison.OrdinalIgnoreCase));
                 if (currencyFromStorage != null)
                 {
                     var currency = new CurrencyUi()
@@ -127,8 +125,8 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
             }
             catch (Exception ex)
             {
-
-                throw new ApplicationException($"Ошибка получения валюты по индексу: {ex}");
+                ex.Data.Add(this.GetType().ToString(), "Ошибка получения данных валюты из хранилища по коду валюты");
+                throw;
             }
             return ret;
         }
@@ -145,14 +143,14 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
                         updateCurrencyData.CurrencyCode = item.CurrencyCode;
                         updateCurrencyData.CurrencyName = item.CurrencyName;
                         CurrencyRepository.Update(updateCurrencyData);
-                        this.db.SaveChanges();
+                        CurrencyRepository.SaveChanges();
                     }
                 }
             }
             catch (Exception ex)
             {
-
-                throw new ApplicationException($"Ошибка изменения валюты в хранилище данных: {ex}");
+                ex.Data.Add(this.GetType().ToString(), "Ошибка изменения данных валюты в хранилище");
+                throw;
             }
         }
 
@@ -161,11 +159,36 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
             try
             {
                 CurrencyRepository.Delete(id);
+                CurrencyRepository.SaveChanges();
             }
             catch (Exception ex)
             {
+                ex.Data.Add(this.GetType().ToString(), "Ошибка удаления валюты из хранилища");
+                throw;
+            }
+        }
 
-                throw new ApplicationException($"Ошибка удаления валюты по индексу: {ex}");
+        public void AddOrUpdate(CurrencyUi item)
+        {
+            try
+            {
+                if (item != null)
+                {
+                    //добавление новой записи в валюты в хранилище данных
+                    var currencyData = new CurrencyData()
+                    {
+                        CurrencyCode = item.CurrencyCode,
+                        CurrencyName = item.CurrencyName
+                    };
+
+                    CurrencyRepository.AddOrUpdate(currencyData);
+                    CurrencyRepository.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                ex.Data.Add(this.GetType().ToString(), "Ошибка добавления или изменения валюты в хранилище");
+                throw;
             }
         }
 
@@ -182,7 +205,7 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
             {
                 if (disposing)
                 {
-                    db.Dispose();
+                    CurrencyRepository.Dispose();
                 }
                 this.disposed = true;
             }

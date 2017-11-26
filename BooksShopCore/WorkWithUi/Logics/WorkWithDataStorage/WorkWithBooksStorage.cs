@@ -46,11 +46,13 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
                         var book = new BookUi();
 
                         //получение списка авторов
-                        book.Author = String.Join(";", item.Authors.ToList());
+                        //book.Authors = String.Join(";", item.Authors.ToList());
+                        book.Authors = ConvertEntity.ToListAuthorUi(item.Authors);
 
                         //получение названия в зависимости от выбранного языка
                         var tempBookName = item.NameBooksTranslates.FirstOrDefault((p) => p.Language.LanguageCode.Equals(languageCode, StringComparison.OrdinalIgnoreCase));
-                        book.Name = tempBookName != null ? tempBookName.NameBook : string.Empty;
+                        //book.ListName = tempBookName != null ? tempBookName.NameBook : string.Empty;
+                        book.ListName = new List<BookNameUi> { ConvertEntity.ToBookNameUi(tempBookName) };
 
                         //год издания
                         book.Year = item.Year;
@@ -79,11 +81,15 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
                         }
                         #endregion
 
-                        book.Price = tempPrice;
-                        book.Currency = new CurrencyUi()
+                        var currency = new WorkWithCurrencyStorage();
+
+                        var price = new PriceUi()
                         {
-                            CurrencyCode = tempCurrency
+                            Price = tempPrice,
+                            Currency = currency.Read(tempCurrency)
                         };
+                        book.ListPrice = book.ListPrice ?? new List<PriceUi>();
+                        book.ListPrice.Add(price);
 
 
                         #region определение количества книги на разных складах
@@ -117,30 +123,47 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
                     //добавление новой записи в книги в хранилище данных
                     var bookData = new BookData();
 
-                    #region добавка названия
-                    var nameBook = new NameBooksTranslateData();
-                    nameBook.Language = LanguageDataRepository.ReadAll()?.FirstOrDefault(p => p.LanguageCode.Equals(languageCode, StringComparison.OrdinalIgnoreCase));
-                    nameBook.Book = bookData;
-                    nameBook.NameBook = item.Name;
+                    #region добавка названий
 
+                    var listBooksName = new List<NameBooksTranslateData>();
+                    foreach (var bookName in item.ListName)
+                    {
+                        var nameBook = new NameBooksTranslateData();
+                        nameBook.Language =
+                            LanguageDataRepository.ReadAll()?
+                                .FirstOrDefault(
+                                    p => p.LanguageCode.Equals(languageCode, StringComparison.OrdinalIgnoreCase));
+                        nameBook.Book = bookData;
+                        nameBook.NameBook = bookName.Name;
+                        listBooksName.Add(nameBook);
+                    }
                     //добавка названия
-                    bookData.NameBooksTranslates = new List<NameBooksTranslateData> {nameBook};
+                    //bookData.NameBooksTranslates = new List<NameBooksTranslateData> {nameBook};
+                    bookData.NameBooksTranslates = listBooksName;
 
                     #endregion
 
-                    #region добавка автора
-                    var authorData = AuthorDataRepository.ReadAll()?.FirstOrDefault(p => p.Name.Equals(item.Author, StringComparison.OrdinalIgnoreCase));
-                    if (authorData == null)
+                    #region добавка авторов
+                    var listAuthors = new List<AuthorData>();
+                    foreach (var author in item.Authors)
                     {
-                        authorData = new AuthorData
-                        {
-                            Name = item.Author,
-                            Books = new List<BookData> {bookData}
-                        };
-                    }
+                        var authorData =
+                            AuthorDataRepository.ReadAll()?
+                                .FirstOrDefault(p => p.Name.Equals(author.Name, StringComparison.OrdinalIgnoreCase));
 
+                        if (authorData == null)
+                        {
+                            authorData = new AuthorData
+                            {
+                                Name = author.Name,
+                                Books = new List<BookData> {bookData}
+                            };
+                        }
+
+                        listAuthors.Add(authorData);
+                    }
                     //добавка автора
-                    bookData.Authors = new List<AuthorData> { authorData };
+                    bookData.Authors = listAuthors;
 
                     #endregion
 
@@ -176,14 +199,14 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
 
                     #region добавка формата
                     var formatBookData = FormatBookDataRepository.ReadAll()?.FirstOrDefault(p => p.FormatName.Equals(item.Format?.FormatName, StringComparison.OrdinalIgnoreCase));
-                    if (formatBookData == null)
-                    {
-                        authorData = new AuthorData
-                        {
-                            Name = item.Author,
-                            Books = new List<BookData> { bookData }
-                        };
-                    }
+                    //if (formatBookData == null)
+                    //{
+                    //    var authorData = new AuthorData
+                    //    {
+                    //        Name = item.Author,
+                    //        Books = new List<BookData> { bookData }
+                    //    };
+                    //}
 
                     //добавка формата
                     bookData.FormatBook = new List<FormatBookData> { formatBookData };
@@ -233,14 +256,177 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
             }
         }
 
+        public IList<BookUi> ReadAll_old()
+        {
+            IList<BookUi> ret = null;
+            try
+            {
+                var booksListFromStorage = BookRepository.GetWithInclude(p => p.Authors, p => p.BooksStorages, p => p.NameBooksTranslates, p => p.PricePolicy);
+                if (booksListFromStorage != null)
+                {
+                    foreach (var item in booksListFromStorage)
+                    {
+                        var book = new BookUi();
+
+                        //получение списка авторов
+                        book.Authors = ConvertEntity.ToListAuthorUi(item.Authors);
+                        book.ListName = ConvertEntity.ToListBookNameUi(item.NameBooksTranslates);
+
+                        //год издания
+                        book.Year = item.Year;
+
+                        var currencyStorege = new WorkWithCurrencyStorage();
+                        book.ListPrice =
+                            item.PricePolicy.Select(
+                                tempPrice =>
+                                    new PriceUi()
+                                    {
+                                        Price = tempPrice.Price,
+                                        Currency = currencyStorege.Read(tempPrice.Currency.Id)
+                                    }).ToList();
+
+                        #region цена и валюта в зависимости от ценовой политики
+                        //decimal tempPrice = 0;
+                        //string tempCurrency = string.Empty;
+
+
+                        //var priceData = item.PricePolicy.FirstOrDefault((p) => p.Currency.CurrencyCode.Equals(currencyCode, StringComparison.OrdinalIgnoreCase));
+                        //if (priceData != null)
+                        //{
+                        //    tempPrice = priceData.Price;
+                        //    tempCurrency = priceData.Currency.CurrencyCode;
+                        //}
+                        //else
+                        //{
+                        //    if (item.PricePolicy?.Count > 0)
+                        //    {
+                        //        var reCalcPrice = item.PricePolicy[0].Price;
+                        //        var reCalcCurrencyCodeID = item.PricePolicy[0].CurrencyDataId;
+                        //        var rate = ExchangeRatesRepository.ReadAll().FirstOrDefault(p => p.CurrencyDataFromId.Equals(reCalcCurrencyCodeID) && p.CurrencyTo.CurrencyCode.Equals(currencyCode, StringComparison.OrdinalIgnoreCase))?.Rate;
+
+                        //        tempPrice = tempPrice * (rate.HasValue ? rate.Value : 0);
+                        //        tempCurrency = currencyCode;
+                        //    }
+                        //}
+                        #endregion
+
+                        //var currency = new WorkWithCurrencyStorage();
+
+                        //var price = new PriceUi()
+                        //{
+                        //    Price = tempPrice,
+                        //    Currency = currency.Read(tempCurrency)
+                        //};
+                        //book.ListPrice = book.ListPrice ?? new List<PriceUi>();
+                        //book.ListPrice.Add(price);
+
+
+                        #region определение количества книги на разных складах
+                        var tempCount = 0;
+                        if (item.BooksStorages != null)
+                        {
+                            tempCount += item.BooksStorages.Sum(storage => storage.Count - storage.CountInBlocked);
+                        }
+                        #endregion
+                        book.Count = tempCount;
+                        book.BookId = item.Id;
+
+                        ret.Add(book);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw new ApplicationException($"Ошибка получения данных");
+            }
+
+            return ret;
+        }
         public IList<BookUi> ReadAll()
         {
-            throw new NotImplementedException();
+            var ret = new List<BookUi>();
+            try
+            {
+                var booksListFromStorage = BookRepository.GetWithInclude(
+                    p => p.Authors, p => p.BooksStorages, p => p.NameBooksTranslates, p => p.PricePolicy, p => p.FormatBook,
+                    p => p.NameBooksTranslates.Select(p1 => p1.Language), p => p.PricePolicy.Select(p1 => p1.Currency));
+                if (booksListFromStorage != null)
+                {
+                    foreach (var item in booksListFromStorage)
+                    {
+                        var book = new BookUi();
+
+                        book.BookId = item.Id;
+                        //получение списка авторов
+                        book.Authors = ConvertEntity.ToListAuthorUi(item.Authors);
+
+                        //получение списка названий
+                        book.ListName = ConvertEntity.ToListBookNameUi(item.NameBooksTranslates);
+
+                        //год издания
+                        book.Year = item.Year;
+
+                        //получение списка цен
+                        book.ListPrice = ConvertEntity.ToListPriceUi(item.PricePolicy);
+                        
+
+                        #region определение количества книги на разных складах
+                        var tempCount = 0;
+                        if (item.BooksStorages != null)
+                        {
+                            tempCount += item.BooksStorages.Sum(storage => storage.Count - storage.CountInBlocked);
+                        }
+                        #endregion
+                        book.Count = tempCount;
+
+                        book.Format = new FormatBookUi
+                        {
+                            FormatName = item.FormatBook.Aggregate(new StringBuilder(), (s, p) => s.Append(p.FormatName).Append(";")).ToString(),
+                        };
+
+                        ret.Add(book);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ex.Data.Add(this.GetType().ToString(), "Ошибка получения книг из хранилища данных");
+                throw;
+            }
+            return ret;
         }
 
         public void Create(BookUi item)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (item != null)
+                {
+                    var bookData = new BookData();
+                    bookData.Authors = ConvertEntity.ToListAuthorData(item.Authors);
+                    bookData.NameBooksTranslates = ConvertEntity.ToListBookNameData(item.ListName);
+                    bookData.PricePolicy = ConvertEntity.ToListPricePolicyData(item.ListPrice);
+                    bookData.Year = item.Year;
+                    //bookData.FormatBook = ConvertEntity.ToListFormatBookData(item.Format);
+                    //bookData.BooksStorages = item
+
+                    #region сохранение автора в бд
+                    foreach (var author in bookData.Authors)
+                    {
+                        AuthorDataRepository.AddOrUpdate(author);
+                    }
+                    #endregion
+
+
+                    BookRepository.Create(bookData);
+                    this.db.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                ex.Data.Add(this.GetType().ToString(), "Ошибка добавления книги в хранилище данных");
+                throw;
+            }
         }
         public BookUi Read(int index)
         {
@@ -261,6 +447,11 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
             throw new NotImplementedException();
         }
 
+        public void AddOrUpdate(BookUi item)
+        {
+            throw new NotImplementedException();
+        }
+
         #region частичная реализация паттерна очистки
         public void Dispose()
         {
@@ -274,7 +465,7 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
             {
                 if (disposing)
                 {
-                    db.Dispose();
+                    BookRepository.Dispose();
                 }
                 this.disposed = true;
             }

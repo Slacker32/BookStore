@@ -24,15 +24,107 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithBooks
             CurrencyStorage = new WorkWithCurrencyStorage();
         }
 
-        public IList<BookUi> ShowAllBooks(string languageCode=null,string currencyCode=null)
+        //public IList<BookUi> ShowAllBooks(string languageCode=null,string currencyCode=null)
+        //{
+        //    var ret = new List<BookUi>();
+        //    try
+        //    {
+        //        var booksListFromStorage = BookRepository.GetWithInclude(
+        //            p => p.Authors,p => p.BooksStorages, p => p.NameBooksTranslates, p => p.PricePolicy, p => p.FormatBook,
+        //            p => p.NameBooksTranslates.Select(p1=>p1.Language), p => p.PricePolicy.Select(p1 => p1.Currency));
+        //        if (booksListFromStorage!=null)
+        //        {
+        //            foreach (var item in booksListFromStorage)
+        //            {
+        //                var book = new BookUi();
+
+        //                book.BookId = item.Id;
+        //                //получение списка авторов
+        //                //book.Author = item.Authors.Aggregate(new StringBuilder(), (s, p) => s.Append(p.Name).Append(";")).ToString();
+        //                book.Authors = ConvertEntity.ToListAuthorUi(item.Authors);
+
+        //                //получение названия в зависимости от выбранного языка
+        //                var tempBookName = item.NameBooksTranslates[0];
+        //                if (!string.IsNullOrEmpty(languageCode))
+        //                {
+        //                    tempBookName = item.NameBooksTranslates.FirstOrDefault((p) => p.Language.LanguageCode.Equals(languageCode, StringComparison.OrdinalIgnoreCase));
+        //                }
+        //                //book.Name = tempBookName != null ? tempBookName.NameBook : string.Empty;
+        //                book.ListName = new List<BookNameUi> {ConvertEntity.ToBookNameUi(tempBookName)};
+
+        //                //год издания
+        //                book.Year = item.Year;
+
+
+        //                #region цена и валюта в зависимости от ценовой политики
+        //                decimal tempPrice = 0;
+        //                string tempCurrency = string.Empty;
+        //                var priceData = item.PricePolicy.FirstOrDefault((p) => p.Currency.CurrencyCode.Equals(currencyCode, StringComparison.OrdinalIgnoreCase));
+        //                if (priceData != null)
+        //                {
+        //                    tempPrice = priceData.Price;
+        //                    tempCurrency = priceData.Currency.CurrencyCode;
+        //                }
+        //                else
+        //                {
+        //                    if (item.PricePolicy?.Count>0)
+        //                    {
+        //                        var reCalcPrice = item.PricePolicy[0].Price;
+        //                        var reCalcCurrencyCodeID = item.PricePolicy[0].CurrencyDataId;
+        //                        var rate = ExchangeRatesRepository.ReadAll().FirstOrDefault(p=>p.CurrencyDataFromId.Equals(reCalcCurrencyCodeID)&& p.CurrencyTo.CurrencyCode.Equals(currencyCode,StringComparison.OrdinalIgnoreCase))?.Rate;
+
+        //                        tempPrice = tempPrice * (rate.HasValue ? rate.Value : 0);
+        //                        tempCurrency = currencyCode;
+        //                    }
+        //                }
+        //                #endregion
+
+        //                book.ListPrice = new List<PriceUi>();
+        //                book.ListPrice.Add(new PriceUi()
+        //                        {
+        //                            Price = tempPrice,
+        //                            Currency = CurrencyStorage.Read(currencyCode)
+        //                        }
+        //                    );
+        //                //book.Price = tempPrice;
+        //                //book.Currency = CurrencyStorage.Read(currencyCode);
+
+
+        //                #region определение количества книги на разных складах
+        //                var tempCount = 0;
+        //                if (item.BooksStorages != null)
+        //                {
+        //                    tempCount += item.BooksStorages.Sum(storage => storage.Count - storage.CountInBlocked);
+        //                }
+        //                #endregion
+        //                book.Count = tempCount;
+
+        //                book.Format = new FormatBookUi
+        //                {
+        //                    FormatName = item.FormatBook.Aggregate(new StringBuilder(), (s, p) => s.Append(p.FormatName).Append(";")).ToString(),
+        //                };
+
+        //                ret.Add(book);
+        //            }
+        //        }
+        //    }
+        //    catch(Exception ex)
+        //    {
+        //        ex.Data.Add("BooksShopCore", "Ошибка получения книг из хранилища данных");
+        //        throw;
+        //        //throw new ApplicationException($"Ошибка получения книг из хранилища данных:{ex},{ex.StackTrace}");
+        //    }
+        //    return ret;
+        //}
+        public IList<BookUi> ShowAllBooks(string languageCode = null, string currencyCode = null)
         {
             var ret = new List<BookUi>();
             try
             {
                 var booksListFromStorage = BookRepository.GetWithInclude(
-                    p => p.Authors,p => p.BooksStorages, p => p.NameBooksTranslates, p => p.PricePolicy, p => p.FormatBook,
-                    p => p.NameBooksTranslates.Select(p1=>p1.Language), p => p.PricePolicy.Select(p1 => p1.Currency));
-                if (booksListFromStorage!=null)
+                    p => p.Authors, p => p.BooksStorages, p => p.NameBooksTranslates, p => p.PricePolicy, p => p.FormatBook,
+                    p => p.NameBooksTranslates.Select(p1 => p1.Language), p => p.PricePolicy.Select(p1 => p1.Currency));
+                if (booksListFromStorage != null)
                 {
                     foreach (var item in booksListFromStorage)
                     {
@@ -40,7 +132,8 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithBooks
 
                         book.BookId = item.Id;
                         //получение списка авторов
-                        book.Author = item.Authors.Aggregate(new StringBuilder(), (s, p) => s.Append(p.Name).Append(";")).ToString();
+                        //book.Author = item.Authors.Aggregate(new StringBuilder(), (s, p) => s.Append(p.Name).Append(";")).ToString();
+                        book.Authors = ConvertEntity.ToListAuthorUi(item.Authors);
 
                         //получение названия в зависимости от выбранного языка
                         var tempBookName = item.NameBooksTranslates[0];
@@ -48,8 +141,9 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithBooks
                         {
                             tempBookName = item.NameBooksTranslates.FirstOrDefault((p) => p.Language.LanguageCode.Equals(languageCode, StringComparison.OrdinalIgnoreCase));
                         }
-                        book.Name = tempBookName != null ? tempBookName.NameBook : string.Empty;
-                        
+                        //book.Name = tempBookName != null ? tempBookName.NameBook : string.Empty;
+                        book.ListName = new List<BookNameUi> { ConvertEntity.ToBookNameUi(tempBookName) };
+
                         //год издания
                         book.Year = item.Year;
 
@@ -65,11 +159,11 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithBooks
                         }
                         else
                         {
-                            if (item.PricePolicy?.Count>0)
+                            if (item.PricePolicy?.Count > 0)
                             {
                                 var reCalcPrice = item.PricePolicy[0].Price;
                                 var reCalcCurrencyCodeID = item.PricePolicy[0].CurrencyDataId;
-                                var rate = ExchangeRatesRepository.ReadAll().FirstOrDefault(p=>p.CurrencyDataFromId.Equals(reCalcCurrencyCodeID)&& p.CurrencyTo.CurrencyCode.Equals(currencyCode,StringComparison.OrdinalIgnoreCase))?.Rate;
+                                var rate = ExchangeRatesRepository.ReadAll().FirstOrDefault(p => p.CurrencyDataFromId.Equals(reCalcCurrencyCodeID) && p.CurrencyTo.CurrencyCode.Equals(currencyCode, StringComparison.OrdinalIgnoreCase))?.Rate;
 
                                 tempPrice = tempPrice * (rate.HasValue ? rate.Value : 0);
                                 tempCurrency = currencyCode;
@@ -77,8 +171,15 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithBooks
                         }
                         #endregion
 
-                        book.Price = tempPrice;
-                        book.Currency = CurrencyStorage.Read(currencyCode);
+                        book.ListPrice = new List<PriceUi>();
+                        book.ListPrice.Add(new PriceUi()
+                        {
+                            Price = tempPrice,
+                            Currency = CurrencyStorage.Read(currencyCode)
+                        }
+                            );
+                        //book.Price = tempPrice;
+                        //book.Currency = CurrencyStorage.Read(currencyCode);
 
 
                         #region определение количества книги на разных складах
@@ -99,9 +200,11 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithBooks
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                throw new ApplicationException($"Ошибка получения книг из хранилища данных:{ex}");
+                ex.Data.Add("BooksShopCore", "Ошибка получения книг из хранилища данных");
+                throw;
+                //throw new ApplicationException($"Ошибка получения книг из хранилища данных:{ex},{ex.StackTrace}");
             }
             return ret;
         }
@@ -112,7 +215,8 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithBooks
             try
             {
                 var listBook = ShowAllBooks(languageCode, currency);
-                ret = listBook.Where((p) => p.Author.Contains(searchStr) || p.Name.Contains(searchStr)).ToList();
+                //ret = listBook.Where((p) => p.Authors.Contains(searchStr) || p.ListName.Contains(searchStr)).ToList();
+                ret = listBook.Where((p) => p.FindAuthor(searchStr) || p.FindName(searchStr)).ToList();
             }
             catch (Exception ex)
             {

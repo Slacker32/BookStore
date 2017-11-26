@@ -26,7 +26,7 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithOrder
            this.PromocodeRepository=new GenericRepository<PromocodeData>(new BookStoreContext());
         }
 
-        public bool Buy(BookUi book)
+        public bool Buy(BookUi book, decimal amount, CurrencyUi currencyUi)
         {
             var ret = false;
             try
@@ -53,10 +53,10 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithOrder
                 }
 
                 tempPurchase.Book = book;
-                tempPurchase.Amount = book.Price;
+                tempPurchase.Amount = amount;
                 tempPurchase.Buyer = this.TempBuyer;
                 tempPurchase.Count++;
-                tempPurchase.Currency = book.Currency.CurrencyCode;
+                tempPurchase.Currency = currencyUi.CurrencyCode;
                 tempPurchase.Date = DateTime.UtcNow;
 
                 if (flgAddBook)
@@ -212,7 +212,13 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithOrder
                             }
                             else
                             {
-                                throw new ApplicationException($"Выбранное количество{book.Count} книги {book.Name} недоступно для заказа");
+                                var bookTitle = "Untitled";
+                                if (book.ListName?.Count > 0)
+                                {
+                                    bookTitle = book.ListName[0].Name;
+                                }
+
+                                throw new ApplicationException($"Выбранное количество{book.Count} книги {bookTitle} недоступно для заказа");
                             }
                         }
                         

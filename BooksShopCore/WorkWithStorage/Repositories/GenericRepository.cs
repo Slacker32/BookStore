@@ -6,10 +6,11 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.Entity.Migrations;
 
 namespace BooksShopCore.WorkWithStorage.Repositories
 {
-    internal sealed class GenericRepository<T> : IDisposable, IDataRepository<T> where T : class
+    internal sealed class GenericRepository<T> : IDataRepository<T> where T : class
     {
         private readonly DbContext db;
         private readonly DbSet<T> dbSet;
@@ -27,6 +28,11 @@ namespace BooksShopCore.WorkWithStorage.Repositories
         public IList<T> ReadAll()
         {
             return this.dbSet.ToList();
+        }
+
+        public void AddOrUpdate(T item)
+        {
+            this.dbSet.AddOrUpdate(item);
         }
 
         public void Create(T item)
@@ -65,7 +71,7 @@ namespace BooksShopCore.WorkWithStorage.Repositories
             return includeProperties.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
         }
 
-        public void Save()
+        public void SaveChanges()
         {
             db.SaveChanges();
         }

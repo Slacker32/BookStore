@@ -12,13 +12,11 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
 {
     public class WorkWithCountryStorage : IDisposable, IWorkWithDataStorage<CountryUi>
     {
-        private readonly BookStoreContext db;
         private IDataRepository<CountryData> CountryRepository { get; set; }
 
         public WorkWithCountryStorage()
         {
-            this.db = new BookStoreContext();
-            CountryRepository = new GenericRepository<CountryData>(db);
+            CountryRepository = new GenericRepository<CountryData>(new BookStoreContext());
 
         }
 
@@ -47,9 +45,10 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new ApplicationException($"Ошибка получения данных");
+                ex.Data.Add(this.GetType().ToString(), "Ошибка получения данных по всем странам из хранилища");
+                throw;
             }
 
             return ret;
@@ -68,13 +67,13 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
                     };
 
                     CountryRepository.Create(countryData);
-                    this.db.SaveChanges();
+                    CountryRepository.SaveChanges();
                 }
             }
             catch (Exception ex)
             {
-
-                throw new ApplicationException($"Ошибка добавления страны в хранилище данных: {ex}");
+                ex.Data.Add(this.GetType().ToString(), "Ошибка добавления страны в хранилище данных");
+                throw;
             }
         }
 
@@ -98,8 +97,8 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
             }
             catch (Exception ex)
             {
-
-                throw new ApplicationException($"Ошибка получения страны по индексу: {ex}");
+                ex.Data.Add(this.GetType().ToString(), "Ошибка получения страны из хранилища по индексу");
+                throw;
             }
             return ret;
         }
@@ -124,8 +123,8 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
             }
             catch (Exception ex)
             {
-
-                throw new ApplicationException($"Ошибка получения страны по коду: {ex}");
+                ex.Data.Add(this.GetType().ToString(), "Ошибка получения страны из хранилища по коду страны");
+                throw;
             }
             return ret;
         }
@@ -142,14 +141,14 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
                         updateCountryData.CountryCode = item.CountryCode;
                         updateCountryData.CountryName = item.CountryName;
                         CountryRepository.Update(updateCountryData);
-                        this.db.SaveChanges();
+                        CountryRepository.SaveChanges();
                     }
                 }
             }
             catch (Exception ex)
             {
-
-                throw new ApplicationException($"Ошибка изменения страны в хранилище данных: {ex}");
+                ex.Data.Add(this.GetType().ToString(), "Ошибка обновления данных страны в хранилище");
+                throw;
             }
         }
 
@@ -158,11 +157,35 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
             try
             {
                 CountryRepository.Delete(id);
+                CountryRepository.SaveChanges();
             }
             catch (Exception ex)
             {
 
-                throw new ApplicationException($"Ошибка удаления страны по индексу: {ex}");
+                throw new ApplicationException($"Ошибка удаления страны из хранилища по индексу: {ex}");
+            }
+        }
+
+        public void AddOrUpdate(CountryUi item)
+        {
+            try
+            {
+                if (item != null)
+                {
+                    var countryData = new CountryData()
+                    {
+                        CountryCode = item.CountryCode,
+                        CountryName = item.CountryName
+                    };
+
+                    CountryRepository.AddOrUpdate(countryData);
+                    CountryRepository.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                ex.Data.Add(this.GetType().ToString(), "Ошибка добавления или обновления страны в хранилище данных");
+                throw;
             }
         }
 
@@ -179,7 +202,7 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
             {
                 if (disposing)
                 {
-                    db.Dispose();
+                    CountryRepository.Dispose();
                 }
                 this.disposed = true;
             }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BooksShopCore.WorkWithStorage.Repositories
 {
-    internal interface IDataRepository<T>
+    internal interface IDataRepository<T> : IDisposable
     {
         IList<T> GetWithInclude(params Expression<Func<T, object>>[] includeProperties);
         IList<T> GetWithInclude(Func<T, bool> predicate, params Expression<Func<T, object>>[] includeProperties);
@@ -16,6 +16,8 @@ namespace BooksShopCore.WorkWithStorage.Repositories
         T Read(int index); // чтение элемента из хранилища по индексу
         void Update(T item);// обновление элемента
         void Delete(int id);// удаление элемента по индексу
+        void AddOrUpdate(T item);//удаление или обновление объекта
+        void SaveChanges();//сохранение изменений в хранилище
     }
 
 }

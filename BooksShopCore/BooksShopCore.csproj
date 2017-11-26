@@ -80,9 +80,12 @@
     <Compile Include="WorkWithStorage\EntityStorage\StorageData.cs" />
     <Compile Include="WorkWithStorage\Repositories\IDataRepository.cs" />
     <Compile Include="WorkWithStorage\Repositories\GenericRepository.cs" />
+    <Compile Include="WorkWithUi\ConvertEntity.cs" />
     <Compile Include="WorkWithUi\EntityUi\AuthorUi.cs" />
     <Compile Include="WorkWithUi\EntityUi\BookUi.cs" />
     <Compile Include="WorkWithUi\EntityUi\BuyerUi.cs" />
+    <Compile Include="WorkWithUi\EntityUi\BookNameUi.cs" />
+    <Compile Include="WorkWithUi\EntityUi\PriceUi.cs" />
     <Compile Include="WorkWithUi\EntityUi\PreviewUi.cs" />
     <Compile Include="WorkWithUi\EntityUi\CountryUi.cs" />
     <Compile Include="WorkWithUi\EntityUi\LanguageUi.cs" />

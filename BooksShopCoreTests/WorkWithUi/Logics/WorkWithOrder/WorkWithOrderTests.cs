@@ -17,16 +17,29 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithOrder.Tests
     public class WorkWithOrderTests
     {
         private BuyerUi tempBuyerUi = new BuyerUi();
-        BookUi book = new BookUi()
+        private static BookUi book = new BookUi();
+        
+
+        static WorkWithOrderTests()
         {
-            Author = "Рихтер",
-            BookId = 1,
-            Count = 1,
-            Currency = new CurrencyUi() {CurrencyCode = "BUN" },
-            Name = "Clr via C#",
-            Price = 123.43m,
-            Year = new DateTime(2017, 1, 1)
-        };
+            var bookName = new BookNameUi()
+            {
+                LanguageBookCode = new LanguageUi()
+                {
+                    LanguageCode = "ENG",
+                    LanguageName = "Английский"
+                },
+                Name = "CLR via C#"
+
+            };
+
+            book.Authors = new List<AuthorUi> {new AuthorUi() {Name="Рихтер"}};
+            book.BookId = 1;
+            book.Count = 1;
+            book.ListName = new List<BookNameUi> {bookName};
+            book.Year = new DateTime(2017, 1, 1);
+
+        }
 
         [TestMethod()]
         public void BuyTest()
@@ -37,7 +50,7 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithOrder.Tests
             var expected = true;
 
             //результат
-            var actual = workWithOrder.Buy(book);
+            var actual = workWithOrder.Buy(book,100,new CurrencyUi() {CurrencyCode = "BUN"});
 
             //сверка значений
             Assert.AreEqual(expected, actual);

@@ -12,13 +12,11 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
 {
     public class WorkWithAuthorStorage : IDisposable, IWorkWithDataStorage<AuthorUi>
     {
-        private readonly BookStoreContext db;
         private IDataRepository<AuthorData> AuthorDataRepository { get; set; }
 
         public WorkWithAuthorStorage()
         {
-            this.db = new BookStoreContext();
-            AuthorDataRepository = new GenericRepository<AuthorData>(db);
+            AuthorDataRepository = new GenericRepository<AuthorData>(new BookStoreContext());
 
         }
 
@@ -48,10 +46,10 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw new ApplicationException($"Ошибка получения данных");
+                ex.Data.Add(this.GetType().ToString(), "Ошибка получения данных по всем авторам из хранилища данных");
+                throw;
             }
 
             return ret;
@@ -71,13 +69,13 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
                     };
 
                     AuthorDataRepository.Create(authorData);
-                    this.db.SaveChanges();
+                    AuthorDataRepository.SaveChanges();
                 }
             }
             catch (Exception ex)
             {
-
-                throw new ApplicationException($"Ошибка добавления автора в хранилище данных: {ex}");
+                ex.Data.Add(this.GetType().ToString(), "Ошибка добавления автора в хранилище данных");
+                throw;
             }
         }
 
@@ -102,8 +100,8 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
             }
             catch (Exception ex)
             {
-
-                throw new ApplicationException($"Ошибка получения автора по индексу: {ex}");
+                ex.Data.Add(this.GetType().ToString(), "Ошибка получения автора по индексу из хранилища");
+                throw;
             }
             return ret;
         }
@@ -129,8 +127,8 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
             }
             catch (Exception ex)
             {
-
-                throw new ApplicationException($"Ошибка получения автора по индексу: {ex}");
+                ex.Data.Add(this.GetType().ToString(), "Ошибка получения автора по имени из хранилища");
+                throw;
             }
             return ret;
         }
@@ -148,14 +146,14 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
                         updateAuthorData.Name = item.Name;
                         updateAuthorData.Year = item.Year;
                         AuthorDataRepository.Update(updateAuthorData);
-                        this.db.SaveChanges();
+                        AuthorDataRepository.SaveChanges();
                     }
                 }
             }
             catch (Exception ex)
             {
-
-                throw new ApplicationException($"Ошибка изменения автора в хранилище данных: {ex}");
+                ex.Data.Add(this.GetType().ToString(), "Ошибка обновления данных автора в хранилище");
+                throw;
             }
         }
 
@@ -164,11 +162,36 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
             try
             {
                 AuthorDataRepository.Delete(id);
+                AuthorDataRepository.SaveChanges();
             }
             catch (Exception ex)
             {
+                ex.Data.Add(this.GetType().ToString(), "Ошибка удаления автора из хранилища по индексу");
+                throw;
+            }
+        }
 
-                throw new ApplicationException($"Ошибка удаления валюты по индексу: {ex}");
+        public void AddOrUpdate(AuthorUi item)
+        {
+            try
+            {
+                if (item != null)
+                {
+                    var authorData = new AuthorData()
+                    {
+                        Name = item.Name,
+                        Info = item.Info,
+                        Year = item.Year
+                    };
+
+                    AuthorDataRepository.AddOrUpdate(authorData);
+                    AuthorDataRepository.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                ex.Data.Add(this.GetType().ToString(), "Ошибка добавления или обновления автора в хранилище данных");
+                throw;
             }
         }
 
@@ -185,7 +208,7 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
             {
                 if (disposing)
                 {
-                    db.Dispose();
+                    AuthorDataRepository.Dispose();
                 }
                 this.disposed = true;
             }

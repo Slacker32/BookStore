@@ -9,7 +9,7 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithOrder
 {
     public interface IWorkWithOrder
     {
-        bool Buy(BookUi book);
+        bool Buy(BookUi book, decimal amount, CurrencyUi currencyUi);
         bool Reversal(BookUi book);
         IList<PurchaseUi> ShowListCurrentPurchases();
         bool ConfirmationOrder();

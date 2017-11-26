@@ -12,13 +12,11 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
 {
     public class WorkWithLanguageStorage : IDisposable, IWorkWithDataStorage<LanguageUi>
     {
-        private readonly BookStoreContext db;
         private IDataRepository<LanguageData> LanguageRepository { get; set; }
 
         public WorkWithLanguageStorage()
         {
-            this.db = new BookStoreContext();
-            LanguageRepository = new GenericRepository<LanguageData>(db);
+            LanguageRepository = new GenericRepository<LanguageData>(new BookStoreContext());
 
         }
 
@@ -47,10 +45,10 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw new ApplicationException($"Ошибка получения данных");
+                ex.Data.Add(this.GetType().ToString(), "Ошибка получения данных по всем языкам из хранилища");
+                throw;
             }
 
             return ret;
@@ -70,13 +68,13 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
                     };
 
                     LanguageRepository.Create(languageData);
-                    this.db.SaveChanges();
+                    LanguageRepository.SaveChanges();
                 }
             }
             catch (Exception ex)
             {
-
-                throw new ApplicationException($"Ошибка добавления языка в хранилище данных: {ex}");
+                ex.Data.Add(this.GetType().ToString(), "Ошибка добавления языка в хранилище данных");
+                throw;
             }
         }
 
@@ -100,8 +98,8 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
             }
             catch (Exception ex)
             {
-
-                throw new ApplicationException($"Ошибка получения языка по индексу: {ex}");
+                ex.Data.Add(this.GetType().ToString(), "Ошибка получения языка из хранилища данных по его индексу");
+                throw;
             }
             return ret;
         }
@@ -126,8 +124,8 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
             }
             catch (Exception ex)
             {
-
-                throw new ApplicationException($"Ошибка получения языка по коду: {ex}");
+                ex.Data.Add(this.GetType().ToString(), "Ошибка получения языка из хранилища данных по его коду");
+                throw;
             }
             return ret;
         }
@@ -144,14 +142,14 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
                         updateLanguageData.LanguageCode = item.LanguageCode;
                         updateLanguageData.LanguageName = item.LanguageName;
                         LanguageRepository.Update(updateLanguageData);
-                        this.db.SaveChanges();
+                        LanguageRepository.SaveChanges();
                     }
                 }
             }
             catch (Exception ex)
             {
-
-                throw new ApplicationException($"Ошибка изменения языка в хранилище данных: {ex}");
+                ex.Data.Add(this.GetType().ToString(), "Ошибка изменения данных по языку в хранилище данных");
+                throw;
             }
         }
 
@@ -160,11 +158,36 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
             try
             {
                 LanguageRepository.Delete(id);
+                LanguageRepository.SaveChanges();
             }
             catch (Exception ex)
             {
+                ex.Data.Add(this.GetType().ToString(), "Ошибка удаления языка в хранилище данных");
+                throw;
+            }
+        }
 
-                throw new ApplicationException($"Ошибка удаления языка по индексу: {ex}");
+        public void AddOrUpdate(LanguageUi item)
+        {
+            try
+            {
+                if (item != null)
+                {
+                    //добавление новой записи в валюты в хранилище данных
+                    var languageData = new LanguageData()
+                    {
+                        LanguageCode = item.LanguageCode,
+                        LanguageName = item.LanguageName
+                    };
+
+                    LanguageRepository.AddOrUpdate(languageData);
+                    LanguageRepository.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                ex.Data.Add(this.GetType().ToString(), "Ошибка добавления или обновления языка в хранилище данных");
+                throw;
             }
         }
 
@@ -181,7 +204,7 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
             {
                 if (disposing)
                 {
-                    db.Dispose();
+                    LanguageRepository.Dispose();
                 }
                 this.disposed = true;
             }

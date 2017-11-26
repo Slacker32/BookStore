@@ -14,5 +14,6 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
         T Read(string findStr);
         void Update(T item);
         void Delete(int id);
+        void AddOrUpdate(T item);
     }
 }
