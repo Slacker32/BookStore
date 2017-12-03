@@ -12,7 +12,6 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
 {
     public class WorkWithBooksStorage : IDisposable, IWorkWithDataStorage<BookUi>
     {
-        private readonly BookStoreContext db;
         private IDataRepository<BookData> BookRepository { get; set; }
         private IDataRepository<ExchangeRatesData> ExchangeRatesRepository { get; set; }
         private IDataRepository<NameBooksTranslateData> NameBooksTranslateDataRepository { get; set; }
@@ -28,8 +27,7 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
 
         public WorkWithBooksStorage()
         {
-            this.db = new BookStoreContext();
-            BookRepository = new GenericRepository<BookData>(db);
+            BookRepository = new GenericRepository<BookData>(new BookStoreContext());
 
         }
 
@@ -390,7 +388,8 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
             }
             catch (Exception ex)
             {
-                ex.Data.Add(this.GetType().ToString(), "Ошибка получения книг из хранилища данных");
+                var tt = this.GetType().ToString();
+                ex.Data.Add(tt, "Ошибка получения книг из хранилища данных");
                 throw;
             }
             return ret;
@@ -419,7 +418,7 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
 
 
                     BookRepository.Create(bookData);
-                    this.db.SaveChanges();
+                    BookRepository.SaveChanges();
                 }
             }
             catch (Exception ex)

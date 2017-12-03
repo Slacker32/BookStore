@@ -12,13 +12,26 @@ namespace BooksShopCore.WorkWithUi
     {
         internal static AuthorUi ToAuthorUi(AuthorData author)
         {
-            var authorUi = new AuthorUi()
+            AuthorUi authorUi = null;
+            if (author == null)
             {
-                AuthorId = author.Id,
-                Info = author.Info,
-                Name = author.Name,
-                Year = author.Year
-            };
+                return authorUi;
+            }
+            try
+            {
+                authorUi = new AuthorUi()
+                {
+                    AuthorId = author.Id,
+                    Info = author.Info,
+                    Name = author.Name,
+                    Year = author.Year
+                };
+            }
+            catch (Exception ex)
+            {
+                ex.Data.Add("ConvertEntity.ToAuthorUi", "Ошибка конвертации AuthorData в AuthorUi");
+                throw;
+            }
             return authorUi;
         }
         internal static List<AuthorUi> ToListAuthorUi(IList<AuthorData> listAuthor)
@@ -32,13 +45,26 @@ namespace BooksShopCore.WorkWithUi
         }
         internal static AuthorData ToAuthorData(AuthorUi author)
         {
-            var authorData = new AuthorData()
+            AuthorData authorData = null;
+            if (author == null)
             {
-                Id = author.AuthorId,
-                Info = author.Info,
-                Name = author.Name,
-                Year = author.Year
-            };
+                return authorData;
+            }
+            try
+            {
+                authorData = new AuthorData()
+                {
+                    Id = author.AuthorId,
+                    Info = author.Info,
+                    Name = author.Name,
+                    Year = author.Year
+                };
+            }
+            catch (Exception ex)
+            {
+                ex.Data.Add("ConvertEntity.ToAuthorData", "Ошибка конвертации AuthorUi в AuthorData");
+                throw;
+            }
             return authorData;
         }
         internal static List<AuthorData> ToListAuthorData(IList<AuthorUi> listAuthor)
@@ -54,16 +80,29 @@ namespace BooksShopCore.WorkWithUi
 
         internal static BookNameUi ToBookNameUi(NameBooksTranslateData nameBook)
         {
-            var nameBookUi = new BookNameUi()
+            BookNameUi nameBookUi = null;
+            if (nameBook == null)
             {
-                // ид наименования
-                BookNameId = nameBook.Id,
-                //язык
-                LanguageBookCode = ToLanguageUi(nameBook.Language),
-                //название книги
-                Name = nameBook.NameBook 
+                return nameBookUi;
+            }
+            try
+            {
+                nameBookUi = new BookNameUi()
+                {
+                    // ид наименования
+                    BookNameId = nameBook.Id,
+                    //язык
+                    LanguageBookCode = ToLanguageUi(nameBook.Language),
+                    //название книги
+                    Name = nameBook.NameBook
 
-            };
+                };
+            }
+            catch (Exception ex)
+            {
+                ex.Data.Add("ConvertEntity.ToBookNameUi", "Ошибка конвертации NameBooksTranslateData в BookNameUi");
+                throw;
+            }
             return nameBookUi;
         }
         internal static List<BookNameUi> ToListBookNameUi(IList<NameBooksTranslateData> listNameBook)
@@ -74,15 +113,28 @@ namespace BooksShopCore.WorkWithUi
         }
         internal static NameBooksTranslateData ToBookNameData(BookNameUi nameBook)
         {
-            var nameBookData = new NameBooksTranslateData()
+            NameBooksTranslateData nameBookData = null;
+            if (nameBook == null)
             {
-                // ид наименования
-                Id = nameBook.BookNameId,
-                NameBook = nameBook.Name,
-                Language = ToLanguageData(nameBook.LanguageBookCode),
-                BookDataId = nameBook.BookNameId
+                return nameBookData;
+            }
+            try
+            {
+                nameBookData = new NameBooksTranslateData()
+                {
+                    // ид наименования
+                    Id = nameBook.BookNameId,
+                    NameBook = nameBook.Name,
+                    Language = ToLanguageData(nameBook.LanguageBookCode),
+                    BookDataId = nameBook.BookNameId
 
-            };
+                };
+            }
+            catch (Exception ex)
+            {
+                ex.Data.Add("ConvertEntity.ToBookNameData", "Ошибка конвертации BookNameUi в NameBooksTranslateData");
+                throw;
+            }
             return nameBookData;
         }
         internal static List<NameBooksTranslateData> ToListBookNameData(IList<BookNameUi> listNameBook)
@@ -95,14 +147,26 @@ namespace BooksShopCore.WorkWithUi
 
         internal static PriceUi ToPriceUi(PricePolicyData pricePolicy)
         {
-            var priceUi = new PriceUi()
+            PriceUi priceUi = null;
+            if (pricePolicy == null)
             {
-                PriceId = pricePolicy.Id,
-                Price = pricePolicy.Price,
-                Currency = ToCurrencyUi(pricePolicy.Currency),
-                Country = ToCountryUi(pricePolicy.Country)
-            };
-           
+                return priceUi;
+            }
+            try
+            {
+                priceUi = new PriceUi()
+                {
+                    PriceId = pricePolicy.Id,
+                    Price = pricePolicy.Price,
+                    Currency = ToCurrencyUi(pricePolicy.Currency),
+                    Country = ToCountryUi(pricePolicy.Country)
+                };
+            }
+            catch (Exception ex)
+            {
+                ex.Data.Add("ConvertEntity.ToPriceUi", "Ошибка конвертации PricePolicyData в PriceUi");
+                throw;
+            }
             return priceUi;
         }
         internal static List<PriceUi> ToListPriceUi(IList<PricePolicyData> listPricePolicy)
@@ -113,14 +177,26 @@ namespace BooksShopCore.WorkWithUi
         }
         internal static PricePolicyData ToPricePolicyData(PriceUi price)
         {
-            var priceData = new PricePolicyData()
+            PricePolicyData priceData = null;
+            if (price == null)
             {
-                Id = price.PriceId,
-                Price = price.Price,
-                Currency = ToCurrencyData(price.Currency),
-                Country = ToCountryData(price.Country)
-            };
-
+                return priceData;
+            }
+            try
+            {
+                priceData = new PricePolicyData()
+                {
+                    Id = price.PriceId,
+                    Price = price.Price,
+                    Currency = ToCurrencyData(price.Currency),
+                    Country = ToCountryData(price.Country)
+                };
+            }
+            catch (Exception ex)
+            {
+                ex.Data.Add("ConvertEntity.ToPricePolicyData", "Ошибка конвертации PriceUi в PricePolicyData");
+                throw;
+            }
             return priceData;
         }
         internal static List<PricePolicyData> ToListPricePolicyData(IList<PriceUi> listPrice)
@@ -132,12 +208,25 @@ namespace BooksShopCore.WorkWithUi
 
         internal static CurrencyUi ToCurrencyUi(CurrencyData currency)
         {
-            var currencyUi = new CurrencyUi()
+            CurrencyUi currencyUi = null;
+            if (currency == null)
             {
-                CurrencyId = currency.Id,
-                CurrencyCode = currency.CurrencyCode,
-                CurrencyName = currency.CurrencyName
-            };
+                return currencyUi;
+            }
+            try
+            {
+                currencyUi = new CurrencyUi()
+                {
+                    CurrencyId = currency.Id,
+                    CurrencyCode = currency.CurrencyCode,
+                    CurrencyName = currency.CurrencyName
+                };
+            }
+            catch (Exception ex)
+            {
+                ex.Data.Add("ConvertEntity.ToCurrencyUi", "Ошибка конвертации CurrencyData в CurrencyUi");
+                throw;
+            }
             return currencyUi;
         }
         internal static List<CurrencyUi> ToListCurrencyUi(IList<CurrencyData> listCurrency)
@@ -151,12 +240,25 @@ namespace BooksShopCore.WorkWithUi
         }
         internal static CurrencyData ToCurrencyData(CurrencyUi currency)
         {
-            var currencyData = new CurrencyData()
+            CurrencyData currencyData = null;
+            if (currency == null)
             {
-                Id = currency.CurrencyId,
-                CurrencyCode = currency.CurrencyCode,
-                CurrencyName = currency.CurrencyName
-            };
+                return currencyData;
+            }
+            try
+            {
+                currencyData = new CurrencyData()
+                {
+                    Id = currency.CurrencyId,
+                    CurrencyCode = currency.CurrencyCode,
+                    CurrencyName = currency.CurrencyName
+                };
+            }
+            catch (Exception ex)
+            {
+                ex.Data.Add("ConvertEntity.ToCurrencyData", "Ошибка конвертации CurrencyUi в CurrencyData");
+                throw;
+            }
             return currencyData;
         }
         internal static List<CurrencyData> ToListCurrencyData(IList<CurrencyUi> listCurrency)
@@ -171,12 +273,25 @@ namespace BooksShopCore.WorkWithUi
 
         internal static LanguageUi ToLanguageUi(LanguageData language)
         {
-            var languageUi = new LanguageUi()
+            LanguageUi languageUi = null;
+            if (language == null)
             {
-                LanguageId = language.Id,
-                LanguageCode = language.LanguageCode,
-                LanguageName = language.LanguageName
-            };
+                return languageUi;
+            }
+            try
+            {
+                languageUi = new LanguageUi()
+                {
+                    LanguageId = language.Id,
+                    LanguageCode = language.LanguageCode,
+                    LanguageName = language.LanguageName
+                };
+            }
+            catch (Exception ex)
+            {
+                ex.Data.Add("ConvertEntity.ToLanguageUi", "Ошибка конвертации LanguageData в LanguageUi");
+                throw;
+            }
             return languageUi;
         }
         internal static List<LanguageUi> ToListLanguageUi(IList<LanguageData> listLanguage)
@@ -190,12 +305,25 @@ namespace BooksShopCore.WorkWithUi
         }
         internal static LanguageData ToLanguageData(LanguageUi language)
         {
-            var languageData = new LanguageData()
+            LanguageData languageData = null;
+            if (language == null)
             {
-                Id = language.LanguageId,
-                LanguageCode = language.LanguageCode,
-                LanguageName = language.LanguageName
-            };
+                return languageData;
+            }
+            try
+            {
+                languageData = new LanguageData()
+                {
+                    Id = language.LanguageId,
+                    LanguageCode = language.LanguageCode,
+                    LanguageName = language.LanguageName
+                };
+            }
+            catch (Exception ex)
+            {
+                ex.Data.Add("ConvertEntity.ToLanguageData", "Ошибка конвертации LanguageUi в LanguageData");
+                throw;
+            }
             return languageData;
         }
         internal static List<LanguageData> ToListLanguageData(IList<LanguageUi> listLanguage)
@@ -210,12 +338,27 @@ namespace BooksShopCore.WorkWithUi
 
         internal static CountryUi ToCountryUi(CountryData country)
         {
-            var countryUi = new CountryUi()
+            CountryUi countryUi = null;
+            if (country == null)
             {
-                CountryId = country.Id,
-                CountryCode = country.CountryCode,
-                CountryName = country.CountryName
-            };
+                return countryUi;
+            }
+            try
+            {
+
+
+                countryUi = new CountryUi()
+                {
+                    CountryId = country.Id,
+                    CountryCode = country.CountryCode,
+                    CountryName = country.CountryName
+                };
+            }
+            catch (Exception ex)
+            {
+                ex.Data.Add("ConvertEntity.ToCountryUi", "Ошибка конвертации CountryData в CountryUi");
+                throw;
+            }
             return countryUi;
         }
         internal static List<CountryUi> ToListCountryUi(IList<CountryData> listCountry)
@@ -229,12 +372,25 @@ namespace BooksShopCore.WorkWithUi
         }
         internal static CountryData ToCountryData(CountryUi country)
         {
-            var countryData = new CountryData()
+            CountryData countryData = null;
+            if (country == null)
             {
-                Id = country.CountryId,
-                CountryCode = country.CountryCode,
-                CountryName = country.CountryName
-            };
+                return countryData;
+            }
+            try
+            {
+                countryData = new CountryData()
+                {
+                    Id = country.CountryId,
+                    CountryCode = country.CountryCode,
+                    CountryName = country.CountryName
+                };
+            }
+            catch (Exception ex)
+            {
+                ex.Data.Add("ConvertEntity.ToCountryData", "Ошибка конвертации CountryUi в CountryData");
+                throw;
+            }
             return countryData;
         }
         internal static List<CountryData> ToListCountryData(IList<CountryUi> listCountry)
@@ -249,11 +405,24 @@ namespace BooksShopCore.WorkWithUi
 
         internal static FormatBookUi ToFormatBookUi(FormatBookData formatBook)
         {
-            var formatBookUi = new FormatBookUi()
+            FormatBookUi formatBookUi = null;
+            if (formatBook == null)
             {
-                FormatBookId = formatBook.Id,
-                FormatName = formatBook.FormatName
-            };
+                return formatBookUi;
+            }
+            try
+            {
+                formatBookUi = new FormatBookUi()
+                {
+                    FormatBookId = formatBook.Id,
+                    FormatName = formatBook.FormatName
+                };
+            }
+            catch (Exception ex)
+            {
+                ex.Data.Add("ConvertEntity.ToFormatBookUi", "Ошибка конвертации FormatBookData в FormatBookUi");
+                throw;
+            }
             return formatBookUi;
         }
         internal static List<FormatBookUi> ToListFormatBookUi(IList<FormatBookData> listFormatBook)
@@ -267,11 +436,24 @@ namespace BooksShopCore.WorkWithUi
         }
         internal static FormatBookData ToFormatBookData(FormatBookUi formatBook)
         {
-            var formatBookData = new FormatBookData()
+            FormatBookData formatBookData = null;
+            if (formatBook == null)
             {
-                 Id=formatBook.FormatBookId,
-                 FormatName=formatBook.FormatName
-            };
+                return formatBookData;
+            }
+            try
+            {
+                formatBookData = new FormatBookData()
+                {
+                    Id = formatBook.FormatBookId,
+                    FormatName = formatBook.FormatName
+                };
+            }
+            catch (Exception ex)
+            {
+                ex.Data.Add("ConvertEntity.ToFormatBookData", "Ошибка конвертации FormatBookUi в FormatBookData");
+                throw;
+            }
             return formatBookData;
         }
         internal static List<FormatBookData> ToListFormatBookData(IList<FormatBookUi> listFormatBook)

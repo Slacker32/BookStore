@@ -1,0 +1,83 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Backet</title>
+    <meta name="viewport" content="width=device-width" />
+    <link type="text/css" rel="stylesheet" href="../../Content/Site.css" />
+</head>
+<body>
+    <div> 
+        <h1 class="text"><i>Backet</i></h1>
+        <table class="data">
+            <tr>
+                <th>Author</th>
+                <th>Book title</th>
+                <th>The year of publishing</th>
+                <th>Price</th>
+                <th>Format</th>
+                <th></th>
+                <th></th>
+            </tr>
+            @if (ViewBag.Books != null)
+            {
+                foreach (var b in ViewBag.Books)
+                {
+                    <tr>
+                        <td><p>@b.Authors</p></td>
+                        <td><p>@b.Name</p></td>
+                        <td><p>@b.Year</p></td>
+                        <td><p>@b.Price</p></td>
+                        <td><p>@b.Format</p></td>
+                        <td><p><a href="/Home/Buy/@b.BookId">Preview</a></p></td>
+                        <td><p><a href="/Home/Buy/@b.BookId">Buy</a></p></td>
+                    </tr>
+                }
+            }
+        </table>
+    </div>
+    <table class="filter">
+        <tr>
+            <td><input style="width:225px" type="text" value="Promocode"></td>
+            <td align="center">
+                <form method="post">
+                    <p style="text-align: center">
+                        <button style="width:225px">Apply promo code</button>
+                    </p>
+                </form>
+            </td>
+            <td class="filterInput"></td>
+            <td width="50" align="center"><p>Amount: @ViewBag.AmountOrder</p></td>
+        </tr>
+    </table>
+    <table class="filter">
+        <tr>
+            <td width="225" align="center"><p>Name of contact person</p></td>
+            <td><input type="text" class="filterInput" value="Иванов Иван Иванович"></td>
+        </tr>
+        <tr>
+            <td  width="225" align="center"><p>Phone</p></td>
+            <td><input type="text" class="filterInput" value="8 029 333-33-33"></td>
+        </tr>
+        <tr>
+            <td width="225" align="center"><p>Address</p></td>
+            <td><input type="text" class="filterInput" value="Брест"></td>
+        </tr>
+        <tr>
+            <td width="225" align="center"> </td>
+            <td>
+                <form method="post">
+                    <p style="text-align: center">
+                        <button style="width:100%">Confirm order</button>
+                    </p>
+                </form>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

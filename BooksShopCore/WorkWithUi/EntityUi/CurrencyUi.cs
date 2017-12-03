@@ -11,6 +11,11 @@ namespace BooksShopCore.WorkWithUi.EntityUi
         public int CurrencyId { get; set; }// уникальный идентификатор валюты
         public string CurrencyCode { get; set; }// строковый код валюты по ISO
         public string CurrencyName { get; set; }// название валюты
+
+        public override string ToString()
+        {
+            return $"Id={CurrencyId};CurrencyCode={CurrencyCode};CurrencyName={CurrencyName}";
+        }
     }
 
 }

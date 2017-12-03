@@ -17,6 +17,11 @@ namespace BooksShopCore.WorkWithUi.EntityUi
         public string Currency { get; set; }// валюта для суммы
         public bool IsGetMoney { get; set; }// флаг получения оплаты
         public bool IsTransferComplete { get; set; }// флаг передачи книги покупателю
+
+        public override string ToString()
+        {
+            return $"Id={PurchaseId};Date={Date};Buyer={Buyer.ToString()};Book={Book.ToString()};Count={Count};Amount={Amount};Currency={Currency};IsGetMoney={IsGetMoney};IsTransferComplete={IsTransferComplete}";
+        }
     }
 
 }

@@ -11,5 +11,10 @@ namespace BooksShopCore.WorkWithUi.EntityUi
         public int CountryId { get; set; }// уникальный идентификатор 
         public string CountryCode { get; set; }// строковый код страны по ISO
         public string CountryName { get; set; }// название страны
+
+        public override string ToString()
+        {
+            return $"Id={CountryId};CountryCode={CountryCode};CountryName={CountryName}";
+        }
     }
 }

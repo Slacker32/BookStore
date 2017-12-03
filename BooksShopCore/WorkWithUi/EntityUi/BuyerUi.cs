@@ -15,7 +15,10 @@ namespace BooksShopCore.WorkWithUi.EntityUi
         public IList<PurchaseUi> ListPurchases { get; set; }// список покупок пользователя завершенных и нет
         public IList<OrderUi> ListOrders { get; set; }// список заказов пользователя
 
-
+        public override string ToString()
+        {
+            return $"Id={BuyerId};Name={FullName};Year={Address};Info={Phone};ListPurchases={ListPurchases?.Count};ListOrders={ListOrders?.Count}";
+        }
     }
 
 }

@@ -1,24 +1,25 @@
-﻿body {
-    padding-top: 50px;
-    padding-bottom: 20px;
+﻿.text{
+    margin: 1em auto auto;
+    width: 85%;
 }
-
-/* Set padding to keep content from hitting the edges */
-.body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+table.filter {
+    margin: 0.3em auto 0.5em;
+    width: 90%;
 }
-
-/* Override the default bootstrap behavior where horizontal description lists 
-   will truncate terms that are too long to fit in the left column 
-*/
-.dl-horizontal dt {
-    white-space: normal;
+.filterInput{
+    margin: 0;
+    width: 98%;
 }
-
-/* Set width on the form input elements since they're 100% wide by default */
-input,
-select,
-textarea {
-    max-width: 280px;
+table.data {
+    border-collapse: collapse;
+    margin: 0.3em auto 0.5em;
+    width: 90%;
+}
+.data td, .data th {
+    border: 1px solid #333;
+    padding: 4px;
+}
+th {
+    background: #bfbfbf;
+    font-size: 0.9em;
 }

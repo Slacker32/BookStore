@@ -6,35 +6,9 @@
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
     <title>BookStore</title>
-    <style>
-        .text{
-            margin: 1em auto auto;
-            width: 85%;
-        }
-        table.filter {
-            margin: 0.3em auto 0.5em;
-            width: 90%;
-        }
-        .filterInput{
-            margin: 0;
-            width: 98%;
-        }
-        table.data {
-            border-collapse: collapse;
-            margin: 0.3em auto 0.5em;
-            width: 90%;
-        }
-        .data td, .data th {
-            border: 1px solid #333;
-            padding: 4px;
-        }
-        th {
-            background: #bfbfbf;
-            font-size: 0.9em;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width" />
+    <link type="text/css" rel="stylesheet" href="../../Content/Site.css" />
 </head>
 <body>
     <div>
@@ -42,8 +16,19 @@
         <table class="filter">
             <tr>
                 <td><input type="text" value="Search string" class="filterInput"></td>
-                <td width="25" align="center"><p>Currency</p></td>
-                <td width="25" align="center"><p>Backet</p></td>
+                <td width="120" align="center"> 
+                    <form method="post">
+                        <p>Currency:
+                        <select name="SiteCurrency">
+                            @foreach (var curCode in ViewBag.Currency)
+                            {
+                                <option value="@curCode">@curCode</option>
+                            }
+                        </select>
+                        </p>
+                    </form>
+                </td>
+                <td width="25" align="center"><p><a href="/Home/Backet">Backet</a></p></td>
             </tr>
         </table>
         <table class="data">
@@ -59,12 +44,12 @@
             @foreach (var b in ViewBag.Books)
             {
                 <tr>
-                    <td><p>@b.Author</p></td>
+                    <td><p>@b.Authors</p></td>
                     <td><p>@b.Name</p></td>
                     <td><p>@b.Year</p></td>
                     <td><p>@b.Price</p></td>
-                    <td><p>@b.Format.FormatName</p></td>
-                    <td><p><a href="/Home/Buy/@b.BookId">Preview</a></p></td>
+                    <td><p>@b.Format</p></td>
+                    <td><p><a href="/Home/Preview/@b.BookId">Preview</a></p></td>
                     <td><p><a href="/Home/Buy/@b.BookId">Buy</a></p></td>
                 </tr>
             }

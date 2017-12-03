@@ -11,5 +11,10 @@ namespace BooksShopCore.WorkWithUi.EntityUi
         public int PreviewId { get; set; }// уникальный идентификатор
         public string BookId { get; set; }// ид книги на которую будет превью
         public string Path { get; set; }// путь к файлу с превью
+
+        public override string ToString()
+        {
+            return $"Id={PreviewId};BookId={BookId};Path={Path}";
+        }
     }
 }

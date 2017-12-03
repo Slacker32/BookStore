@@ -12,5 +12,10 @@ namespace BooksShopCore.WorkWithUi.EntityUi
         public decimal Price { get; set; }// цена
         public CurrencyUi Currency { get; set; }// валюта
         public CountryUi Country { get; set; }//страна в которой используется данная цена
+
+        public override string ToString()
+        {
+            return $"Id={PriceId};Price={Price};Currency={Currency.ToString()};Country={Country.ToString()}";
+        }
     }
 }

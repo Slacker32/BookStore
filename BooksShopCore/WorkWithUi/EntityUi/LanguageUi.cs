@@ -11,5 +11,10 @@ namespace BooksShopCore.WorkWithUi.EntityUi
         public int LanguageId { get; set; }// уникальный идентификатор
         public string LanguageCode { get; set; }// строковый код языка по ISO
         public string LanguageName { get; set; }// название языка
+
+        public override string ToString()
+        {
+            return $"Id={LanguageId};LanguageCode={LanguageCode};LanguageName={LanguageName}";
+        }
     }
 }
