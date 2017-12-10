@@ -44,10 +44,7 @@ namespace BooksShopCore.WorkWithUi.EntityUi
             return ret;
         }
 
-        public override string ToString()
-        {
-            return $"Id={BookId};Authors={Authors?.Count};ListName={ListName};Year={Year};ListPrice={ListPrice};Format={Format};Count={Count}";
-        }
+
     }
 
 }

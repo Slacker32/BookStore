@@ -93,19 +93,19 @@
     <Compile Include="WorkWithUi\EntityUi\OrderUi.cs" />
     <Compile Include="WorkWithUi\EntityUi\CurrencyUi.cs" />
     <Compile Include="WorkWithUi\EntityUi\PurchaseUi.cs" />
-    <Compile Include="WorkWithUi\Logics\PromoCode\IPromoCode.cs" />
-    <Compile Include="WorkWithUi\Logics\Preview\IPreview.cs" />
-    <Compile Include="WorkWithUi\Logics\WorkWithBooks\WorkWithBooks.cs" />
-    <Compile Include="WorkWithUi\Logics\WorkWithDataStorage\WorkWithCountryStorage.cs" />
-    <Compile Include="WorkWithUi\Logics\WorkWithDataStorage\WorkWithLanguageStorage.cs" />
-    <Compile Include="WorkWithUi\Logics\WorkWithDataStorage\IWorkWithDataStorage.cs" />
-    <Compile Include="WorkWithUi\Logics\WorkWithDataStorage\WorkWithAuthorStorage.cs" />
-    <Compile Include="WorkWithUi\Logics\WorkWithDataStorage\WorkWithFormatBookStorage.cs" />
-    <Compile Include="WorkWithUi\Logics\WorkWithDataStorage\WorkWithCurrencyStorage.cs" />
-    <Compile Include="WorkWithUi\Logics\WorkWithDataStorage\WorkWithBooksStorage.cs" />
-    <Compile Include="WorkWithUi\Logics\WorkWithOrder\WorkWithOrder.cs" />
-    <Compile Include="WorkWithUi\Logics\WorkWithOrder\IWorkWithOrder.cs" />
-    <Compile Include="WorkWithUi\Logics\WorkWithBooks\IWorkWithBooks.cs" />
+    <Compile Include="WorkWithUi\LogicsSite\PromoCode\IPromoCode.cs" />
+    <Compile Include="WorkWithUi\LogicsSite\Preview\IPreview.cs" />
+    <Compile Include="WorkWithUi\LogicsSite\WorkWithBooks\WorkWithBooks.cs" />
+    <Compile Include="WorkWithUi\WorkWithDataStorage\WorkWithCountryStorage.cs" />
+    <Compile Include="WorkWithUi\WorkWithDataStorage\WorkWithLanguageStorage.cs" />
+    <Compile Include="WorkWithUi\WorkWithDataStorage\IWorkWithDataStorage.cs" />
+    <Compile Include="WorkWithUi\WorkWithDataStorage\WorkWithAuthorStorage.cs" />
+    <Compile Include="WorkWithUi\WorkWithDataStorage\WorkWithFormatBookStorage.cs" />
+    <Compile Include="WorkWithUi\WorkWithDataStorage\WorkWithCurrencyStorage.cs" />
+    <Compile Include="WorkWithUi\WorkWithDataStorage\WorkWithBooksStorage.cs" />
+    <Compile Include="WorkWithUi\LogicsSite\WorkWithOrder\WorkWithOrder.cs" />
+    <Compile Include="WorkWithUi\LogicsSite\WorkWithOrder\IWorkWithOrder.cs" />
+    <Compile Include="WorkWithUi\LogicsSite\WorkWithBooks\IWorkWithBooks.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

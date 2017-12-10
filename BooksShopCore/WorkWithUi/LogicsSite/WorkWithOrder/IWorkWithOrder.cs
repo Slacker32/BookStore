@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BooksShopCore.WorkWithUi.Logics.WorkWithOrder
+namespace BooksShopCore.WorkWithUi.LogicsSite.WorkWithOrder
 {
     public interface IWorkWithOrder
     {

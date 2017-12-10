@@ -12,9 +12,5 @@ namespace BooksShopCore.WorkWithUi.EntityUi
         public string Name { get; set; }// наименование книги
         public LanguageUi LanguageBookCode { get; set; }// код языка книги
 
-        public override string ToString()
-        {
-            return $"Id={BookNameId};Name={Name};LanguageBookCode={LanguageBookCode.ToString()}";
-        }
     }
 }

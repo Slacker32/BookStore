@@ -1,16 +1,16 @@
 ﻿using BooksShopCore.WorkWithUi.EntityUi;
-using BooksShopCore.WorkWithUi.Logics;
-using BooksShopCore.WorkWithUi.Logics.Preview;
-using BooksShopCore.WorkWithUi.Logics.PromoCode;
-using BooksShopCore.WorkWithUi.Logics.WorkWithBooks;
-using BooksShopCore.WorkWithUi.Logics.WorkWithOrder;
+using BooksShopCore.WorkWithUi.LogicsSite;
+using BooksShopCore.WorkWithUi.LogicsSite.Preview;
+using BooksShopCore.WorkWithUi.LogicsSite.PromoCode;
+using BooksShopCore.WorkWithUi.LogicsSite.WorkWithBooks;
+using BooksShopCore.WorkWithUi.LogicsSite.WorkWithOrder;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage;
+using BooksShopCore.WorkWithUi.WorkWithDataStorage;
 
 namespace BooksShopCore
 {

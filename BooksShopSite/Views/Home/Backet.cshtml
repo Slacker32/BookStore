@@ -21,7 +21,7 @@
                 <th>The year of publishing</th>
                 <th>Price</th>
                 <th>Format</th>
-                <th></th>
+                <th>Count</th>
                 <th></th>
             </tr>
             @if (ViewBag.Books != null)
@@ -34,8 +34,8 @@
                         <td><p>@b.Year</p></td>
                         <td><p>@b.Price</p></td>
                         <td><p>@b.Format</p></td>
-                        <td><p><a href="/Home/Buy/@b.BookId">Preview</a></p></td>
-                        <td><p><a href="/Home/Buy/@b.BookId">Buy</a></p></td>
+                        <td><p>@b.Count</p></td>
+                        <td><p><a href="/Home/Cancel/@b.BookId">Cancel</a></p></td>
                     </tr>
                 }
             }
@@ -52,7 +52,7 @@
                 </form>
             </td>
             <td class="filterInput"></td>
-            <td width="50" align="center"><p>Amount: @ViewBag.AmountOrder</p></td>
+            <td align="center"><p style="width: 150px">Amount: @ViewBag.AmountOrder</p></td>
         </tr>
     </table>
     <table class="filter">

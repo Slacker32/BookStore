@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BooksShopCore.WorkWithUi.Logics.PromoCode
+namespace BooksShopCore.WorkWithUi.LogicsSite.PromoCode
 {
     internal interface IPromoCode
     {

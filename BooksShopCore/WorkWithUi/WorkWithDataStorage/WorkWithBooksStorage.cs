@@ -8,7 +8,7 @@ using BooksShopCore.WorkWithStorage.EntityStorage;
 using BooksShopCore.WorkWithStorage.Repositories;
 using BooksShopCore.WorkWithUi.EntityUi;
 
-namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
+namespace BooksShopCore.WorkWithUi.WorkWithDataStorage
 {
     public class WorkWithBooksStorage : IDisposable, IWorkWithDataStorage<BookUi>
     {

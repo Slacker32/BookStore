@@ -13,9 +13,5 @@ namespace BooksShopCore.WorkWithUi.EntityUi
         public DateTime Date { get; set; }// дата заказа=дате каждой покупки в списке
         public IList<PurchaseUi> ListPurchases { get; set; }// список покупок в заказе
 
-        public override string ToString()
-        {
-            return $"Id={OrderId};BuyerId={BuyerId};Date={Date};ListPurchases={ListPurchases?.Count}";
-        }
     }
 }

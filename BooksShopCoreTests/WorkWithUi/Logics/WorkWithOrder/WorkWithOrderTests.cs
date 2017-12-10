@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using BooksShopCore.WorkWithUi.Logics.WorkWithOrder;
+using BooksShopCore.WorkWithUi.LogicsSite.WorkWithOrder;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +11,7 @@ using BooksShopCore.WorkWithStorage.Repositories;
 using BooksShopCore.WorkWithUi.EntityUi;
 using Moq;
 
-namespace BooksShopCore.WorkWithUi.Logics.WorkWithOrder.Tests
+namespace BooksShopCore.WorkWithUi.LogicsSite.WorkWithOrder.Tests
 {
     [TestClass()]
     public class WorkWithOrderTests
@@ -95,7 +95,7 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithOrder.Tests
                     });
 
                 var workWithOrder = new WorkWithOrder(this.tempBuyerUi);
-                workWithOrder.PromocodeRepository = mock.Object;
+                workWithOrder.promocodeRepository = mock.Object;
 
                 BuyTest();
 

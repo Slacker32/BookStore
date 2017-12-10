@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
+namespace BooksShopCore.WorkWithUi.WorkWithDataStorage
 {
     public interface IWorkWithDataStorage<T> where T:class
     {

@@ -16,7 +16,7 @@ namespace BooksShopCore.Migrations
         protected override void Seed(BooksShopCore.WorkWithStorage.BookStoreContext context)
         {
 
-           var init=new BookStoreInitializer(context);
+           //var init=new BookStoreInitializer(context);
 
             //  This method will be called after migrating to the latest version.
 

@@ -16,17 +16,15 @@
         <table class="filter">
             <tr>
                 <td><input type="text" value="Search string" class="filterInput"></td>
-                <td width="120" align="center"> 
-                    <form method="post">
-                        <p>Currency:
-                        <select name="SiteCurrency">
-                            @foreach (var curCode in ViewBag.Currency)
-                            {
-                                <option value="@curCode">@curCode</option>
-                            }
-                        </select>
-                        </p>
-                    </form>
+                <td width="120" align="left">
+                    @model BooksShopSite.Models.Currency
+                    @using (Html.BeginForm())
+                    {
+                        <div>
+                            Currency:
+                            @Html.DropDownListFor(x => x.SelectedCurrency, Model.Currencies, new {onchange = "this.form.submit();"})
+                        </div>
+                    }
                 </td>
                 <td width="25" align="center"><p><a href="/Home/Backet">Backet</a></p></td>
             </tr>
@@ -41,17 +39,29 @@
                 <th></th>
                 <th></th>
             </tr>
-            @foreach (var b in ViewBag.Books)
+            @if (ViewBag.Books != null)
             {
-                <tr>
-                    <td><p>@b.Authors</p></td>
-                    <td><p>@b.Name</p></td>
-                    <td><p>@b.Year</p></td>
-                    <td><p>@b.Price</p></td>
-                    <td><p>@b.Format</p></td>
-                    <td><p><a href="/Home/Preview/@b.BookId">Preview</a></p></td>
-                    <td><p><a href="/Home/Buy/@b.BookId">Buy</a></p></td>
-                </tr>
+                foreach (var b in ViewBag.Books)
+                 {
+                     <tr>
+                         <td>
+                             <p>@b.Authors</p></td>
+                         <td>
+                             <p>@b.Name</p></td>
+                         <td>
+                             <p>@b.Year</p></td>
+                         <td>
+                             <p>@b.Price</p></td>
+                         <td>
+                             <p>@b.Format</p></td>
+                         <td>
+                             <p><a href="/Home/Preview/@b.BookId">Preview</a>
+                             </p></td>
+                         <td>
+                             <p><a href="/Home/Buy/@b.BookId">Buy</a>
+                             </p></td>
+                     </tr>
+                 }
             }
         </table>
     </div>

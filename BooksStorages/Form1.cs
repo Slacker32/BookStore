@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using BooksShopCore.WorkWithUi.EntityUi;
-using BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage;
+using BooksShopCore.WorkWithUi.WorkWithDataStorage;
 
 namespace BooksStorages
 {
@@ -118,7 +118,7 @@ namespace BooksStorages
                 var data= methodInfo.Invoke(elemType, null);
 
                 this.dataGridView1.DataSource = data;
-                AddComboboxColumn();
+                //AddComboboxColumn();
             }
             catch (Exception ex)
             {

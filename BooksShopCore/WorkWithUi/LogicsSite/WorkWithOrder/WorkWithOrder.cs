@@ -9,21 +9,21 @@ using System.Threading.Tasks;
 using BooksShopCore.WorkWithStorage;
 
 
-namespace BooksShopCore.WorkWithUi.Logics.WorkWithOrder
+namespace BooksShopCore.WorkWithUi.LogicsSite.WorkWithOrder
 {
     public class WorkWithOrder : IWorkWithOrder
     {
-        internal IDataRepository<PromocodeData> PromocodeRepository { get; set; }
-        internal IDataRepository<PurchaseData> PurchaseRepository { get; set; }
-        internal IDataRepository<BuyerData> BuyerRepository { get; set; }
-        internal IDataRepository<BookData> BookRepository { get; set; }
+        internal IDataRepository<PromocodeData> promocodeRepository;
+        internal IDataRepository<PurchaseData> purchaseRepository;
+        internal IDataRepository<BuyerData> buyerRepository;
+        internal IDataRepository<BookData> bookRepository;
 
         private BuyerUi TempBuyer { get; set; }
 
         public WorkWithOrder(BuyerUi buyer)
         {
            this.TempBuyer = buyer ?? new BuyerUi();
-           this.PromocodeRepository=new GenericRepository<PromocodeData>(new BookStoreContext());
+           this.promocodeRepository=new GenericRepository<PromocodeData>(new BookStoreContext());
         }
 
         public bool Buy(BookUi book, decimal amount, CurrencyUi currencyUi)
@@ -106,7 +106,7 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithOrder
             var ret = false;
             try
             {
-                var promo = PromocodeRepository.ReadAll().OrderByDescending(p=>p.Date).FirstOrDefault(p=>p.Code.Equals(promocode,StringComparison.OrdinalIgnoreCase));
+                var promo = promocodeRepository.ReadAll().OrderByDescending(p=>p.Date).FirstOrDefault(p=>p.Code.Equals(promocode,StringComparison.OrdinalIgnoreCase));
                 if (promo != null)
                 {
                     if (promo.Code.Equals(promocode, StringComparison.OrdinalIgnoreCase))
@@ -181,7 +181,7 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithOrder
                         var book = pubrchase.Book;
                         #region блокировка заказанных книг
 
-                        var bookData = BookRepository.Read(book.BookId);
+                        var bookData = bookRepository.Read(book.BookId);
                         if (bookData.BooksStorages?.Count > 0)
                         {
                             var bookIsAvailable = bookData.BooksStorages.Sum(p => p.Count - p.CountInBlocked);
@@ -208,7 +208,7 @@ namespace BooksShopCore.WorkWithUi.Logics.WorkWithOrder
                                     }
                                     tempBook++;
                                 }
-                                BookRepository.Update(bookData);
+                                bookRepository.Update(bookData);
                             }
                             else
                             {

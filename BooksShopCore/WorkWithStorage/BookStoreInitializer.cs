@@ -9,11 +9,10 @@ using System.Threading.Tasks;
 
 namespace BooksShopCore.WorkWithStorage
 {
-    internal class BookStoreInitializer
+    class BookStoreInitializer: DropCreateDatabaseIfModelChanges<BookStoreContext>
     {
-        BookStoreContext db;
-
-        public BookStoreInitializer(BookStoreContext db)
+        private BookStoreContext db = null;
+        protected override void Seed(BookStoreContext db)
         {
 
             //if (!System.Diagnostics.Debugger.IsAttached) 

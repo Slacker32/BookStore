@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage
+namespace BooksShopCore.WorkWithUi.WorkWithDataStorage
 {
     public class WorkWithCountryStorage : IDisposable, IWorkWithDataStorage<CountryUi>
     {

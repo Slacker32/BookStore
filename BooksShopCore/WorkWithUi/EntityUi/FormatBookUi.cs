@@ -11,9 +11,5 @@ namespace BooksShopCore.WorkWithUi.EntityUi
         public int FormatBookId { get; set; }// уникальный идентификатор 
         public string FormatName { get; set; }// формат данных книги(paper, pdf, fb2, doc, rtf, txt)
 
-        public override string ToString()
-        {
-            return $"Id={FormatBookId};FormatName={FormatName}";
-        }
     }
 }

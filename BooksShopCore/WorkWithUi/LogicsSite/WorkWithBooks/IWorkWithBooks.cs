@@ -5,14 +5,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BooksShopCore.WorkWithUi.Logics.WorkWithBooks
+namespace BooksShopCore.WorkWithUi.LogicsSite.WorkWithBooks
 {
     public interface IWorkWithBooks
     {
         IList<BookUi> ShowAllBooks(string languageCode, string currency);
         IList<BookUi> FindBooks(string searchStr, string languageCode, string currency);
 
-        IList<BookUi> ChangeCurrencyBook(int idCurrency, string languageCode);
+        //IList<BookUi> ChangeCurrencyBook(int idCurrency, string languageCode);
+
+        BookUi GetBook(int index, string languageCode, string currencyCode);
     }
 
 }

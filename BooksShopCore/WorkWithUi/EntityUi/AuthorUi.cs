@@ -14,9 +14,5 @@ namespace BooksShopCore.WorkWithUi.EntityUi
         public string Year { get; set; }// годы жизни
         public string Info { get; set; }// краткая информация об авторе
 
-        public override string ToString()
-        {
-            return $"Id={AuthorId};Name={Name};Year={Year};Info={Info}";
-        }
     }
 }

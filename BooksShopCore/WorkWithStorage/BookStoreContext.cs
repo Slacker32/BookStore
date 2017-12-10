@@ -10,6 +10,10 @@ namespace BooksShopCore.WorkWithStorage
 {
     internal class BookStoreContext : DbContext
     {
+        static BookStoreContext()
+        {
+            System.Data.Entity.Database.SetInitializer<BookStoreContext>(new BookStoreInitializer());
+        }
 
         public BookStoreContext() : base("BookStoreDbConnection")
         { }
