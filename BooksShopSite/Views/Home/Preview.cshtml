@@ -14,22 +14,23 @@
 <body>
 <div>
     <h1 class="text"><i>Preview</i></h1>
-    <table>
+    <table class="filter">
         <tr>
-            <td width="225" align="center">
-                <p>Author:</p></td>
+            <td width="225" align="left">
+                <p><i><u>Author:</u></i> @ViewBag.Book.Authors</p></td>
         </tr>
         <tr>
-            <td width="225" align="center">
-                <p>Book title: </p></td>
+            <td width="225" align="left">
+                <p><i><u>Book title:</u></i> @ViewBag.Book.Name</p></td>
         </tr>
         <tr>
-            <td width="225" align="center">
-                <p>Content:</p></td>
+            <td width="225" align="left">
+                <p><i><u>Content:</u></i></p></td>
         </tr>
         <tr>
-            <td width="225" align="center">
-                <p>Content</p></td>
+            <td width="225" align="left">
+                <p>@Html.Raw(ViewBag.Preview)</p>
+            </td>
         </tr>
     </table>
 

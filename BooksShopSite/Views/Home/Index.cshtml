@@ -15,10 +15,15 @@
         <h1 class="text"><i>BookStore</i></h1>
         <table class="filter">
             <tr>
-                <td><input type="text" value="Search string" class="filterInput"></td>
+                <td>
+                    @using (Html.BeginForm("SearchBook", "Home", FormMethod.Post))
+                    {
+                        @Html.TextBox("searchValue", null, new { placeholder = "Search string", onchange = "this.form.submit();", @class = "filterInput" })
+                    }
+                </td>
                 <td width="120" align="left">
                     @model BooksShopSite.Models.Currency
-                    @using (Html.BeginForm())
+                    @using (Html.BeginForm("Index", "Home", FormMethod.Post))
                     {
                         <div>
                             Currency:
@@ -48,8 +53,8 @@
                              <p>@b.Authors</p></td>
                          <td>
                              <p>@b.Name</p></td>
-                         <td>
-                             <p>@b.Year</p></td>
+                         <td align="center">
+                             <p>@b.Year.ToString("yyyy")</p></td>
                          <td>
                              <p>@b.Price</p></td>
                          <td>

@@ -48,11 +48,13 @@ namespace BooksShopCore.WorkWithUi.LogicsSite.WorkWithBooks
             var ret = new List<BookUi>();
             try
             {
+
                 var booksListFromStorage = bookRepository.GetWithInclude(
                     p => p.Authors, p => p.BooksStorages, p => p.NameBooksTranslates, p => p.PricePolicy, p => p.FormatBook,
-                    p => p.NameBooksTranslates.Select(p1 => p1.Language), p => p.PricePolicy.Select(p1 => p1.Currency),
-                    p => p.Authors.Where(p1 => searchStr.Contains(p1.Name)).Count()>0 || p.NameBooksTranslates.Where(p1 => searchStr.Contains(p1.NameBook)).Count()>0
-                    );
+                    p => p.NameBooksTranslates.Select(p1 => p1.Language), p => p.PricePolicy.Select(p1 => p1.Currency)
+                    ).Where(
+                            p => p.Authors.Count(p1 => p1.Name.IndexOf(searchStr, StringComparison.OrdinalIgnoreCase) >= 0) > 0 ||
+                                 p.NameBooksTranslates.Count(p1 => p1.NameBook.IndexOf(searchStr, StringComparison.OrdinalIgnoreCase) >= 0) > 0).ToList();
 
                 ret = MapBookData(booksListFromStorage, languageCode, currencyCode);
             }

@@ -18,7 +18,7 @@ namespace BooksShopCore
     {
         public IWorkWithBooks Books { get; set; }
         public IWorkWithOrder Order { get; set; }
-        internal IPreview Preview { get; set; }
+        public IPreview Preview { get; set; }
         internal IPromoCode Promocode { get; set; }
 
         private BuyerUi TempBuyer { get; set; }
@@ -29,6 +29,7 @@ namespace BooksShopCore
 
             this.Books = new WorkWithBooks();
             this.Order = new WorkWithOrder(TempBuyer);
+            this.Preview = new Preview();
         }
 
     }

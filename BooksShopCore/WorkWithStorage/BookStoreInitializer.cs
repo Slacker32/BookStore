@@ -182,7 +182,7 @@ namespace BooksShopCore.WorkWithStorage
             var previewData = new PreviewData()
             {
                 Book=book,
-                Path="//CLR_viaC#.txt",
+                Path= "//Previews//Richter_CLR_via.htm",
                 Data=string.Empty,
                 Format= db.FormatsPreview.FirstOrDefault(p => p.FormatName.Equals("txt",StringComparison.OrdinalIgnoreCase))
             };

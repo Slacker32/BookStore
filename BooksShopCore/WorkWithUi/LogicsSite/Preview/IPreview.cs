@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace BooksShopCore.WorkWithUi.LogicsSite.Preview
 {
-    internal interface IPreview
+    public interface IPreview
     {
-        string ShowPreview(int bookId);
+        string GetPreview(int bookId);
     }
 
 }
