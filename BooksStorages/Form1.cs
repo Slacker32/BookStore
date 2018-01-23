@@ -102,14 +102,33 @@ namespace BooksStorages
         {
             MessageBox.Show($"{GetExceptionStack(ex)}", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
+
+        object SetBinding(object data)
+        {
+            if (data is List<BookUi>)
+            {
+                data = (data as List<BookUi>)?.Select(p => new
+                {
+                    Id = p.BookId,
+                    Author = p.Authors[0].Name,
+                    Name = p.ListName[0].Name,
+                    Year = p.Year,
+                    Count = p.Count,
+                    Format = p.Format.FormatName,
+                    Price = p.ListPrice[0].Price,
+                    Currency = p.ListPrice[0].Currency.CurrencyCode
+                }).ToList();
+            }
+            return data;
+        }
+
         void GetData(string typeUiName)
         {
             var nameType = "тип не найден";
             try
             {
-                var listTypes =
-                BookCoreAssembly?.ExportedTypes.Where(
-                    p => p.FullName != null && p.FullName.Contains("BooksShopCore.WorkWithUi.Logics.WorkWithDataStorage"));
+                var listTypes = BookCoreAssembly?.ExportedTypes.Where(
+                    p => p.FullName != null && p.FullName.Contains("BooksShopCore.WorkWithUi.WorkWithDataStorage"));
                 var workType = listTypes.FirstOrDefault(p => p.Name.Contains("WorkWith" + typeUiName.Replace("Ui", "")));
                 nameType = workType.Name;
                 var elemType = Activator.CreateInstance(workType);
@@ -117,7 +136,7 @@ namespace BooksStorages
                 MethodInfo methodInfo = workType.GetMethod("ReadAll", new Type[] { });
                 var data= methodInfo.Invoke(elemType, null);
 
-                this.dataGridView1.DataSource = data;
+                this.dataGridView1.DataSource = SetBinding(data);
                 //AddComboboxColumn();
             }
             catch (Exception ex)
@@ -130,6 +149,71 @@ namespace BooksStorages
         private void button3_Click(object sender, EventArgs e)
         {
             GetData(this.comboBox1.Text);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            IWorkWithDataStorage<LanguageUi> Language= new WorkWithLanguageStorage();
+            IWorkWithDataStorage<CountryUi> Country = new WorkWithCountryStorage();
+            IWorkWithDataStorage<CurrencyUi> Currency = new WorkWithCurrencyStorage();
+
+            var book = new BookUi();
+            book.Authors = new List<AuthorUi>();
+            book.Authors.Add(new AuthorUi() {
+                Name = "Стив Макконелл",
+                Info = " американский программист, автор книг по разработке программного обеспечения.",
+                Year = "1962" });
+            book.ListName = new List<BookNameUi>();
+            book.ListName.Add(new BookNameUi() { Name = "Совершенный код", LanguageBookCode = Language.Read("rus") });
+            book.ListName.Add(new BookNameUi() { Name = "Code Complete", LanguageBookCode = Language.Read("eng") });
+            book.ListPrice = new List<PriceUi>();
+            book.ListPrice.Add(new PriceUi() { Country = Country.Read("ru"), Currency= Currency.Read("rub"), Price=120.23m });
+            book.ListPrice.Add(new PriceUi() { Country = Country.Read("gb"), Currency = Currency.Read("gbp"), Price = 60.55m });
+            book.Format = new FormatBookUi() { FormatName = "paper" };
+            book.Year = new DateTime(2015,09,01);
+            book.Count = 10;
+
+            using (var myBook = new WorkWithBooksStorage())
+            {
+                myBook.Create(book);
+            }
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            var index = this.dataGridView1.CurrentRow?.Index;
+            if (index.HasValue && (index >= 0))
+            {
+                if (this.dataGridView1.SelectedRows?.Count>0)
+                {
+                    switch (this.comboBox1.SelectedItem.ToString().ToLower())
+                    {
+                        case "bookui":
+                            List<int> listBookId = new List<int>();
+                            foreach (DataGridViewRow item in this.dataGridView1.SelectedRows)
+                            {
+                                var bookId = (int)item.Cells["Id"].Value;
+                                listBookId.Add(bookId);
+                            }
+
+                            if (listBookId.Count > 0)
+                            {
+                                using (var myBook = new WorkWithBooksStorage())
+                                {
+                                    foreach (var item in listBookId)
+                                    {
+                                        myBook.Delete(item);
+                                    }
+                                }
+                            }
+                            break;
+                            
+                    }
+
+                }
+            }
+
         }
     }
 }

@@ -19,6 +19,34 @@ namespace BooksShopCore.WorkWithStorage
             //    System.Diagnostics.Debugger.Launch();
 
             this.db = db;
+
+            #region Добавка языка
+            AddLanguageCodes("Английский", "eng");
+            AddLanguageCodes("Русский", "rus");
+            #endregion
+
+            #region Добавка cтран
+            AddCountryCodes("Великобритания", "GB");
+            AddCountryCodes("Россия", "RU");
+            AddCountryCodes("США", "US");
+            AddCountryCodes("Беларусь", "BY");
+            #endregion
+
+            #region Добавка валют
+            AddCurrencyCodes("Белорусский рубль", "BYN");
+            AddCurrencyCodes("Российский рубль", "RUB");
+            AddCurrencyCodes("Доллар США", "USD");
+            AddCurrencyCodes("Фунт стерлингов", "GBP");
+            #endregion
+
+            #region Добавка форматов превью
+            AddFormatPreview("pdf");
+            AddFormatPreview("jpg");
+            AddFormatPreview("xml");
+            AddFormatPreview("txt");
+            #endregion
+
+
             AddBooks();
 
         }
@@ -89,32 +117,6 @@ namespace BooksShopCore.WorkWithStorage
             var info = "компьютерный специалист, автор наиболее продаваемых книг в области Win32 и .NET. Рихтер — соучредитель компании Wintellect, которая обучает ИТ-специалистов и консультирует фирмы в области создания ПО.";
             var year = "27 июля 1964 г.";
             AddAuthor(nameAuthor, info, year);
-            #endregion
-
-            #region Добавка языка
-            AddLanguageCodes("Английский", "eng");
-            AddLanguageCodes("Русский", "rus");
-            #endregion
-
-            #region Добавка cтран
-            AddCountryCodes("Великобритания", "GB");
-            AddCountryCodes("Россия", "RU");
-            AddCountryCodes("США", "US");
-            AddCountryCodes("Беларусь", "BY");
-            #endregion
-
-            #region Добавка валют
-            AddCurrencyCodes("Белорусский рубль", "BYN");
-            AddCurrencyCodes("Российский рубль", "RUB");
-            AddCurrencyCodes("Доллар США", "USD");
-            AddCurrencyCodes("Фунт стерлингов", "GBP");
-            #endregion
-
-            #region Добавка форматов превью
-            AddFormatPreview("pdf");
-            AddFormatPreview("jpg");
-            AddFormatPreview("xml");
-            AddFormatPreview("txt");
             #endregion
 
             BookData book = new BookData();
