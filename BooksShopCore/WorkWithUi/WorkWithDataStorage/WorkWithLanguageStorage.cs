@@ -13,10 +13,12 @@ namespace BooksShopCore.WorkWithUi.WorkWithDataStorage
     public class WorkWithLanguageStorage : IDisposable, IWorkWithDataStorage<LanguageUi>
     {
         private IDataRepository<LanguageData> LanguageRepository { get; set; }
+        private IDataRepositoryAsync<LanguageData> LanguageRepositoryAsync { get; set; }
 
         public WorkWithLanguageStorage()
         {
             LanguageRepository = new GenericRepository<LanguageData>(new BookStoreContext());
+            LanguageRepositoryAsync = new GenericRepositoryAsync<LanguageData,BookStoreContext>();
 
         }
 
@@ -26,6 +28,39 @@ namespace BooksShopCore.WorkWithUi.WorkWithDataStorage
             try
             {
                 var languageFromStorage = LanguageRepository.ReadAll();
+                if (languageFromStorage != null)
+                {
+                    foreach (var item in languageFromStorage)
+                    {
+                        var language = new LanguageUi()
+                        {
+                            LanguageId = item.Id,
+                            LanguageCode = item.LanguageCode,
+                            LanguageName = item.LanguageName
+                        };
+
+                        if (ret == null)
+                        {
+                            ret = new List<LanguageUi>();
+                        }
+                        ret.Add(language);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ex.Data.Add(this.GetType().ToString(), "Ошибка получения данных по всем языкам из хранилища");
+                throw;
+            }
+
+            return ret;
+        }
+        public async Task<IList<LanguageUi>> ReadAllAsync()
+        {
+            IList<LanguageUi> ret = null;
+            try
+            {
+                var languageFromStorage =await LanguageRepositoryAsync.ReadAllAsync();
                 if (languageFromStorage != null)
                 {
                     foreach (var item in languageFromStorage)
@@ -77,6 +112,28 @@ namespace BooksShopCore.WorkWithUi.WorkWithDataStorage
                 throw;
             }
         }
+        public async Task CreateAsync(LanguageUi item)
+        {
+            try
+            {
+                if (item != null)
+                {
+                    //добавление новой записи в валюты в хранилище данных
+                    var languageData = new LanguageData()
+                    {
+                        LanguageCode = item.LanguageCode,
+                        LanguageName = item.LanguageName
+                    };
+
+                    await LanguageRepositoryAsync.CreateAsync(languageData);
+                }
+            }
+            catch (Exception ex)
+            {
+                ex.Data.Add(this.GetType().ToString(), "Ошибка добавления языка в хранилище данных");
+                throw;
+            }
+        }
 
         public LanguageUi Read(int id)
         {
@@ -84,6 +141,31 @@ namespace BooksShopCore.WorkWithUi.WorkWithDataStorage
             try
             {
                 var languageFromStorage = LanguageRepository.Read(id);
+                if (languageFromStorage != null)
+                {
+                    var language = new LanguageUi()
+                    {
+                        LanguageId = languageFromStorage.Id,
+                        LanguageCode = languageFromStorage.LanguageCode,
+                        LanguageName = languageFromStorage.LanguageName
+                    };
+
+                    ret = language;
+                }
+            }
+            catch (Exception ex)
+            {
+                ex.Data.Add(this.GetType().ToString(), "Ошибка получения языка из хранилища данных по его индексу");
+                throw;
+            }
+            return ret;
+        }
+        public async Task<LanguageUi> ReadAsync(int id)
+        {
+            LanguageUi ret = null;
+            try
+            {
+                var languageFromStorage = await LanguageRepositoryAsync.ReadAsync(id);
                 if (languageFromStorage != null)
                 {
                     var language = new LanguageUi()
@@ -129,6 +211,32 @@ namespace BooksShopCore.WorkWithUi.WorkWithDataStorage
             }
             return ret;
         }
+        public async Task<LanguageUi> ReadAsync(string languageCode)
+        {
+            LanguageUi ret = null;
+            try
+            {
+                var languageFromStorageList = await LanguageRepositoryAsync.ReadAllAsync();
+                var languageFromStorage = languageFromStorageList.FirstOrDefault(p => p.LanguageCode.Equals(languageCode, StringComparison.OrdinalIgnoreCase));
+                if (languageFromStorage != null)
+                {
+                    var language = new LanguageUi()
+                    {
+                        LanguageId = languageFromStorage.Id,
+                        LanguageCode = languageFromStorage.LanguageCode,
+                        LanguageName = languageFromStorage.LanguageName
+                    };
+
+                    ret = language;
+                }
+            }
+            catch (Exception ex)
+            {
+                ex.Data.Add(this.GetType().ToString(), "Ошибка получения языка из хранилища данных по его коду");
+                throw;
+            }
+            return ret;
+        }
 
         public void Update(LanguageUi item)
         {
@@ -152,6 +260,27 @@ namespace BooksShopCore.WorkWithUi.WorkWithDataStorage
                 throw;
             }
         }
+        public async Task UpdateAsync(LanguageUi item)
+        {
+            try
+            {
+                if (item != null)
+                {
+                    var updateLanguageData =await LanguageRepositoryAsync.ReadAsync(item.LanguageId);
+                    if (updateLanguageData != null)
+                    {
+                        updateLanguageData.LanguageCode = item.LanguageCode;
+                        updateLanguageData.LanguageName = item.LanguageName;
+                        await LanguageRepositoryAsync.UpdateAsync(updateLanguageData);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ex.Data.Add(this.GetType().ToString(), "Ошибка изменения данных по языку в хранилище данных");
+                throw;
+            }
+        }
 
         public void Delete(int id)
         {
@@ -159,6 +288,18 @@ namespace BooksShopCore.WorkWithUi.WorkWithDataStorage
             {
                 LanguageRepository.Delete(id);
                 LanguageRepository.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                ex.Data.Add(this.GetType().ToString(), "Ошибка удаления языка в хранилище данных");
+                throw;
+            }
+        }
+        public async Task DeleteAsync(int id)
+        {
+            try
+            {
+                await LanguageRepositoryAsync.DeleteAsync(id);
             }
             catch (Exception ex)
             {
@@ -182,6 +323,28 @@ namespace BooksShopCore.WorkWithUi.WorkWithDataStorage
 
                     LanguageRepository.AddOrUpdate(languageData);
                     LanguageRepository.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                ex.Data.Add(this.GetType().ToString(), "Ошибка добавления или обновления языка в хранилище данных");
+                throw;
+            }
+        }
+        public async Task AddOrUpdateAsync(LanguageUi item)
+        {
+            try
+            {
+                if (item != null)
+                {
+                    //добавление новой записи в валюты в хранилище данных
+                    var languageData = new LanguageData()
+                    {
+                        LanguageCode = item.LanguageCode,
+                        LanguageName = item.LanguageName
+                    };
+
+                    await LanguageRepositoryAsync.AddOrUpdateAsync(languageData);
                 }
             }
             catch (Exception ex)

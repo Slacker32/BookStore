@@ -121,7 +121,6 @@ namespace BooksStorages
             }
             return data;
         }
-
         void GetData(string typeUiName)
         {
             var nameType = "тип не найден";
@@ -146,37 +145,124 @@ namespace BooksStorages
             }
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        async Task GetDataAsync(string typeUiName)
         {
-            GetData(this.comboBox1.Text);
+            var nameType = "тип не найден";
+            try
+            {
+                var listTypes = BookCoreAssembly?.ExportedTypes.Where(
+                    p => p.FullName != null && p.FullName.Contains("BooksShopCore.WorkWithUi.WorkWithDataStorage"));
+                var workType = listTypes.FirstOrDefault(p => p.Name.Contains("WorkWith" + typeUiName.Replace("Ui", "")));
+                nameType = workType.Name;
+                var elemType = Activator.CreateInstance(workType);
+
+                MethodInfo methodInfo = workType.GetMethod("ReadAllAsync", new Type[] { });
+                //var data = methodInfo.Invoke(elemType, null);
+
+                var task = (Task)methodInfo.Invoke(elemType, null);
+                await task;
+                var resultProperty = task.GetType().GetProperty("Result");
+                var data = resultProperty.GetValue(task);
+
+                //dynamic awaitable=methodInfo.Invoke(elemType, null);
+                //await awaitable;
+                //var data=awaitable.GetAwaiter().GetResult();
+
+                this.dataGridView1.DataSource = SetBinding(data);
+                //AddComboboxColumn();
+            }
+            catch (Exception ex)
+            {
+                ex.Data.Add("BooksStorages", $"Ошибка выполнения метода \"ReadAll\" для типа \"{nameType}\"");
+                ShowException(ex);
+            }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        void AddNewBook()
         {
-            IWorkWithDataStorage<LanguageUi> Language= new WorkWithLanguageStorage();
+            IWorkWithDataStorage<LanguageUi> Language = new WorkWithLanguageStorage();
             IWorkWithDataStorage<CountryUi> Country = new WorkWithCountryStorage();
             IWorkWithDataStorage<CurrencyUi> Currency = new WorkWithCurrencyStorage();
+            IWorkWithDataStorage<AuthorUi> Author = new WorkWithAuthorStorage();
 
             var book = new BookUi();
             book.Authors = new List<AuthorUi>();
-            book.Authors.Add(new AuthorUi() {
-                Name = "Стив Макконелл",
-                Info = " американский программист, автор книг по разработке программного обеспечения.",
-                Year = "1962" });
+            book.Authors.Add(Author.Read("Стив Макконелл"));
             book.ListName = new List<BookNameUi>();
             book.ListName.Add(new BookNameUi() { Name = "Совершенный код", LanguageBookCode = Language.Read("rus") });
             book.ListName.Add(new BookNameUi() { Name = "Code Complete", LanguageBookCode = Language.Read("eng") });
+
             book.ListPrice = new List<PriceUi>();
-            book.ListPrice.Add(new PriceUi() { Country = Country.Read("ru"), Currency= Currency.Read("rub"), Price=120.23m });
+            book.ListPrice.Add(new PriceUi() { Country = Country.Read("ru"), Currency = Currency.Read("rub"), Price = 120.23m });
             book.ListPrice.Add(new PriceUi() { Country = Country.Read("gb"), Currency = Currency.Read("gbp"), Price = 60.55m });
             book.Format = new FormatBookUi() { FormatName = "paper" };
-            book.Year = new DateTime(2015,09,01);
+            book.Year = new DateTime(2015, 09, 01);
             book.Count = 10;
 
             using (var myBook = new WorkWithBooksStorage())
             {
                 myBook.Create(book);
             }
+        }
+        void AddNewBook_old()
+        {
+            IWorkWithDataStorage<LanguageUi> Language = new WorkWithLanguageStorage();
+            IWorkWithDataStorage<CountryUi> Country = new WorkWithCountryStorage();
+            IWorkWithDataStorage<CurrencyUi> Currency = new WorkWithCurrencyStorage();
+
+            var book = new BookUi();
+            book.Authors = new List<AuthorUi>();
+            book.Authors.Add(new AuthorUi()
+            {
+                Name = "Стив Макконелл",
+                Info = " американский программист, автор книг по разработке программного обеспечения.",
+                Year = "1962"
+            });
+            book.ListName = new List<BookNameUi>();
+            book.ListName.Add(new BookNameUi() { Name = "Совершенный код", LanguageBookCode = Language.Read("rus") });
+            book.ListName.Add(new BookNameUi() { Name = "Code Complete", LanguageBookCode = Language.Read("eng") });
+            book.ListPrice = new List<PriceUi>();
+            book.ListPrice.Add(new PriceUi() { Country = Country.Read("ru"), Currency = Currency.Read("rub"), Price = 120.23m });
+            book.ListPrice.Add(new PriceUi() { Country = Country.Read("gb"), Currency = Currency.Read("gbp"), Price = 60.55m });
+            book.Format = new FormatBookUi() { FormatName = "paper" };
+            book.Year = new DateTime(2015, 09, 01);
+            book.Count = 10;
+
+            using (var myBook = new WorkWithBooksStorage())
+            {
+                myBook.Create(book);
+            }
+        }
+
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            //GetData(this.comboBox1.Text);
+            GetDataAsync(this.comboBox1.Text);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var index = this.dataGridView1.CurrentRow?.Index;
+            if (index.HasValue && (index >= 0))
+            {
+                if (this.dataGridView1.SelectedRows?.Count > 0)
+                {
+                    switch (this.comboBox1.SelectedItem.ToString().ToLower())
+                    {
+                        case "bookui":
+                            AddNewBook();
+                            break;
+                        default:
+                            MessageBox.Show("Удаление данных из указанной таблицы не поддерживается", "Внимание - программная информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            break;
+
+
+                    }
+
+                }
+            }
+            
 
         }
 
@@ -208,7 +294,11 @@ namespace BooksStorages
                                 }
                             }
                             break;
+                        default:
+                            MessageBox.Show("Удаление данных из указанной таблицы не поддерживается", "Внимание - программная информация",MessageBoxButtons.OK,MessageBoxIcon.Information);
+                            break;
                             
+
                     }
 
                 }

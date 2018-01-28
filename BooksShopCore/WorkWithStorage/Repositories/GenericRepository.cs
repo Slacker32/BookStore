@@ -24,10 +24,18 @@ namespace BooksShopCore.WorkWithStorage.Repositories
         {
             return this.dbSet.Find(id);
         }
+        public async Task<T> ReadAsync(int id)
+        {
+            return await this.dbSet.FindAsync(id);
+        }
 
         public IList<T> ReadAll()
         {
             return this.dbSet.ToList();
+        }
+        public async Task<IList<T>> ReadAllAsync()
+        {
+            return await this.dbSet.ToArrayAsync();
         }
 
         public void AddOrUpdate(T item)

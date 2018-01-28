@@ -78,6 +78,8 @@
     <Compile Include="WorkWithStorage\EntityStorage\NameBooksTranslateData.cs" />
     <Compile Include="WorkWithStorage\EntityStorage\FormatBookData.cs" />
     <Compile Include="WorkWithStorage\EntityStorage\StorageData.cs" />
+    <Compile Include="WorkWithStorage\Repositories\IDataRepositoryAsync.cs" />
+    <Compile Include="WorkWithStorage\Repositories\GenericRepositoryAsync.cs" />
     <Compile Include="WorkWithStorage\Repositories\IDataRepository.cs" />
     <Compile Include="WorkWithStorage\Repositories\GenericRepository.cs" />
     <Compile Include="WorkWithUi\ConvertEntity.cs" />

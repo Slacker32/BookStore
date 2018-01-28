@@ -11,10 +11,12 @@ namespace BooksShopCore.WorkWithUi.LogicsSite.WorkWithBooks
     {
         IList<BookUi> ShowAllBooks(string languageCode, string currency);
         IList<BookUi> FindBooks(string searchStr, string languageCode, string currency);
-
-        //IList<BookUi> ChangeCurrencyBook(int idCurrency, string languageCode);
-
         BookUi GetBook(int index, string languageCode, string currencyCode);
+
+        Task<IList<BookUi>> ShowAllBooksAsync(string languageCode = null, string currencyCode = null);
+        Task<IList<BookUi>> FindBooksAsync(string searchStr, string languageCode, string currencyCode);
+        Task<BookUi> GetBookAsync(int index, string languageCode, string currencyCode);
+
     }
 
 }

@@ -16,14 +16,14 @@
         <table class="filter">
             <tr>
                 <td>
-                    @using (Html.BeginForm("SearchBook", "Home", FormMethod.Post))
+                    @using (Html.BeginForm("SearchBookAsync", "Home", FormMethod.Post))
                     {
                         @Html.TextBox("searchValue", null, new { placeholder = "Search string", onchange = "this.form.submit();", @class = "filterInput" })
                     }
                 </td>
                 <td width="120" align="left">
                     @model BooksShopSite.Models.Currency
-                    @using (Html.BeginForm("Index", "Home", FormMethod.Post))
+                    @using (Html.BeginForm("SetCurrency", "Home", FormMethod.Post))
                     {
                         <div>
                             Currency:
