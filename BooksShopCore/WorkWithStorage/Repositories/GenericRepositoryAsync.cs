@@ -107,8 +107,9 @@ namespace BooksShopCore.WorkWithStorage.Repositories
             IList<T> ret;
             using (var db = new TContext())
             {
-                var query = Include(db, includeProperties);
-                ret = await ((IQueryable<T>)query.Where(predicate)).ToListAsync();
+                var data = await Include(db, includeProperties).ToListAsync();
+                ret = data.Where(predicate).ToList();
+                //ret = await query.Where(predicate).AsQueryable().ToListAsync();
             }
             return ret;
         }

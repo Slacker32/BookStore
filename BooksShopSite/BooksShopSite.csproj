@@ -196,6 +196,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Backet.cshtml" />
     <Content Include="Views\Home\Preview.cshtml" />
+    <Content Include="Views\Home\DialogView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

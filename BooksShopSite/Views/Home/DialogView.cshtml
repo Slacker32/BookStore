@@ -1,0 +1,28 @@
+﻿<div class="modal-body">
+    <div class="alert alert-info">
+        <span class="glyphicon glyphicon-info-sign"></span>
+        Книга помещена в корзину
+
+        @using (Html.BeginForm("Dialog", "Home", FormMethod.Post))
+        {
+            <div class="row">
+                &nbsp;
+            </div>
+            <div class="row">
+
+                <div class="col-md-1 col-md-offset-11">
+                    <button type="submit" id="approve-btn" class="btn btn-default">OK</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(function () {
+        $('#approve-btn').click(function () {
+            $('#modal-container').modal('hide');
+        });
+    });
+</script>

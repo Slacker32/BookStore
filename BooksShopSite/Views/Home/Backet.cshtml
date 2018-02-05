@@ -13,7 +13,7 @@
 </head>
 <body>
     <div> 
-        <h1 class="text"><i>Backet</i></h1>
+        <h1 class="text"><i><small><a href="/Home/Index">BookStore</a></small>-<a href="/Home/Backet">Backet</a></i></h1>
         <table class="data">
             <tr>
                 <th>Author</th>
@@ -41,43 +41,53 @@
             }
         </table>
     </div>
-    <table class="filter">
-        <tr>
-            <td><input style="width:225px" type="text" placeholder="Promocode"></td>
+<table class="filter">
+    <tr>
+        @using (Html.BeginForm("ApplyPromoCode", "Home", FormMethod.Post))
+        {
+            <td><input style="width: 225px" type="text" placeholder="Promocode" name="PromoCode"></td>
             <td align="center">
-                <form method="post">
-                    <p style="text-align: center">
-                        <button style="width:225px">Apply promo code</button>
-                    </p>
-                </form>
+
+                <p style="text-align: center">
+                    <button style="width: 225px" type="submit">Apply promo code</button>
+                </p>
+
             </td>
-            <td class="filterInput"></td>
-            <td align="center"><p style="width: 150px">Amount: @ViewBag.AmountOrder</p></td>
-        </tr>
-    </table>
-    <table class="filter">
-        <tr>
-            <td width="225" align="center"><p>Name of contact person</p></td>
-            <td><input type="text" class="filterInput" value="Иванов Иван Иванович"></td>
-        </tr>
-        <tr>
-            <td  width="225" align="center"><p>Phone</p></td>
-            <td><input type="text" class="filterInput" value="8 029 333-33-33"></td>
-        </tr>
-        <tr>
-            <td width="225" align="center"><p>Address</p></td>
-            <td><input type="text" class="filterInput" value="Брест"></td>
-        </tr>
-        <tr>
-            <td width="225" align="center"> </td>
-            <td>
-                <form method="post">
-                    <p style="text-align: center">
-                        <button style="width:100%">Confirm order</button>
-                    </p>
-                </form>
-            </td>
-        </tr>
-    </table>
+        }
+        <td class="filterInput"></td>
+        <td align="center">
+            <p style="width: 150px">Amount: @ViewBag.AmountOrder</p></td>
+    </tr>
+</table>
+    @using (Html.BeginForm("ConfirmOrder", "Home", FormMethod.Post))
+    {
+        <table class="filter">
+            <tr>
+                <td width="225" align="center">
+                    <p>Name of contact person</p></td>
+                <td><input type="text" class="filterInput" placeholder="Иванов Иван Иванович" name="FIO"></td>
+            </tr>
+            <tr>
+                <td width="225" align="center">
+                    <p>Phone</p></td>
+                <td><input type="text" class="filterInput" placeholder="8 029 333-33-33" name="Phone"></td>
+            </tr>
+            <tr>
+                <td width="225" align="center">
+                    <p>Address</p></td>
+                <td><input type="text" class="filterInput" placeholder="Брест" name="Address"></td>
+            </tr>
+            <tr>
+                <td width="225" align="center"> </td>
+                <td>
+                    <form method="post">
+                        <p style="text-align: center">
+                            <button style="width: 100%" type="submit">Confirm order</button>
+                        </p>
+                    </form>
+                </td>
+            </tr>
+        </table>
+    }
 </body>
 </html>

@@ -239,6 +239,7 @@ namespace BooksStorages
         {
             //GetData(this.comboBox1.Text);
             GetDataAsync(this.comboBox1.Text);
+            MessageBox.Show("Проверка");
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -254,7 +255,7 @@ namespace BooksStorages
                             AddNewBook();
                             break;
                         default:
-                            MessageBox.Show("Удаление данных из указанной таблицы не поддерживается", "Внимание - программная информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("Добавление данных в указанную таблицу не поддерживается", "Внимание - программная информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             break;
 
 

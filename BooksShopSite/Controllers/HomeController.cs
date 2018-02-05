@@ -90,7 +90,10 @@ namespace BooksShopSite.Controllers
                 bookSite.Year = book.Year;
                 bookSite.Price = book.ListPrice.FirstOrDefault(p => p.Currency.CurrencyCode.Equals(this.Currency, StringComparison.OrdinalIgnoreCase)).Price;
                 bookSite.Format = book.Format.FormatName;
-                bookListForViews.Add(bookSite);
+                if (bookSite.Price > 0)
+                {
+                    bookListForViews.Add(bookSite);
+                }
             }
             ViewBag.Books = bookListForViews;
 
@@ -200,18 +203,6 @@ namespace BooksShopSite.Controllers
             return View("Index", model);
         }
 
-        public ContentResult Buy(int id)
-        {
-            if (Session["ListId"] == null)
-            {
-                Session["ListId"] = new List<int>();
-            }
-            (Session["ListId"] as List<int>)?.Add(id);
-            
-
-            return Content("<script language='javascript' type='text/javascript'>alert('Книга добавлена в корзину');location.href='/Home/Index';</script>");
-        }
-
         public ActionResult Preview(int id)
         {
             var book = bookShop.Books.GetBook(id, this.Language, this.Currency);
@@ -224,6 +215,34 @@ namespace BooksShopSite.Controllers
             var preview = bookShop.Preview.GetPreview(id);
             ViewBag.Preview = preview;
             return View();
+        }
+
+        public async Task<ActionResult> PreviewAsync(int id)
+        {
+            var book = await bookShop.Books.GetBookAsync(id, this.Language, this.Currency);
+            var bookSite = new Book();
+            bookSite.BookId = book.BookId;
+            bookSite.Authors = book.Authors.Aggregate(new StringBuilder(), (s, p) => s.Append(p.Name).Append(";")).ToString();
+            bookSite.Name = book.ListName.FirstOrDefault(p => p.LanguageBookCode.LanguageCode.Equals(this.Language, StringComparison.OrdinalIgnoreCase))?.Name;
+            ViewBag.Book = bookSite;
+
+            var preview = await bookShop.Preview.GetPreviewAsync(id);
+            ViewBag.Preview = preview;
+            return View("Preview");
+        }
+
+        public ActionResult Buy(int id)
+        {
+            // если книга отображена на сайте значит она есть в хранилище и имеет id
+            if (Session["ListId"] == null)
+            {
+                Session["ListId"] = new List<int>();
+            }
+            (Session["ListId"] as List<int>)?.Add(id);
+
+
+            //return Content("<script language='javascript' type='text/javascript'>alert('Книга добавлена в корзину');location.href='/Home/Index';</script>");
+            return DialogView();
         }
 
         public ActionResult Backet()
@@ -261,5 +280,34 @@ namespace BooksShopSite.Controllers
             return View();
         }
 
+        public ContentResult Cancel(int id)
+        {
+            (Session["ListId"] as List<int>)?.Remove(id);
+
+            return Content("<script language='javascript' type='text/javascript'>alert('Книга удалена из корзины');location.href='/Home/Backet';</script>");
+        }
+
+        public ContentResult ApplyPromoCode(string PromoCode)
+        {
+
+            return Content("<script language='javascript' type='text/javascript'>alert('Промокод применен');location.href='/Home/Backet';</script>");
+        }
+
+        public ContentResult ConfirmOrder(string FIO, string Phone,string Address)
+        {
+
+            return Content("<script language='javascript' type='text/javascript'>alert('Заказ выполнен');location.href='/Home/Backet';</script>");
+        }
+
+        public ActionResult DialogView()
+        {
+            return PartialView("DialogView");
+        }
+
+        [HttpPost]
+        public ActionResult Dialog()
+        {
+            return RedirectToAction("Index");
+        }
     }
 }

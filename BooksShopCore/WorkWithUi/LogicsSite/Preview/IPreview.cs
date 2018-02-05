@@ -9,6 +9,7 @@ namespace BooksShopCore.WorkWithUi.LogicsSite.Preview
     public interface IPreview
     {
         string GetPreview(int bookId);
+        Task<string> GetPreviewAsync(int bookId);
     }
 
 }
