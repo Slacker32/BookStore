@@ -15,23 +15,23 @@ using BooksShopCore.WorkWithUi.LogicsSite.Currency;
 
 namespace BooksShopCore
 {
-    public abstract class AbstractBooksShop
+    public interface IBooksShop
     {
-        public virtual IWorkWithBooks Books { get; set; }
-        public virtual IWorkWithOrder Order { get; set; }
-        public virtual IPreview Preview { get; set; }
-        internal virtual IPromoCode Promocode { get; set; }
-        public virtual IWorkWithCurrency Currency { get; set; }
+        IWorkWithBooks Books { get; set; }
+        IWorkWithOrder Order { get; set; }
+        IPreview Preview { get; set; }
+        IPromoCode Promocode { get; set; }
+        IWorkWithCurrency Currency { get; set; }
 
         //private BuyerUi TempBuyer { get; set; }
     }
-    public sealed class BooksShop: AbstractBooksShop
+    public sealed class BooksShop: IBooksShop
     {
-        //public IWorkWithBooks Books { get; set; }
-        //public IWorkWithOrder Order { get; set; }
-        //public IPreview Preview { get; set; }
-        //internal IPromoCode Promocode { get; set; }
-        //public IWorkWithCurrency Currency { get; set; }
+        public IWorkWithBooks Books { get; set; }
+        public IWorkWithOrder Order { get; set; }
+        public IPreview Preview { get; set; }
+        public IPromoCode Promocode { get; set; }
+        public IWorkWithCurrency Currency { get; set; }
 
         private BuyerUi TempBuyer { get; set; }
 
@@ -45,6 +45,18 @@ namespace BooksShopCore
             this.Currency = new WorkWithCurrency();
         }
 
+        public BooksShop(IBooksShop bookShop)
+        {
+            if (bookShop != null)
+            {
+                TempBuyer = new BuyerUi();
+
+                this.Books = bookShop.Books;
+                this.Order = bookShop.Order;
+                this.Preview = bookShop.Preview;
+                this.Currency = bookShop.Currency;
+            }
+        }
 
     }
 }

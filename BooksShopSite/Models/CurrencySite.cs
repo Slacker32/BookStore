@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace BooksShopSite.Models
 {
-    public class Currency
+    public class CurrencySite
     {
         public string SelectedCurrency { get; set; }
         public IList<SelectListItem> Currencies { get; set; }

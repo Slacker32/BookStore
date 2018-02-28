@@ -7,7 +7,7 @@ namespace BooksShopSite.Models
 {
     public class BookCurrencyViewModel
     {
-        public Currency CurrencyView { get; set; }
-        public IEnumerable<Book> BooksView { get; set; }
+        public CurrencySite CurrencyView { get; set; }
+        public IEnumerable<BookSite> BooksView { get; set; }
     }
 }

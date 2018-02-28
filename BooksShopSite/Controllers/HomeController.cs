@@ -12,20 +12,20 @@ namespace BooksShopSite.Controllers
 {
     public class HomeController : Controller
     {
-        AbstractBooksShop bookShop = new BooksShopCore.BooksShop();
+        IBooksShop bookShop;//= new BooksShopCore.BooksShop();
         string Language { get; set; } = "rus";
         string Currency { get; set; } = "byn";
 
         public HomeController()
         { }
-        public HomeController(AbstractBooksShop bookShop)
+        public HomeController(IBooksShop bookShop)
         {
             this.bookShop = bookShop;
         }
 
-        private async Task<Currency> GetCurrencyList()
+        private async Task<CurrencySite> GetCurrencyList()
         {
-            var currencyForView = new Currency();
+            var currencyForView = new CurrencySite();
             #region получение списка валют
             //var currency = new BooksShopCore.WorkWithUi.WorkWithDataStorage.WorkWithCurrencyStorage();
             //var listCurrency = await currency.ReadAllAsync();
@@ -72,15 +72,15 @@ namespace BooksShopSite.Controllers
 
             var bookList = await bookShop.Books.ShowAllBooksAsync(this.Language, this.Currency);
 
-            var bookListForViews = new List<Book>();
+            var bookListForViews = new List<BookSite>();
             foreach (var book in bookList)
             {
-                var bookSite = new Book();
+                var bookSite = new BookSite();
                 bookSite.BookId = book.BookId;
                 bookSite.Authors = book.Authors.Aggregate(new StringBuilder(), (s, p) => s.Append(p.Name).Append(";")).ToString();
                 bookSite.Name = book.ListName.FirstOrDefault(p => p.LanguageBookCode.LanguageCode.Equals(this.Language, StringComparison.OrdinalIgnoreCase))?.Name;
                 bookSite.Year = book.Year;
-                bookSite.Price = book.ListPrice.FirstOrDefault(p => p.Currency.CurrencyCode.Equals(this.Currency, StringComparison.OrdinalIgnoreCase)).Price;
+                bookSite.Price = book.ListPrice.FirstOrDefault(p => p.Currency.CurrencyCode.Equals(this.Currency, StringComparison.OrdinalIgnoreCase))?.Price ?? 0;
                 bookSite.Format = book.Format.FormatName;
                 if (bookSite.Price > 0)
                 {
@@ -103,29 +103,13 @@ namespace BooksShopSite.Controllers
         [HttpPost]
         public ActionResult SearchBook(string searchValue)
         {
-            var model = new Currency();
-            #region получение списка валют
-            var currency = new BooksShopCore.WorkWithUi.WorkWithDataStorage.WorkWithCurrencyStorage();
-            var listCurrency = currency.ReadAll()?.Select(p => p.CurrencyCode);
-            model.SelectedCurrency = this.Currency;
-            if (listCurrency != null)
-            {
-                foreach (var item in listCurrency)
-                {
-                    if (model.Currencies == null)
-                    {
-                        model.Currencies = new List<SelectListItem>();
-                    }
-                    model.Currencies.Add(new SelectListItem {Value = item, Text = item});
-                }
-            }
-            #endregion
+            var currencyForView = GetCurrencyList().Result;
 
             var bookList = bookShop.Books.FindBooks(searchValue,this.Language, this.Currency);
-            var bookListForViews = new List<Book>();
+            var bookListForViews = new List<BookSite>();
             foreach (var book in bookList)
             {
-                var bookSite = new Book();
+                var bookSite = new BookSite();
                 bookSite.BookId = book.BookId;
                 bookSite.Authors = book.Authors.Aggregate(new StringBuilder(), (s, p) => s.Append(p.Name).Append(";")).ToString();
                 bookSite.Name = book.ListName.FirstOrDefault(p => p.LanguageBookCode.LanguageCode.Equals(this.Language, StringComparison.OrdinalIgnoreCase))?.Name;
@@ -141,6 +125,7 @@ namespace BooksShopSite.Controllers
             ViewBag.Books = bookListForViews;
 
 
+            var model = new BookCurrencyViewModel() { CurrencyView = currencyForView, BooksView = bookListForViews };
             return View("Index",model);
         }
 
@@ -168,10 +153,10 @@ namespace BooksShopSite.Controllers
             var currencyForView = await GetCurrencyList();
 
             var bookList = await bookShop.Books.FindBooksAsync(searchValue, this.Language, this.Currency);
-            var bookListForViews = new List<Book>();
+            var bookListForViews = new List<BookSite>();
             foreach (var book in bookList)
             {
-                var bookSite = new Book();
+                var bookSite = new BookSite();
                 bookSite.BookId = book.BookId;
                 bookSite.Authors = book.Authors.Aggregate(new StringBuilder(), (s, p) => s.Append(p.Name).Append(";")).ToString();
                 bookSite.Name = book.ListName.FirstOrDefault(p => p.LanguageBookCode.LanguageCode.Equals(this.Language, StringComparison.OrdinalIgnoreCase))?.Name;
@@ -194,7 +179,7 @@ namespace BooksShopSite.Controllers
         public ActionResult Preview(int id)
         {
             var book = bookShop.Books.GetBook(id, this.Language, this.Currency);
-            var bookSite = new Book();
+            var bookSite = new BookSite();
             bookSite.BookId = book.BookId;
             bookSite.Authors = book.Authors.Aggregate(new StringBuilder(), (s, p) => s.Append(p.Name).Append(";")).ToString();
             bookSite.Name = book.ListName.FirstOrDefault(p => p.LanguageBookCode.LanguageCode.Equals(this.Language, StringComparison.OrdinalIgnoreCase))?.Name;
@@ -208,7 +193,7 @@ namespace BooksShopSite.Controllers
         public async Task<ActionResult> PreviewAsync(int id)
         {
             var book = await bookShop.Books.GetBookAsync(id, this.Language, this.Currency);
-            var bookSite = new Book();
+            var bookSite = new BookSite();
             bookSite.BookId = book.BookId;
             bookSite.Authors = book.Authors.Aggregate(new StringBuilder(), (s, p) => s.Append(p.Name).Append(";")).ToString();
             bookSite.Name = book.ListName.FirstOrDefault(p => p.LanguageBookCode.LanguageCode.Equals(this.Language, StringComparison.OrdinalIgnoreCase))?.Name;
@@ -238,7 +223,7 @@ namespace BooksShopSite.Controllers
             if (Session["ListId"] != null)
             {
                 var bookStorage = new BooksShopCore.WorkWithUi.WorkWithDataStorage.WorkWithBooksStorage();
-                var bookListForViews = new List<Book>();
+                var bookListForViews = new List<BookSite>();
                 decimal fullAmount = 0;
                 var listId = Session["ListId"] as List<int>;
                 if (listId != null)
@@ -246,7 +231,7 @@ namespace BooksShopSite.Controllers
                     foreach (var id in listId)
                     {
                         var book = bookShop.Books.GetBook(id,this.Language, this.Currency);
-                        var bookSite = new Book();
+                        var bookSite = new BookSite();
                         bookSite.BookId = book.BookId;
                         bookSite.Authors = book.Authors.Aggregate(new StringBuilder(), (s, p) => s.Append(p.Name).Append(";")).ToString();
                         bookSite.Name = book.ListName.FirstOrDefault(p => p.LanguageBookCode.LanguageCode.Equals(this.Language, StringComparison.OrdinalIgnoreCase))?.Name;
