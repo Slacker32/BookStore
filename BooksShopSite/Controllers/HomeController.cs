@@ -88,6 +88,7 @@ namespace BooksShopSite.Controllers
                 }
             }
             //ViewBag.Books = bookListForViews;
+            Session["CurrentPage"] = "Index";
 
             var model = new BookCurrencyViewModel() { CurrencyView = currencyForView, BooksView = bookListForViews };
             return View("Index",model);
@@ -187,6 +188,7 @@ namespace BooksShopSite.Controllers
 
             var preview = bookShop.Preview.GetPreview(id);
             ViewBag.Preview = preview;
+            Session["CurrentPage"] = "Preview";
             return View();
         }
 
@@ -213,7 +215,7 @@ namespace BooksShopSite.Controllers
             }
             (Session["ListId"] as List<int>)?.Add(id);
 
-
+            ViewBag.Message = "Книга добавлена в корзину";
             //return Content("<script language='javascript' type='text/javascript'>alert('Книга добавлена в корзину');location.href='/Home/Index';</script>");
             return DialogView();
         }
@@ -249,27 +251,31 @@ namespace BooksShopSite.Controllers
                 ViewBag.Books = bookListForViews;
                 ViewBag.AmountOrder = fullAmount;
             }
-            
+            Session["CurrentPage"] = "Backet";
             return View();
         }
 
-        public ContentResult Cancel(int id)
+        public ActionResult Cancel(int id)
         {
             (Session["ListId"] as List<int>)?.Remove(id);
 
-            return Content("<script language='javascript' type='text/javascript'>alert('Книга удалена из корзины');location.href='/Home/Backet';</script>");
+            //return Content("<script language='javascript' type='text/javascript'>alert('Книга удалена из корзины');location.href='/Home/Backet';</script>");
+            ViewBag.Message = "Книга удалена из корзины";
+            return DialogView();
         }
 
-        public ContentResult ApplyPromoCode(string PromoCode)
+        public ActionResult ApplyPromoCode(string PromoCode)
         {
-
-            return Content("<script language='javascript' type='text/javascript'>alert('Промокод применен');location.href='/Home/Backet';</script>");
+            //return Content("<script language='javascript' type='text/javascript'>alert('Промокод применен');location.href='/Home/Backet';</script>");
+            ViewBag.Message = "Промокод применен";
+            return DialogView();
         }
 
-        public ContentResult ConfirmOrder(string FIO, string Phone,string Address)
+        public ActionResult ConfirmOrder(string FIO, string Phone,string Address)
         {
-
-            return Content("<script language='javascript' type='text/javascript'>alert('Заказ выполнен');location.href='/Home/Backet';</script>");
+            //return Content("<script language='javascript' type='text/javascript'>alert('Заказ выполнен');location.href='/Home/Backet';</script>");
+            ViewBag.Message = "Заказ выполнен";
+            return DialogView();
         }
 
         public ActionResult DialogView()
@@ -280,7 +286,14 @@ namespace BooksShopSite.Controllers
         [HttpPost]
         public ActionResult Dialog()
         {
-            return RedirectToAction("Index");
+            if (Session["CurrentPage"].ToString() == "Backet")
+            {
+                return RedirectToAction("Backet");
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
         }
     }
 }
