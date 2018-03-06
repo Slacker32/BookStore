@@ -1,11 +1,13 @@
-﻿using System;
+﻿using BooksShopCore.WorkWithUi.EntityUi;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 
 namespace BooksShopSite.Models
 {
-    public class Book
+    public class BookSite
     {
         public int BookId { get; set; }// уникальный идентификатор книги
         public string Authors { get; set; }//авторы книги через точку с запятой
@@ -15,5 +17,6 @@ namespace BooksShopSite.Models
 
         public string Format { get; set; }//формат книги
         public int Count { get; set; }// количество книг в наличии(за вычетом блокированных)
+
     }
 }

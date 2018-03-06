@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BooksShopCore", "BooksShopCore\BooksShopCore.csproj", "{7365CF43-82E4-49F2-B544-58173FFA5C34}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BooksShopSite", "BooksShopSite\BooksShopSite.csproj", "{85B02362-B331-4983-9FF6-F3151BCFF58F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BooksStorages", "BooksStorages\BooksStorages.csproj", "{779B61A7-24C6-4A8B-85CD-7695BC7DFB3C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BooksShopSiteTests", "BooksShopSiteTests\BooksShopSiteTests.csproj", "{35BD314F-8D00-498B-AB77-2D21A269B4F1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{779B61A7-24C6-4A8B-85CD-7695BC7DFB3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{779B61A7-24C6-4A8B-85CD-7695BC7DFB3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{779B61A7-24C6-4A8B-85CD-7695BC7DFB3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35BD314F-8D00-498B-AB77-2D21A269B4F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35BD314F-8D00-498B-AB77-2D21A269B4F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35BD314F-8D00-498B-AB77-2D21A269B4F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35BD314F-8D00-498B-AB77-2D21A269B4F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

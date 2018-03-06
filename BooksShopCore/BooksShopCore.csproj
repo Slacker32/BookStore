@@ -95,6 +95,8 @@
     <Compile Include="WorkWithUi\EntityUi\OrderUi.cs" />
     <Compile Include="WorkWithUi\EntityUi\CurrencyUi.cs" />
     <Compile Include="WorkWithUi\EntityUi\PurchaseUi.cs" />
+    <Compile Include="WorkWithUi\LogicsSite\Currency\IWorkWithCurrency.cs" />
+    <Compile Include="WorkWithUi\LogicsSite\Currency\WorkWithCurrency.cs" />
     <Compile Include="WorkWithUi\LogicsSite\Preview\Preview.cs" />
     <Compile Include="WorkWithUi\LogicsSite\PromoCode\IPromoCode.cs" />
     <Compile Include="WorkWithUi\LogicsSite\Preview\IPreview.cs" />

@@ -2,6 +2,8 @@
     Layout = null;
 }
 
+@model BooksShopSite.Models.BookCurrencyViewModel
+
 <!DOCTYPE html>
 
 <html>
@@ -13,6 +15,7 @@
 </head>
 <body>
     <div>
+        
         <h1 class="text"><i><a href="/Home/Index">BookStore</a></i></h1>
         <table class="filter">
             <tr>
@@ -23,12 +26,12 @@
                     }
                 </td>
                 <td width="120" align="left">
-                    @model BooksShopSite.Models.Currency
+                    
                     @using (Html.BeginForm("SetCurrency", "Home", FormMethod.Post))
                     {
                         <div>
                             Currency:
-                            @Html.DropDownListFor(x => x.SelectedCurrency, Model.Currencies, new {onchange = "this.form.submit();"})
+                            @Html.DropDownListFor(x => x.CurrencyView.SelectedCurrency, Model.CurrencyView.Currencies, new {onchange = "this.form.submit();"})
                         </div>
                     }
                 </td>
@@ -45,9 +48,9 @@
                 <th></th>
                 <th></th>
             </tr>
-            @if (ViewBag.Books != null)
+            @if (Model.BooksView != null)
             {
-                foreach (var b in ViewBag.Books)
+                foreach (var b in Model.BooksView)
                  {
                      <tr>
                          <td>

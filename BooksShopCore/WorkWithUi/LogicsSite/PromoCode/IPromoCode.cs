@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BooksShopCore.WorkWithUi.LogicsSite.PromoCode
 {
-    internal interface IPromoCode
+    public interface IPromoCode
     {
         bool ConsiderPromoCode(ref decimal amount);
     }
