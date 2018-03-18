@@ -10,9 +10,16 @@
     <title>Backet</title>
     <meta name="viewport" content="width=device-width" />
     <link type="text/css" rel="stylesheet" href="../../Content/Site.css" />
+    @Styles.Render("~/Content/css")
+    <style>
+        .modal-content {
+            width: 600px !important;
+            margin: 30px auto !important;
+        }
+    </style>
 </head>
 <body>
-    <div> 
+    <div>
         <h1 class="text"><i><small><a href="/Home/Index">BookStore</a></small>-<a href="/Home/Backet">Backet</a></i></h1>
         <table class="data">
             <tr>
@@ -35,59 +42,162 @@
                         <td><p>@b.Price</p></td>
                         <td><p>@b.Format</p></td>
                         <td><p>@b.Count</p></td>
-                        <td><p><a href="/Home/Cancel/@b.BookId">Cancel</a></p></td>
+                        <td><p><a href="/Home/Cancel/@b.BookId" class="modal-link">Cancel</a></p></td>
                     </tr>
                 }
             }
         </table>
     </div>
-<table class="filter">
-    <tr>
-        @using (Html.BeginForm("ApplyPromoCode", "Home", FormMethod.Post))
-        {
-            <td><input style="width: 225px" type="text" placeholder="Promocode" name="PromoCode"></td>
+    <table class="filter">
+        <tr>
+            @using (Html.BeginForm("ApplyPromoCodeAsync", "Home", FormMethod.Post))
+            {
+                <td><input class="form-control" style="width: 225px; height: 30px" type="text" placeholder="Promocode" name="PromoCode" onchange="urlUpdate(value)"></td>
+                <td align="center">
+                    @*<button class="modal-link btn btn-primary btn-sm" style="width: 225px;" type="submit">Apply promo code</button>*@
+                    <a id="linkPromocode" href="/Home/ApplyPromoCodeAsync?PromoCode" class="modal-link btn btn-primary btn-sm" style="width: 225px">Apply promo code</a>
+                </td>
+            }
+            <td class="filterInput"></td>
             <td align="center">
-
-                <p style="text-align: center">
-                    <button style="width: 225px" type="submit">Apply promo code</button>
-                </p>
-
+                <p id="amountOrder" style="width: 150px">Amount: @ViewBag.AmountOrder</p>
             </td>
-        }
-        <td class="filterInput"></td>
-        <td align="center">
-            <p style="width: 150px">Amount: @ViewBag.AmountOrder</p></td>
-    </tr>
-</table>
-    @using (Html.BeginForm("ConfirmOrder", "Home", FormMethod.Post))
+        </tr>
+    </table>
+    @using (Html.BeginForm("ConfirmOrder", "Home", FormMethod.Post, new { id = "formConfirm" }))
     {
+        <input type="hidden" name="AmountOrder" value="@ViewBag.AmountOrder">
         <table class="filter">
             <tr>
                 <td width="225" align="center">
-                    <p>Name of contact person</p></td>
-                <td><input type="text" class="filterInput" placeholder="Иванов Иван Иванович" name="FIO"></td>
+                    <p>Name of contact person</p>
+                </td>
+                <td><input id="fioName" type="text" class="form-control" style="width: 100%; height: 30px" placeholder="Иванов Иван Иванович" name="FIO"></td>
             </tr>
             <tr>
                 <td width="225" align="center">
-                    <p>Phone</p></td>
-                <td><input type="text" class="filterInput" placeholder="8 029 333-33-33" name="Phone"></td>
+                    <p>Phone</p>
+                </td>
+                <td><input id="phoneNum" type="text" class="form-control" style="width: 100%; height: 30px" placeholder="8 029 333-33-33" name="Phone"></td>
             </tr>
             <tr>
                 <td width="225" align="center">
-                    <p>Address</p></td>
-                <td><input type="text" class="filterInput" placeholder="Брест" name="Address"></td>
+                    <p>Address</p>
+                </td>
+                <td><input id="buyerAddress" type="text" class="form-control" style="width: 100%; height: 30px" placeholder="Брест" name="Address"></td>
             </tr>
             <tr>
                 <td width="225" align="center"> </td>
                 <td>
                     <form method="post">
                         <p style="text-align: center">
-                            <button style="width: 100%" type="submit">Confirm order</button>
+                            @*<input class="modal-link btn btn-primary" style="width: 100%" type="submit" value="Confirm order">*@
+                            @*<a href="javascript:;" onclick="document.getElementById('formConfirm').submit();" class="modal-link btn btn-primary" style="width: 100%">Confirm order</a>*@
+                            @*<a href="/Home/ConfirmOrder?FIO=FIO&Phone=Phone&Address=Address" class="modal-link btn btn-primary" style="width: 100%">Confirm order</a>*@
+                            <input type="button" name="btn" value="Confirm order" id="submitBtn" data-target="#modal-container2" data-toggle="modal" class="btn btn-primary" style="width: 100%" />
+
                         </p>
                     </form>
                 </td>
             </tr>
         </table>
     }
+
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <div id="modal-container" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-content">
+        </div>
+    </div>
+    <div id="modal-container2" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                Confirm Order
+            </div>
+            <div class="modal-body">
+                Are you sure you want to confirmed the following details?
+                <table class="table">
+                    <tr>
+                        <th>Your Name</th>
+                        <td id="fname"></td>
+                    </tr>
+                    <tr>
+                        <th>Phone</th>
+                        <td id="pnum"></td>
+                    </tr>
+                    <tr>
+                        <th>Adress</th>
+                        <td id="address"></td>
+                    </tr>
+                    <tr>
+                        <th>Amount Order</th>
+                        <td id="fullAmount">@ViewBag.AmountOrder</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <a href="#" id="submit" class="btn btn-success success">Confirm</a>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        function urlUpdate(code) {
+            document.getElementById("linkPromocode").href = "/Home/ApplyPromoCodeAsync?promoCode=" + code+"&amount="+@ViewBag.AmountOrder;
+        }
+
+        $(function () {
+
+            $('#submitBtn').click(function () {
+                $('#pnum').text($('#phoneNum').val());
+                $('#fname').text($('#fioName').val());
+                $('#address').text($('#buyerAddress').val());
+            });
+
+            $('#submit').click(function () {
+                //alert('submitting');
+                $('#formConfirm').submit();
+            });
+
+            //$('#formConfirm').on('submit', function (ev) {
+            //    $('#modal-container').modal('show');
+
+            //    var data = $(this).serializeObject();
+            //    json_data = JSON.stringify(data);
+            //    $("#results").text(json_data);
+            //    $(".modal-body").text(json_data);
+
+            //    ev.preventDefault();
+            //});
+            // Initalize modal dialog
+            // attach modal-container bootstrap attributes to links with .modal-link class.
+            // when a link is clicked with these attributes, bootstrap will display the href content in a modal dialog.
+            $('body').on('click', '.modal-link', function (e) {
+                e.preventDefault();
+                $(this).attr('data-target', '#modal-container');
+                $(this).attr('data-toggle', 'modal');
+            });
+
+            // Attach listener to .modal-close-btn's so that when the button is pressed the modal dialog disappears
+            $('body').on('click', '.modal-close-btn', function () {
+                $('#modal-container').modal('hide');
+            });
+
+            //clear modal cache, so that new content can be loaded
+            $('#modal-container').on('hidden.bs.modal', function () {
+                $(this).removeData('bs.modal');
+            });
+
+            $('#CancelModal').on('click', function () {
+                return false;
+            });
+        });
+    </script>
+
 </body>
+
+
+
 </html>
+

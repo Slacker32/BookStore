@@ -88,6 +88,7 @@ namespace BooksShopSite.Controllers
                 }
             }
             //ViewBag.Books = bookListForViews;
+            Session["CurrentPage"] = "Index";
 
             var model = new BookCurrencyViewModel() { CurrencyView = currencyForView, BooksView = bookListForViews };
             return View("Index",model);
@@ -187,6 +188,7 @@ namespace BooksShopSite.Controllers
 
             var preview = bookShop.Preview.GetPreview(id);
             ViewBag.Preview = preview;
+            Session["CurrentPage"] = "Preview";
             return View();
         }
 
@@ -213,7 +215,7 @@ namespace BooksShopSite.Controllers
             }
             (Session["ListId"] as List<int>)?.Add(id);
 
-
+            ViewBag.Message = "Книга добавлена в корзину";
             //return Content("<script language='javascript' type='text/javascript'>alert('Книга добавлена в корзину');location.href='/Home/Index';</script>");
             return DialogView();
         }
@@ -248,28 +250,61 @@ namespace BooksShopSite.Controllers
                 }
                 ViewBag.Books = bookListForViews;
                 ViewBag.AmountOrder = fullAmount;
+
+                var amountWithPromoCode = Session["AmountWithPromoCode"] ?? 0m;
+                if (((decimal)amountWithPromoCode) >0)
+                {
+                    ViewBag.AmountOrder = amountWithPromoCode;
+                    Session.Remove("AmountWithPromoCode");
+                }
             }
-            
+            Session["CurrentPage"] = "Backet";
             return View();
         }
 
-        public ContentResult Cancel(int id)
+        public ActionResult Cancel(int id)
         {
             (Session["ListId"] as List<int>)?.Remove(id);
 
-            return Content("<script language='javascript' type='text/javascript'>alert('Книга удалена из корзины');location.href='/Home/Backet';</script>");
+            //return Content("<script language='javascript' type='text/javascript'>alert('Книга удалена из корзины');location.href='/Home/Backet';</script>");
+            ViewBag.Message = "Книга удалена из корзины";
+            return DialogView();
         }
 
-        public ContentResult ApplyPromoCode(string PromoCode)
+        public ActionResult ApplyPromoCode(string promoCode, decimal amount)
         {
-
-            return Content("<script language='javascript' type='text/javascript'>alert('Промокод применен');location.href='/Home/Backet';</script>");
+            var retValue = bookShop.Promocode.ConsiderPromoCode(promoCode, amount);
+            if (retValue.Item1)
+            {
+                ViewBag.Message = "Промокод применен";
+            }
+            else
+            {
+                ViewBag.Message = "Промокод не применен";
+            }
+            return DialogView();
         }
 
-        public ContentResult ConfirmOrder(string FIO, string Phone,string Address)
+        public async Task<ActionResult> ApplyPromoCodeAsync(string promoCode,decimal amount)
         {
+            var retValue = await bookShop.Promocode.ConsiderPromoCodeAsync(promoCode, amount);
+            if (retValue.Item1)
+            {
+                ViewBag.Message = "Промокод применен";
+                Session["AmountWithPromoCode"] = retValue.Item2;
+            }
+            else
+            {
+                ViewBag.Message = "Промокод не применен";
+            }
+            return DialogView();
+        }
 
-            return Content("<script language='javascript' type='text/javascript'>alert('Заказ выполнен');location.href='/Home/Backet';</script>");
+        public ActionResult ConfirmOrder(string FIO, string Phone,string Address,decimal AmountOrder)
+        {
+            //return Content("<script language='javascript' type='text/javascript'>alert('Заказ выполнен');location.href='/Home/Backet';</script>");
+            ViewBag.Message = "Заказ выполнен";
+            return DialogView();
         }
 
         public ActionResult DialogView()
@@ -280,7 +315,14 @@ namespace BooksShopSite.Controllers
         [HttpPost]
         public ActionResult Dialog()
         {
-            return RedirectToAction("Index");
+            if (Session["CurrentPage"].ToString() == "Backet")
+            {
+                return RedirectToAction("Backet");
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
         }
     }
 }

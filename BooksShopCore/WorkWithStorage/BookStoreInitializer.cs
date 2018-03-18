@@ -46,6 +46,9 @@ namespace BooksShopCore.WorkWithStorage
             AddFormatPreview("txt");
             #endregion
 
+            #region Добавка промокода
+            AddPromoCode("demo",10);
+            #endregion
 
             AddBooks();
 
@@ -108,6 +111,17 @@ namespace BooksShopCore.WorkWithStorage
                 FormatName=typePreview
             };
             db.FormatsPreview.AddOrUpdate(formatPreviewData);
+            db.SaveChanges();
+        }
+        private void AddPromoCode(string promoCode,int percent)
+        {
+            var promocodeData = new PromocodeData()
+            {
+                Code = promoCode,
+                Percent = percent,
+                Date = DateTime.Now
+            };
+            db.Promocodes.AddOrUpdate(promocodeData);
             db.SaveChanges();
         }
         private void AddBooks()
