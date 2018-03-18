@@ -250,6 +250,13 @@ namespace BooksShopSite.Controllers
                 }
                 ViewBag.Books = bookListForViews;
                 ViewBag.AmountOrder = fullAmount;
+
+                var amountWithPromoCode = Session["AmountWithPromoCode"] ?? 0m;
+                if (((decimal)amountWithPromoCode) >0)
+                {
+                    ViewBag.AmountOrder = amountWithPromoCode;
+                    Session.Remove("AmountWithPromoCode");
+                }
             }
             Session["CurrentPage"] = "Backet";
             return View();
@@ -264,14 +271,36 @@ namespace BooksShopSite.Controllers
             return DialogView();
         }
 
-        public ActionResult ApplyPromoCode(string PromoCode)
+        public ActionResult ApplyPromoCode(string promoCode, decimal amount)
         {
-            //return Content("<script language='javascript' type='text/javascript'>alert('Промокод применен');location.href='/Home/Backet';</script>");
-            ViewBag.Message = "Промокод применен";
+            var retValue = bookShop.Promocode.ConsiderPromoCode(promoCode, amount);
+            if (retValue.Item1)
+            {
+                ViewBag.Message = "Промокод применен";
+            }
+            else
+            {
+                ViewBag.Message = "Промокод не применен";
+            }
             return DialogView();
         }
 
-        public ActionResult ConfirmOrder(string FIO, string Phone,string Address)
+        public async Task<ActionResult> ApplyPromoCodeAsync(string promoCode,decimal amount)
+        {
+            var retValue = await bookShop.Promocode.ConsiderPromoCodeAsync(promoCode, amount);
+            if (retValue.Item1)
+            {
+                ViewBag.Message = "Промокод применен";
+                Session["AmountWithPromoCode"] = retValue.Item2;
+            }
+            else
+            {
+                ViewBag.Message = "Промокод не применен";
+            }
+            return DialogView();
+        }
+
+        public ActionResult ConfirmOrder(string FIO, string Phone,string Address,decimal AmountOrder)
         {
             //return Content("<script language='javascript' type='text/javascript'>alert('Заказ выполнен');location.href='/Home/Backet';</script>");
             ViewBag.Message = "Заказ выполнен";

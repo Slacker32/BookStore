@@ -50,12 +50,12 @@
     </div>
     <table class="filter">
         <tr>
-            @using (Html.BeginForm("ApplyPromoCode", "Home", FormMethod.Post))
+            @using (Html.BeginForm("ApplyPromoCodeAsync", "Home", FormMethod.Post))
             {
                 <td><input class="form-control" style="width: 225px; height: 30px" type="text" placeholder="Promocode" name="PromoCode" onchange="urlUpdate(value)"></td>
                 <td align="center">
                     @*<button class="modal-link btn btn-primary btn-sm" style="width: 225px;" type="submit">Apply promo code</button>*@
-                    <a id="linkPromocode" href="/Home/ApplyPromoCode?PromoCode" class="modal-link btn btn-primary btn-sm" style="width: 225px">Apply promo code</a>
+                    <a id="linkPromocode" href="/Home/ApplyPromoCodeAsync?PromoCode" class="modal-link btn btn-primary btn-sm" style="width: 225px">Apply promo code</a>
                 </td>
             }
             <td class="filterInput"></td>
@@ -66,6 +66,7 @@
     </table>
     @using (Html.BeginForm("ConfirmOrder", "Home", FormMethod.Post, new { id = "formConfirm" }))
     {
+        <input type="hidden" name="AmountOrder" value="@ViewBag.AmountOrder">
         <table class="filter">
             <tr>
                 <td width="225" align="center">
@@ -143,7 +144,7 @@
     </div>
     <script type="text/javascript">
         function urlUpdate(code) {
-            document.getElementById("linkPromocode").href = "/Home/ApplyPromoCode?PromoCode=" + code;
+            document.getElementById("linkPromocode").href = "/Home/ApplyPromoCodeAsync?promoCode=" + code+"&amount="+@ViewBag.AmountOrder;
         }
 
         $(function () {

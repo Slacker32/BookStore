@@ -3,3 +3,4 @@ debug/
 release/
 bin/
 **/packages/*
+.vs/BookStore/v15/*

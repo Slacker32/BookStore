@@ -8,7 +8,8 @@ namespace BooksShopCore.WorkWithUi.LogicsSite.PromoCode
 {
     public interface IPromoCode
     {
-        bool ConsiderPromoCode(ref decimal amount);
+        (bool, decimal) ConsiderPromoCode(string valueCode, decimal amount);
+        Task<(bool, decimal)> ConsiderPromoCodeAsync(string valueCode, decimal amount);
     }
 
 }

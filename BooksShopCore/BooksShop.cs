@@ -42,6 +42,7 @@ namespace BooksShopCore
             this.Books = new WorkWithBooks();
             this.Order = new WorkWithOrder(TempBuyer);
             this.Preview = new Preview();
+            this.Promocode = new PromoCode();
             this.Currency = new WorkWithCurrency();
         }
 
@@ -54,6 +55,7 @@ namespace BooksShopCore
                 this.Books = bookShop.Books;
                 this.Order = bookShop.Order;
                 this.Preview = bookShop.Preview;
+                this.Promocode = bookShop.Promocode;
                 this.Currency = bookShop.Currency;
             }
         }
