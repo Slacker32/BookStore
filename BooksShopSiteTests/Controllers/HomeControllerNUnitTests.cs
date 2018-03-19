@@ -190,8 +190,14 @@ namespace BooksShopSiteTests.Controllers
             var actual = controller.IndexAsync().Result as ViewResult;
             var znach = actual.Model as BookCurrencyViewModel;
             //сверка значений
-            Assert.AreEqual(countCurrensy, znach?.CurrencyView.Currencies.Count);
-            Assert.AreEqual(bookName, (znach?.BooksView as List<BookSite>)?[0].Name);
+
+            //Assert.AreEqual(countCurrensy, znach?.CurrencyView.Currencies.Count);
+            //Assert.AreEqual(bookName, (znach?.BooksView as List<BookSite>)?[0].Name);
+
+            Assert.IsNotNull(znach);
+            Assert.IsTrue(znach.BooksView.Count() > 0);
+            Assert.AreEqual(countCurrensy, znach.CurrencyView.Currencies.Count);
+            Assert.AreEqual(bookName, (znach.BooksView as List<BookSite>)[0].Name);
 
 
         }
@@ -224,14 +230,17 @@ namespace BooksShopSiteTests.Controllers
             var request = new BookCurrencyViewModel() { BooksView = GetBooksList(listBook, language, currency), CurrencyView = GetCurrencyList(listCurrency, currency) };
             //ожидаемое значение
 
-
-
             //результат выполнения
             var actual = controller.SetCurrency(request).Result as ViewResult;
             var znach = actual.Model as BookCurrencyViewModel;
             //сверка значений
-            Assert.AreEqual(request?.CurrencyView.SelectedCurrency, znach?.CurrencyView.SelectedCurrency);
-            Assert.AreEqual((request?.BooksView as List<BookSite>)?.Count, (znach?.BooksView as List<BookSite>)?.Count);
+            //Assert.AreEqual(request?.CurrencyView.SelectedCurrency, znach?.CurrencyView.SelectedCurrency);
+            //Assert.AreEqual((request?.BooksView as List<BookSite>)?.Count, (znach?.BooksView as List<BookSite>)?.Count);
+
+            Assert.IsNotNull(request);
+            Assert.IsNotNull(znach);
+            Assert.AreEqual(request.CurrencyView.SelectedCurrency, znach.CurrencyView.SelectedCurrency);
+            Assert.AreEqual(request.BooksView.Count(), znach.BooksView.Count());
 
         }
 
@@ -258,12 +267,13 @@ namespace BooksShopSiteTests.Controllers
             //ожидаемое значение
             var colSearch = 1;
 
-
             //результат выполнения
             var actual = controller.SearchBookAsync(seachString).Result as ViewResult;
             var znach = actual?.Model as BookCurrencyViewModel;
             //сверка значений
-            Assert.AreEqual((znach?.BooksView as List<BookSite>)?.Count, colSearch);
+            //Assert.AreEqual((znach?.BooksView as List<BookSite>)?.Count, colSearch);
+            Assert.IsNotNull(znach);
+            Assert.AreEqual(znach.BooksView.Count(), colSearch);
 
         }
 
@@ -361,7 +371,7 @@ namespace BooksShopSiteTests.Controllers
             //результат выполнения
             var actual = controller.Backet() as ViewResult;
             //сверка значений
-            //Assert.AreEqual(idBook, (controller.Session["ListId"] as List<int>)[0]);
+            Assert.IsTrue((controller.Session["ListId"] as List<int>).Count > 0);
             Assert.IsNotNull(actual);
 
         }
