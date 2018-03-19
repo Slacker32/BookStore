@@ -51,23 +51,6 @@ namespace BooksShopSite.Controllers
         [ActionName("Index")]
         public async Task<ActionResult> IndexAsync()
         {
-            //var currencyForView = new Currency();
-            //#region получение списка валют
-            ////var currency = new BooksShopCore.WorkWithUi.WorkWithDataStorage.WorkWithCurrencyStorage();
-            ////var listCurrency = await currency.ReadAllAsync();
-            //var listCurrency = await bookShop.Currency.GetAllCurrencyAsync();
-            //var listCurrencyCode= listCurrency?.Select(p => p.CurrencyCode);
-            //currencyForView.SelectedCurrency = this.Currency;
-            //foreach (var item in listCurrencyCode)
-            //{
-            //    if (currencyForView.Currencies == null)
-            //    {
-            //        currencyForView.Currencies = new List<SelectListItem>();
-            //    }
-            //    currencyForView.Currencies.Add(new SelectListItem { Value = item, Text = item });
-
-            //}
-            //#endregion
             var currencyForView = await GetCurrencyList();
 
             var bookList = await bookShop.Books.ShowAllBooksAsync(this.Language, this.Currency);
@@ -133,24 +116,6 @@ namespace BooksShopSite.Controllers
         [HttpPost]
         public async Task<ActionResult> SearchBookAsync(string searchValue)
         {
-            //var model = new Currency();
-            //#region получение списка валют
-            //var currency = new BooksShopCore.WorkWithUi.WorkWithDataStorage.WorkWithCurrencyStorage();
-            //var listCurrency =await currency.ReadAllAsync();
-            //var listCurrencyCode= listCurrency?.Select(p => p.CurrencyCode);
-            //model.SelectedCurrency = this.Currency;
-            //if (listCurrency != null)
-            //{
-            //    foreach (var item in listCurrencyCode)
-            //    {
-            //        if (model.Currencies == null)
-            //        {
-            //            model.Currencies = new List<SelectListItem>();
-            //        }
-            //        model.Currencies.Add(new SelectListItem { Value = item, Text = item });
-            //    }
-            //}
-            //#endregion
             var currencyForView = await GetCurrencyList();
 
             var bookList = await bookShop.Books.FindBooksAsync(searchValue, this.Language, this.Currency);

@@ -1,22 +1,18 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using BooksShopCore.WorkWithUi.EntityUi;
 using BooksShopSite.Controllers;
+using BooksShopSite.Models;
+using Moq;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Web.Mvc;
-using Moq;
-using BooksShopCore.WorkWithUi.EntityUi;
-using BooksShopSite.Models;
-using System.Web;
-using BooksShopSiteTests.Controllers;
 
-namespace BooksShopSite.Controllers.Tests
+namespace BooksShopSiteTests.Controllers
 {
-    [TestClass()]
-    public class HomeControllerTests
+    [TestFixture]
+    class HomeControllerNUnitTests
     {
         private List<CurrencyUi> SetCurrencyUi()
         {
@@ -164,7 +160,7 @@ namespace BooksShopSite.Controllers.Tests
             return currencyForView;
         }
 
-        [TestMethod()]
+        [Test]
         public void IndexAsyncTest()
         {
             #region инициализация
@@ -181,9 +177,9 @@ namespace BooksShopSite.Controllers.Tests
             #endregion
             HomeController controller = new HomeController(mock.Object);
 
-            var context = new Mock<ControllerContext>();
-            context.SetupGet(p => p.HttpContext.Session["CurrentPage"]).Returns("unknoun");
-            controller.ControllerContext = context.Object;
+            var controllerContext = new Mock<ControllerContext>();
+            controllerContext.SetupGet(p => p.HttpContext.Session["CurrentPage"]).Returns("unknoun");
+            controller.ControllerContext = controllerContext.Object;
             #endregion
 
             //ожидаемое значение
@@ -200,7 +196,7 @@ namespace BooksShopSite.Controllers.Tests
 
         }
 
-        [TestMethod()]
+        [Test]
         public void SetCurrencyTest()
         {
             #region инициализация
@@ -218,9 +214,9 @@ namespace BooksShopSite.Controllers.Tests
             #endregion
             HomeController controller = new HomeController(mock.Object);
 
-            var context = new Mock<ControllerContext>();
-            context.SetupGet(p => p.HttpContext.Session["CurrentPage"]).Returns("unknoun");
-            controller.ControllerContext = context.Object;
+            var controllerContext = new Mock<ControllerContext>();
+            controllerContext.SetupGet(p => p.HttpContext.Session["CurrentPage"]).Returns("unknoun");
+            controller.ControllerContext = controllerContext.Object;
             #endregion
 
             //формирование запроса
@@ -239,7 +235,7 @@ namespace BooksShopSite.Controllers.Tests
 
         }
 
-        [TestMethod()]
+        [Test]
         public void SearchBookAsyncTest()
         {
             #region инициализация 
@@ -271,7 +267,7 @@ namespace BooksShopSite.Controllers.Tests
 
         }
 
-        [TestMethod()]
+        [Test]
         public void PreviewAsyncTest()
         {
             #region инициализация 
@@ -303,7 +299,7 @@ namespace BooksShopSite.Controllers.Tests
             Assert.IsNotNull(actual);
         }
 
-        [TestMethod()]
+        [Test()]
         public void BuyTest()
         {
             #region инициализация
@@ -336,7 +332,7 @@ namespace BooksShopSite.Controllers.Tests
             Assert.IsNotNull(actual);
         }
 
-        [TestMethod()]
+        [Test()]
         public void BacketTest()
         {
             #region инициализация
@@ -370,7 +366,7 @@ namespace BooksShopSite.Controllers.Tests
 
         }
 
-        [TestMethod()]
+        [Test]
         public void CancelTest()
         {
             int bookId = 1;
@@ -393,7 +389,7 @@ namespace BooksShopSite.Controllers.Tests
             Assert.IsNotNull(actual);
         }
 
-        [TestMethod()]
+        [Test]
         public void ApplyPromoCodeAsyncTest()
         {
             string code = "demo";
@@ -402,11 +398,11 @@ namespace BooksShopSite.Controllers.Tests
             var valWithPromocode = (true, amountNew);
             #region инициализация
             var mock = new Mock<BooksShopCore.IBooksShop>();
-            mock.Setup(p => p.Promocode.ConsiderPromoCodeAsync(code,amount)).ReturnsAsync(valWithPromocode);
+            mock.Setup(p => p.Promocode.ConsiderPromoCodeAsync(code, amount)).ReturnsAsync(valWithPromocode);
             HomeController controller = new HomeController(mock.Object);
 
             var context = new Mock<ControllerContext>();
-            var session = new MockHttpSession("AmountWithPromoCode", amount );
+            var session = new MockHttpSession("AmountWithPromoCode", amount);
             context.Setup(p => p.HttpContext.Session).Returns(session);
             controller.ControllerContext = context.Object;
             #endregion
@@ -414,7 +410,7 @@ namespace BooksShopSite.Controllers.Tests
             //ожидаемое значение
 
             //результат выполнения
-            var actual = controller.ApplyPromoCodeAsync(code,amount).Result as PartialViewResult;
+            var actual = controller.ApplyPromoCodeAsync(code, amount).Result as PartialViewResult;
             //сверка значений
             Assert.AreEqual(amountNew, controller.Session["AmountWithPromoCode"]);
             Assert.IsNotNull(actual);
